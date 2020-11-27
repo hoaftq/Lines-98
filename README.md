@@ -13,4 +13,6 @@ Something need to be improved:
 <ol>
   <li>Make the ball look better</li>
   <li>Improve concurrent processing in order make movement smoother</li>
+  <li>Refactor source code since it was developed long time ago</li>
+  <li>Convert to an Android game</li>
 <ol>
