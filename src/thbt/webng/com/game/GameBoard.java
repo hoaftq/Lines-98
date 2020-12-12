@@ -1,6 +1,7 @@
 package thbt.webng.com.game;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -41,6 +42,14 @@ public class GameBoard {
 
 	public GameInfoBoard getGameInfoBoard() {
 		return gameInfoBoard;
+	}
+
+	/**
+	 * @return size of the game board including game information displayed on the
+	 *         top
+	 */
+	public Dimension getBoardSize() {
+		return new Dimension(2 * left + col * Square.SIZE, top + row * Square.SIZE);
 	}
 
 	public void newGame() {
@@ -154,8 +163,7 @@ public class GameBoard {
 
 					saveBall = square.getBall();
 
-					square.setBall(new Ball(ballFrom.getColor(),
-							BallState.Maturity, square));
+					square.setBall(new Ball(ballFrom.getColor(), BallState.Maturity, square));
 
 					gamePanel.repaint();
 
@@ -179,16 +187,12 @@ public class GameBoard {
 						if (!square.hasBall()) {
 							square.setBall(ballTo);
 						} else {
-							setNewGrowingPos(
-									positionList.get(positionList.size() - 1),
-									ballTo);
+							setNewGrowingPos(positionList.get(positionList.size() - 1), ballTo);
 						}
 					}
 				} else {
 					if (ballTo != null) {
-						setNewGrowingPos(
-								positionList.get(positionList.size() - 1),
-								ballTo);
+						setNewGrowingPos(positionList.get(positionList.size() - 1), ballTo);
 					}
 
 					nextStep();
@@ -205,10 +209,8 @@ public class GameBoard {
 
 	private void explosionBall(List<Square> listCompleteSquare) {
 		Ball.hideBall(listCompleteSquare);
-		int score = listCompleteSquare.size() + (listCompleteSquare.size() - 4)
-				* listCompleteSquare.size();
-		gameInfoBoard.getScore().setScore(
-				gameInfoBoard.getScore().getScore() + score);
+		int score = listCompleteSquare.size() + (listCompleteSquare.size() - 4) * listCompleteSquare.size();
+		gameInfoBoard.getScore().setScore(gameInfoBoard.getScore().getScore() + score);
 	}
 
 	private void setNewGrowingPos(Position oldPos, Ball ball) {
@@ -218,8 +220,7 @@ public class GameBoard {
 
 		List<Position> positionList = getEmptyPositions();
 		if (positionList.size() > 0) {
-			Position pos = positionList.get(new Random().nextInt(positionList
-					.size()));
+			Position pos = positionList.get(new Random().nextInt(positionList.size()));
 			getSquare(pos).setBall(ball);
 
 			nextPositionList.add(pos);
@@ -234,8 +235,7 @@ public class GameBoard {
 		Ball.growBall(squareList);
 
 		for (Position pos : nextPositionList) {
-			if (getSquare(pos).hasBall()
-					&& getSquare(pos).getBallState() == BallState.Maturity) {
+			if (getSquare(pos).hasBall() && getSquare(pos).getBallState() == BallState.Maturity) {
 				List<Square> listCompleteSquare = getCompleteSquare(pos);
 				if (listCompleteSquare.size() > 0) {
 					explosionBall(listCompleteSquare);
@@ -268,8 +268,7 @@ public class GameBoard {
 		for (int i = 0; i < 5; i++) {
 			int idx = random.nextInt(listEmptyPosition.size());
 			Square square = getSquare(listEmptyPosition.get(idx));
-			square.setBall(new Ball(ColorUtil.getRandomColor(),
-					BallState.Maturity, square));
+			square.setBall(new Ball(ColorUtil.getRandomColor(), BallState.Maturity, square));
 			listEmptyPosition.remove(idx);
 		}
 	}
@@ -279,8 +278,7 @@ public class GameBoard {
 		generateNextColor();
 		for (int i = 0; i < nextPositionList.size(); i++) {
 			Square square = getSquare(nextPositionList.get(i));
-			square.setBall(new Ball(nextColorArray[i], BallState.Growing,
-					square));
+			square.setBall(new Ball(nextColorArray[i], BallState.Growing, square));
 		}
 	}
 
@@ -358,8 +356,7 @@ public class GameBoard {
 		if (pos.x > 0) {
 			x = pos.x - 1;
 			y = pos.y;
-			if (!visitedArray[x][y]
-					&& squareArray[x][y].getBallState() != BallState.Maturity) {
+			if (!visitedArray[x][y] && squareArray[x][y].getBallState() != BallState.Maturity) {
 				positionList.add(new Position2(x, y, pos));
 			}
 		}
@@ -367,8 +364,7 @@ public class GameBoard {
 		if (pos.x < col - 1) {
 			x = pos.x + 1;
 			y = pos.y;
-			if (!visitedArray[x][y]
-					&& squareArray[x][y].getBallState() != BallState.Maturity) {
+			if (!visitedArray[x][y] && squareArray[x][y].getBallState() != BallState.Maturity) {
 				positionList.add(new Position2(x, y, pos));
 			}
 		}
@@ -376,8 +372,7 @@ public class GameBoard {
 		if (pos.y > 0) {
 			x = pos.x;
 			y = pos.y - 1;
-			if (!visitedArray[x][y]
-					&& squareArray[x][y].getBallState() != BallState.Maturity) {
+			if (!visitedArray[x][y] && squareArray[x][y].getBallState() != BallState.Maturity) {
 				positionList.add(new Position2(x, y, pos));
 			}
 		}
@@ -385,8 +380,7 @@ public class GameBoard {
 		if (pos.y < row - 1) {
 			x = pos.x;
 			y = pos.y + 1;
-			if (!visitedArray[x][y]
-					&& squareArray[x][y].getBallState() != BallState.Maturity) {
+			if (!visitedArray[x][y] && squareArray[x][y].getBallState() != BallState.Maturity) {
 				positionList.add(new Position2(x, y, pos));
 			}
 		}
@@ -414,16 +408,12 @@ public class GameBoard {
 
 		listTempSquare = new ArrayList<Square>();
 		j = 1;
-		while (pos.y + j < col
-				&& (square = squareArray[pos.x][pos.y + j])
-						.isEnableDestroy(color)) {
+		while (pos.y + j < col && (square = squareArray[pos.x][pos.y + j]).isEnableDestroy(color)) {
 			listTempSquare.add(square);
 			j++;
 		}
 		j = -1;
-		while (pos.y + j >= 0
-				&& (square = squareArray[pos.x][pos.y + j])
-						.isEnableDestroy(color)) {
+		while (pos.y + j >= 0 && (square = squareArray[pos.x][pos.y + j]).isEnableDestroy(color)) {
 			listTempSquare.add(square);
 			j--;
 		}
@@ -433,16 +423,12 @@ public class GameBoard {
 
 		listTempSquare = new ArrayList<Square>();
 		i = 1;
-		while (pos.x + i < col
-				&& (square = squareArray[pos.x + i][pos.y])
-						.isEnableDestroy(color)) {
+		while (pos.x + i < col && (square = squareArray[pos.x + i][pos.y]).isEnableDestroy(color)) {
 			listTempSquare.add(square);
 			i++;
 		}
 		i = -1;
-		while (pos.x + i >= 0
-				&& (square = squareArray[pos.x + i][pos.y])
-						.isEnableDestroy(color)) {
+		while (pos.x + i >= 0 && (square = squareArray[pos.x + i][pos.y]).isEnableDestroy(color)) {
 			listTempSquare.add(square);
 			i--;
 		}
@@ -453,20 +439,16 @@ public class GameBoard {
 		listTempSquare = new ArrayList<Square>();
 		i = 1;
 		j = 1;
-		while (pos.x + i < col
-				&& pos.y + j < row
-				&& (square = squareArray[pos.x + i][pos.y + j])
-						.isEnableDestroy(color)) {
+		while (pos.x + i < col && pos.y + j < row
+				&& (square = squareArray[pos.x + i][pos.y + j]).isEnableDestroy(color)) {
 			listTempSquare.add(square);
 			i++;
 			j++;
 		}
 		i = -1;
 		j = -1;
-		while (pos.x + i >= 0
-				&& pos.y + j >= 0
-				&& (square = squareArray[pos.x + i][pos.y + j])
-						.isEnableDestroy(color)) {
+		while (pos.x + i >= 0 && pos.y + j >= 0
+				&& (square = squareArray[pos.x + i][pos.y + j]).isEnableDestroy(color)) {
 			listTempSquare.add(square);
 			i--;
 			j--;
@@ -478,20 +460,16 @@ public class GameBoard {
 		listTempSquare = new ArrayList<Square>();
 		i = 1;
 		j = -1;
-		while (pos.x + i < col
-				&& pos.y + j >= 0
-				&& (square = squareArray[pos.x + i][pos.y + j])
-						.isEnableDestroy(color)) {
+		while (pos.x + i < col && pos.y + j >= 0
+				&& (square = squareArray[pos.x + i][pos.y + j]).isEnableDestroy(color)) {
 			listTempSquare.add(square);
 			i++;
 			j--;
 		}
 		i = -1;
 		j = 1;
-		while (pos.x + i >= 0
-				&& pos.y + j < row
-				&& (square = squareArray[pos.x + i][pos.y + j])
-						.isEnableDestroy(color)) {
+		while (pos.x + i >= 0 && pos.y + j < row
+				&& (square = squareArray[pos.x + i][pos.y + j]).isEnableDestroy(color)) {
 			listTempSquare.add(square);
 			i--;
 			j++;
@@ -585,8 +563,7 @@ public class GameBoard {
 	private List<Square> getBlocksComplete(Position pos) {
 		resetVisitedArray();
 
-		List<Square> listCompleteSquare = getBlocksComplete(pos, getSquare(pos)
-				.getBall().getColor());
+		List<Square> listCompleteSquare = getBlocksComplete(pos, getSquare(pos).getBall().getColor());
 
 		if (listCompleteSquare.size() >= 7) {
 			return listCompleteSquare;
@@ -606,23 +583,19 @@ public class GameBoard {
 				listSquare.add(square);
 
 				if (pos.y > 0) {
-					listSquare.addAll(getBlocksComplete(new Position(pos.x,
-							pos.y - 1), color));
+					listSquare.addAll(getBlocksComplete(new Position(pos.x, pos.y - 1), color));
 				}
 
 				if (pos.x > 0) {
-					listSquare.addAll(getBlocksComplete(new Position(pos.x - 1,
-							pos.y), color));
+					listSquare.addAll(getBlocksComplete(new Position(pos.x - 1, pos.y), color));
 				}
 
 				if (pos.y < row - 1) {
-					listSquare.addAll(getBlocksComplete(new Position(pos.x,
-							pos.y + 1), color));
+					listSquare.addAll(getBlocksComplete(new Position(pos.x, pos.y + 1), color));
 				}
 
 				if (pos.x < col - 1) {
-					listSquare.addAll(getBlocksComplete(new Position(pos.x + 1,
-							pos.y), color));
+					listSquare.addAll(getBlocksComplete(new Position(pos.x + 1, pos.y), color));
 				}
 			}
 		}
@@ -635,8 +608,7 @@ public class GameBoard {
 			for (int i = 0; i < row; i++) {
 				for (int j = 0; j < col; j++) {
 					if (squareArray[i][j].getBall() != null) {
-						gameState.bakBallArray[i][j] = (Ball) (squareArray[i][j]
-								.getBall().clone());
+						gameState.bakBallArray[i][j] = (Ball) (squareArray[i][j].getBall().clone());
 					} else {
 						gameState.bakBallArray[i][j] = null;
 					}

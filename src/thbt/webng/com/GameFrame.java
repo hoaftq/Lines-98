@@ -1,5 +1,6 @@
 package thbt.webng.com;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -17,6 +18,7 @@ import javax.swing.KeyStroke;
 
 import thbt.webng.com.game.GameBoard;
 import thbt.webng.com.game.GamePanel;
+import thbt.webng.com.game.common.WindowUtil;
 import thbt.webng.com.game.entity.GameInfo;
 import thbt.webng.com.game.entity.GameType;
 import thbt.webng.com.game.info.GameInfoBoard;
@@ -25,20 +27,28 @@ import thbt.webng.com.game.info.HighScoreUtil;
 public class GameFrame extends JFrame {
 
 	public GameFrame() {
-		setSize(500, 500);
+		setTitle("Lines");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-		GameBoard gameBoard;
 
 		gamePanel = new GamePanel(this);
 		add(gamePanel);
-		gameBoard = new GameBoard(gamePanel);
+
+		GameBoard gameBoard = new GameBoard(gamePanel);
 		gamePanel.setGameBoard(gameBoard);
 
 		setJMenuBar(new JMenuBar());
 		addGameMenu();
 		addHelpMenu();
 		addHighScoreMenu();
+
+		pack();
+		Dimension frameSize = getSize();
+		Dimension boardSize = gameBoard.getBoardSize();
+		setSize(boardSize.width, frameSize.height + boardSize.height - 2);
+		setResizable(false);
+
+		WindowUtil.centerOwner(this);
+
 	}
 
 	private void addGameMenu() {
@@ -46,8 +56,7 @@ public class GameFrame extends JFrame {
 
 		JMenuItem newMenuItem;
 		gameMenu.add(newMenuItem = new JMenuItem("New", 'N'));
-		newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
-				InputEvent.CTRL_MASK));
+		newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
 		newMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -119,8 +128,7 @@ public class GameFrame extends JFrame {
 		gameMenu.addSeparator();
 
 		JMenuItem stepBackMenuItem = new JMenuItem("Step back");
-		stepBackMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,
-				InputEvent.CTRL_MASK));
+		stepBackMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK));
 		gameMenu.add(stepBackMenuItem);
 		stepBackMenuItem.addActionListener(new ActionListener() {
 			@Override
@@ -169,34 +177,28 @@ public class GameFrame extends JFrame {
 				break;
 			} catch (NumberFormatException | IOException e1) {
 				e1.printStackTrace();
-				if (JOptionPane.showConfirmDialog(GameFrame.this,
-						"Occur error while connect to server, retry?", "Lines",
-						JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+				if (JOptionPane.showConfirmDialog(GameFrame.this, "Occur error while connect to server, retry?",
+						"Lines", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
 					return;
 				}
 			}
 		}
 
-		GameInfoBoard gameInfoBoard = gamePanel.getGameBoard()
-				.getGameInfoBoard();
+		GameInfoBoard gameInfoBoard = gamePanel.getGameBoard().getGameInfoBoard();
 		if (gameInfoBoard.getScore().getScore() > minScore) {
-			String playerName = JOptionPane.showInputDialog(GameFrame.this,
-					"Please input your name", "Game Over",
+			String playerName = JOptionPane.showInputDialog(GameFrame.this, "Please input your name", "Game Over",
 					JOptionPane.QUESTION_MESSAGE);
 			if (playerName != null) {
 				while (true) {
-					String status = HighScoreUtil.sendHighScore(playerName,
-							gameInfoBoard.getScore().getScore(), gameInfoBoard
-									.getClock().toString());
+					String status = HighScoreUtil.sendHighScore(playerName, gameInfoBoard.getScore().getScore(),
+							gameInfoBoard.getClock().toString());
 					if ("true".equals(status)) {
 						break;
 					}
 
-					if (JOptionPane
-							.showConfirmDialog(
-									GameFrame.this,
-									"Occur error while send your information to server, retry?",
-									"Lines", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+					if (JOptionPane.showConfirmDialog(GameFrame.this,
+							"Occur error while send your information to server, retry?", "Lines",
+							JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
 						break;
 					}
 
@@ -206,10 +208,8 @@ public class GameFrame extends JFrame {
 
 		showHighScoreDialog();
 
-		if (gameInfoBoard.getScore().getScore() > gameInfoBoard
-				.getHigherScore().getScore()) {
-			gameInfoBoard.getHigherScore().setScore(
-					gameInfoBoard.getScore().getScore());
+		if (gameInfoBoard.getScore().getScore() > gameInfoBoard.getHigherScore().getScore()) {
+			gameInfoBoard.getHigherScore().setScore(gameInfoBoard.getScore().getScore());
 		}
 		gamePanel.getGameBoard().newGame();
 	}

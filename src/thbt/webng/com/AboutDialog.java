@@ -37,28 +37,22 @@ public class AboutDialog extends JDialog {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		// Create puzzle information label
-		JLabel infoLabel = new JLabel(
-				"<html><table>"
-						+ "<tr><td colspan=2 align=center><font size=6 color=Red>Game Lines 1.0</font></td></tr>"
-						+ "<tr><td>Write by:</td><td>Trac Quang Hoa</td></tr>"
-						+ "<tr><td></td><td>Cam Binh, Cam Xuyen, Ha Tinh</td></tr>"
-						+ "<tr><td>Date:</td><td>08-01-2012</td></tr>"
-						+ "</table></html>");
+		JLabel infoLabel = new JLabel("<html><table>"
+				+ "<tr><td colspan=2 align=center><font size=6 color=Red>Game Lines 1.1</font></td></tr>"
+				+ "<tr><td>Author:</td><td>Trac Quang Hoa</td></tr>" + "<tr><td>Created:</td><td>08-01-2012</td></tr>"
+				+ "<tr><td>Updated:</td><td>12-12-2020</td></tr>" + "</table></html>");
 		JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		infoPanel.add(infoLabel);
 		add(infoPanel, BorderLayout.NORTH);
 
-		final String enteredVisitLabel = "<html><table><tr><a href='"
-				+ THBT_WEB_ADDRESS + "'><i>" + THBT_WEB_ADDRESS
+		final String enteredVisitLabel = "<html><table><tr><a href='" + THBT_WEB_ADDRESS + "'><i>" + THBT_WEB_ADDRESS
 				+ "</i></a></tr></table></html>";
-		final String exitedVisitLabel = "<html><table><tr><a href='"
-				+ THBT_WEB_ADDRESS + "'>" + THBT_WEB_ADDRESS
+		final String exitedVisitLabel = "<html><table><tr><a href='" + THBT_WEB_ADDRESS + "'>" + THBT_WEB_ADDRESS
 				+ "</a></tr></table></html>";
 
 		// Create my home page panel
 		JPanel visitPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		visitPanel.add(new JLabel(
-				"<html><table><tr><td>Visit:</td></tr></table></html>"));
+		visitPanel.add(new JLabel("<html><table><tr><td>Source:</td></tr></table></html>"));
 
 		JLabel visitLabel = new JLabel(exitedVisitLabel);
 		visitLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -95,8 +89,7 @@ public class AboutDialog extends JDialog {
 		add(visitPanel, BorderLayout.CENTER);
 
 		// Create panel container OK button
-		JPanel buttonPanel = new JPanel(
-				new FlowLayout(FlowLayout.CENTER, 0, 15));
+		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 15));
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(new ActionListener() {
 			@Override
@@ -118,6 +111,6 @@ public class AboutDialog extends JDialog {
 	/**
 	 * My home page address
 	 */
-	private static final String THBT_WEB_ADDRESS = "http://thbt.webng.com";
+	private static final String THBT_WEB_ADDRESS = "https://github.com/hoaftq/Lines-98";
 	private static final long serialVersionUID = 1L;
 }
