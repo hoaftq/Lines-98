@@ -6,7 +6,7 @@ It supports 3 difference types of game where you get scores if you move balls in
 - Square Game: Move balls to a square (4 balls)
 - Block Game: Move balls to a block (7 neighbor balls)
 
-![Lines98-Screenshot](Lines98-Screenshot.jpg)
+![Lines98-Screenshot](Lines98-Screenshot.png)
 
 Something need to be improved:
 - [x] Updated some frame properties like size, position, title, etc (They are not necessary in an Applet)
