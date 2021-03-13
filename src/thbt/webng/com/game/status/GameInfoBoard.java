@@ -1,4 +1,4 @@
-package thbt.webng.com.game.info;
+package thbt.webng.com.game.status;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.Timer;
 
 import thbt.webng.com.game.GamePanel;
-import thbt.webng.com.game.entity.GameInfo;
+import thbt.webng.com.game.option.GameInfo;
 
 public class GameInfoBoard {
 

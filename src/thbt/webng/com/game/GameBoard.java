@@ -10,9 +10,9 @@ import java.util.Queue;
 import java.util.Random;
 
 import thbt.webng.com.game.common.ColorUtil;
-import thbt.webng.com.game.entity.GameInfo;
-import thbt.webng.com.game.entity.GameType;
-import thbt.webng.com.game.info.GameInfoBoard;
+import thbt.webng.com.game.option.GameInfo;
+import thbt.webng.com.game.option.GameType;
+import thbt.webng.com.game.status.GameInfoBoard;
 import thbt.webng.com.sound.SoundManager;
 
 public class GameBoard {

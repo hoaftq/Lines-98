@@ -19,10 +19,10 @@ import javax.swing.KeyStroke;
 import thbt.webng.com.game.GameBoard;
 import thbt.webng.com.game.GamePanel;
 import thbt.webng.com.game.common.WindowUtil;
-import thbt.webng.com.game.entity.GameInfo;
-import thbt.webng.com.game.entity.GameType;
-import thbt.webng.com.game.info.GameInfoBoard;
-import thbt.webng.com.game.info.HighScoreUtil;
+import thbt.webng.com.game.option.GameInfo;
+import thbt.webng.com.game.option.GameType;
+import thbt.webng.com.game.status.GameInfoBoard;
+import thbt.webng.com.game.status.HighScoreUtil;
 
 public class GameFrame extends JFrame {
 

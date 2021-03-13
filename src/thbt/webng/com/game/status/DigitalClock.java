@@ -1,4 +1,4 @@
-package thbt.webng.com.game.info;
+package thbt.webng.com.game.status;
 
 import java.awt.Graphics;
 

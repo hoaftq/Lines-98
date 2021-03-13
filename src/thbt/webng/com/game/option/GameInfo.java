@@ -1,4 +1,4 @@
-package thbt.webng.com.game.entity;
+package thbt.webng.com.game.option;
 
 public class GameInfo {
 

@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import thbt.webng.com.game.common.WindowUtil;
-import thbt.webng.com.game.info.HighScoreUtil;
+import thbt.webng.com.game.status.HighScoreUtil;
 
 public class HighScoreDialog extends JDialog {
 
