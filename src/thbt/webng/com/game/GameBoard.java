@@ -151,56 +151,53 @@ public class GameBoard {
 			SoundManager.playMoveSound();
 		}
 
-		moveThread = new Thread() {
-			@Override
-			public void run() {
-				Square square = null;
-				Ball saveBall;
+		moveThread = new Thread(() -> {
+			Square square = null;
+			Ball saveBall;
 
-				for (int i = 1; i < positionList.size(); i++) {
-					Position pos = positionList.get(i);
-					square = getSquare(pos);
+			for (int i = 1; i < positionList.size(); i++) {
+				Position pos = positionList.get(i);
+				square = getSquare(pos);
 
-					saveBall = square.getBall();
+				saveBall = square.getBall();
 
-					square.setBall(new Ball(ballFrom.getColor(), BallState.Maturity, square));
-
-					gamePanel.repaint();
-
-					try {
-						Thread.sleep(20);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-
-					square.setBall(saveBall);
-				}
-
-				Ball ballTo = square.getBall();
-				square.setBall(ballFrom);
-
-				List<Square> completeSquareList = getCompleteSquare(positionTo);
-				if (completeSquareList.size() > 0) {
-					explosionBall(completeSquareList);
-
-					if (ballTo != null) {
-						if (!square.hasBall()) {
-							square.setBall(ballTo);
-						} else {
-							setNewGrowingPos(positionList.get(positionList.size() - 1), ballTo);
-						}
-					}
-				} else {
-					if (ballTo != null) {
-						setNewGrowingPos(positionList.get(positionList.size() - 1), ballTo);
-					}
-
-					nextStep();
-				}
+				square.setBall(new Ball(ballFrom.getColor(), BallState.Maturity, square));
 
 				gamePanel.repaint();
+
+				try {
+					Thread.sleep(20);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+
+				square.setBall(saveBall);
 			}
-		};
+
+			Ball ballTo = square.getBall();
+			square.setBall(ballFrom);
+
+			List<Square> completeSquareList = getCompleteSquare(positionTo);
+			if (completeSquareList.size() > 0) {
+				explosionBall(completeSquareList);
+
+				if (ballTo != null) {
+					if (!square.hasBall()) {
+						square.setBall(ballTo);
+					} else {
+						setNewGrowingPos(positionList.get(positionList.size() - 1), ballTo);
+					}
+				}
+			} else {
+				if (ballTo != null) {
+					setNewGrowingPos(positionList.get(positionList.size() - 1), ballTo);
+				}
+
+				nextStep();
+			}
+
+			gamePanel.repaint();
+		});
 
 		moveThread.start();
 

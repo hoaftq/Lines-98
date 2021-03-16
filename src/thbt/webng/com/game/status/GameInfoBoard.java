@@ -3,8 +3,6 @@ package thbt.webng.com.game.status;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
@@ -16,8 +14,8 @@ public class GameInfoBoard {
 	public GameInfoBoard(GamePanel gamePanel) {
 		this.gamePanel = gamePanel;
 
-		higherScore.setLeft(10);
-		higherScore.setTop(top + (height - higherScore.getHeight()) / 2);
+		highestScore.setLeft(10);
+		highestScore.setTop(top + (height - highestScore.getHeight()) / 2);
 
 		score.setLeft(left + width - score.getWidth() - 10);
 		score.setTop(top + (height - score.getHeight()) / 2);
@@ -27,33 +25,25 @@ public class GameInfoBoard {
 
 		nextBallBoard.setLeft(left + (width - nextBallBoard.getWidth()) / 2);
 		nextBallBoard.setTop(10);
-		nextBallBoard.setNextColors(new Color[] { Color.BLACK, Color.BLACK,
-				Color.BLACK });
+		nextBallBoard.setNextColors(new Color[] { Color.BLACK, Color.BLACK, Color.BLACK });
 
 		clockTimer.start();
 
-		new Thread() {
-
-			@Override
-			public void run() {
-				higherScore.setScore(HighScoreUtil.getHighestScore());
-			}
-
-		}.start();
+		new Thread(() -> highestScore.setScore(PlayerScoreHistory.getInstance().getHighestScore())).start();
 	}
 
 	public void draw(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fill3DRect(left, top, width, height, true);
-		higherScore.draw(g);
+		highestScore.draw(g);
 		score.draw(g);
 		nextBallBoard.draw(g);
 		drawGameType(g);
 		clock.draw(g);
 	}
 
-	public Score getHigherScore() {
-		return higherScore;
+	public Score getHighestScore() {
+		return highestScore;
 	}
 
 	public Score getScore() {
@@ -79,8 +69,7 @@ public class GameInfoBoard {
 	}
 
 	private void drawGameType(Graphics g) {
-		String gameTypeString = GameInfo.getInstance().getGameType().toString()
-				.toUpperCase();
+		String gameTypeString = GameInfo.getInstance().getGameType().toString().toUpperCase();
 
 		g.setFont(g.getFont().deriveFont(Font.BOLD, 7f));
 
@@ -97,16 +86,13 @@ public class GameInfoBoard {
 
 	private GamePanel gamePanel;
 
-	private Score higherScore = new Score();
+	private Score highestScore = new Score();
 	private Score score = new Score();
 	private DigitalClock clock = new DigitalClock();
 	private NextBallBoard nextBallBoard = new NextBallBoard();
 
-	private Timer clockTimer = new Timer(1000, new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			clock.setSeconds(clock.getSeconds() + 1);
-			gamePanel.repaint(left, top, width, height);
-		}
+	private Timer clockTimer = new Timer(1000, (e) -> {
+		clock.setSeconds(clock.getSeconds() + 1);
+		gamePanel.repaint(left, top, width, height);
 	});
 }

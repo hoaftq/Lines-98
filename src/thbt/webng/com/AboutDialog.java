@@ -5,8 +5,6 @@ import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Desktop.Action;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -91,14 +89,11 @@ public class AboutDialog extends JDialog {
 		// Create panel container OK button
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 15));
 		JButton okButton = new JButton("OK");
-		okButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		okButton.addActionListener((e) -> {
 
-				// Destroy about dialog
-				setVisible(false);
-				dispose();
-			}
+			// Destroy about dialog
+			setVisible(false);
+			dispose();
 		});
 		buttonPanel.add(okButton);
 		add(buttonPanel, BorderLayout.SOUTH);

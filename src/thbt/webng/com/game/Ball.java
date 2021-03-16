@@ -54,37 +54,34 @@ public class Ball extends PrimitiveBall {
 
 		ballState = BallState.Animate;
 
-		animateThread = new Thread() {
-			@Override
-			public void run() {
-				while (ballState == BallState.Animate) {
-					if (isUpDirect) {
-						if (top > 2) {
-							top -= 2;
-						} else {
-							isUpDirect = !isUpDirect;
-						}
+		animateThread = new Thread(() -> {
+			while (ballState == BallState.Animate) {
+				if (isUpDirect) {
+					if (top > 2) {
+						top -= 2;
 					} else {
-						if (top + height < square.getSize() - 2) {
-							top += 2;
-						} else {
-							isUpDirect = !isUpDirect;
-							if (GameInfo.getInstance().isSelectedBallSound()) {
-								SoundManager.playJumSound();
-							}
-						}
+						isUpDirect = !isUpDirect;
 					}
-
-					square.repaint();
-
-					try {
-						Thread.sleep(GameInfo.getInstance().getJumpValue());
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+				} else {
+					if (top + height < square.getSize() - 2) {
+						top += 2;
+					} else {
+						isUpDirect = !isUpDirect;
+						if (GameInfo.getInstance().isSelectedBallSound()) {
+							SoundManager.playJumSound();
+						}
 					}
 				}
+
+				square.repaint();
+
+				try {
+					Thread.sleep(GameInfo.getInstance().getJumpValue());
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
-		};
+		});
 
 		animateThread.start();
 	}
@@ -135,8 +132,7 @@ public class Ball extends PrimitiveBall {
 
 	public static void hideBall(final List<Square> squareList) {
 		for (Square square : squareList) {
-			if (square.getBallState() != BallState.Maturity
-					&& square.getBallState() != BallState.Animate) {
+			if (square.getBallState() != BallState.Maturity && square.getBallState() != BallState.Animate) {
 				throw new IllegalStateException();
 			}
 
@@ -169,10 +165,7 @@ public class Ball extends PrimitiveBall {
 
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
-		Ball ball = new Ball(
-				color,
-				ballState == BallState.Animate ? BallState.Maturity : ballState,
-				square);
+		Ball ball = new Ball(color, ballState == BallState.Animate ? BallState.Maturity : ballState, square);
 
 		return ball;
 	}
