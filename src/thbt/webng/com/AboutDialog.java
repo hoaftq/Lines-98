@@ -35,22 +35,21 @@ public class AboutDialog extends JDialog {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		// Create puzzle information label
-		JLabel infoLabel = new JLabel("<html><table>"
-				+ "<tr><td colspan=2 align=center><font size=6 color=Red>Game Lines 1.1</font></td></tr>"
-				+ "<tr><td>Author:</td><td>Trac Quang Hoa</td></tr>" + "<tr><td>Created:</td><td>08-01-2012</td></tr>"
-				+ "<tr><td>Updated:</td><td>12-12-2020</td></tr>" + "</table></html>");
-		JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		JLabel infoLabel = new JLabel(
+				"<html><table>" + "<tr><td colspan=2 align=center><font size=5 color=Red>Game Lines</font></td></tr>"
+						+ "<tr><td>Author:</td><td>Trac Quang Hoa</td><td></td></tr>" + "<tr><td>Version:</td><td>"
+						+ VERSION + "</td><td></td></tr>" + "</table></html>");
+		JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		infoPanel.add(infoLabel);
 		add(infoPanel, BorderLayout.NORTH);
 
-		final String enteredVisitLabel = "<html><table><tr><a href='" + THBT_WEB_ADDRESS + "'><i>" + THBT_WEB_ADDRESS
-				+ "</i></a></tr></table></html>";
-		final String exitedVisitLabel = "<html><table><tr><a href='" + THBT_WEB_ADDRESS + "'>" + THBT_WEB_ADDRESS
-				+ "</a></tr></table></html>";
+		final String enteredVisitLabel = "<html><a href='" + THBT_WEB_ADDRESS + "'><i>" + THBT_WEB_ADDRESS
+				+ "</i></a></html>";
+		final String exitedVisitLabel = "<html><a href='" + THBT_WEB_ADDRESS + "'>" + THBT_WEB_ADDRESS + "</a></html>";
 
 		// Create my home page panel
 		JPanel visitPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		visitPanel.add(new JLabel("<html><table><tr><td>Source:</td></tr></table></html>"));
+		visitPanel.add(new JLabel("Source:"));
 
 		JLabel visitLabel = new JLabel(exitedVisitLabel);
 		visitLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -103,9 +102,10 @@ public class AboutDialog extends JDialog {
 		setResizable(false);
 	}
 
+	private static final String VERSION = "1.1.0";
 	/**
 	 * My home page address
 	 */
-	private static final String THBT_WEB_ADDRESS = "https://github.com/hoaftq/Lines-98";
+	private static final String THBT_WEB_ADDRESS = "https://github.com/hoaftq";
 	private static final long serialVersionUID = 1L;
 }

@@ -61,6 +61,7 @@ public class GameBoard {
 		gameInfoBoard.getNextBallBoard().setNextColors(nextColorArray);
 		gameInfoBoard.getClock().setSeconds(0);
 		gameInfoBoard.getScore().setScore(0);
+		gameInfoBoard.setClockState(true);
 
 		gamePanel.repaint();
 	}

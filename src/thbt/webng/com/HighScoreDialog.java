@@ -1,9 +1,6 @@
 package thbt.webng.com;
 
 import java.awt.BorderLayout;
-import java.awt.ScrollPane;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.security.InvalidParameterException;
 import java.util.List;
 
@@ -26,33 +23,23 @@ public class HighScoreDialog extends JDialog {
 	public HighScoreDialog(JFrame frame) {
 		super(frame, true);
 
-		// JPanel northPanel = new JPanel();
-		// label = new JLabel("Please wait...");
-		// northPanel.add(label);
-
 		JTable table = new JTable(new HighScoreTableModel());
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		table.setDefaultRenderer(Object.class, centerRenderer);
 
-		JScrollPane northPanel = new JScrollPane(table);
+		JScrollPane northPane = new JScrollPane(table);
+		add(northPane, BorderLayout.CENTER);
 
-		// northPanel.add(table);
-		add(northPanel, BorderLayout.NORTH);
-
-		JPanel panel = new JPanel();
+		JPanel southPane = new JPanel();
 		JButton okButton = new JButton("OK");
-		okButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				HighScoreDialog.this.setVisible(false);
-				HighScoreDialog.this.dispose();
-			}
+		okButton.addActionListener((e) -> {
+			HighScoreDialog.this.setVisible(false);
+			HighScoreDialog.this.dispose();
 		});
 
-		panel.add(okButton);
-		add(panel, BorderLayout.SOUTH);
+		southPane.add(okButton);
+		add(southPane, BorderLayout.SOUTH);
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle("High scores");
@@ -60,18 +47,6 @@ public class HighScoreDialog extends JDialog {
 		WindowUtil.centerOwner(this);
 		setResizable(false);
 	}
-
-	public void display() {
-		// new Thread() {
-		// @Override
-		// public void run() {
-		// label.setText(HighScoreUtil.getTopHighScore());
-		// }
-		// }.start();
-		setVisible(true);
-	}
-
-	private JLabel label;
 
 	private static final long serialVersionUID = -7150760362536326108L;
 
@@ -107,10 +82,8 @@ public class HighScoreDialog extends JDialog {
 				return scores.get(r).getScore();
 			case 2:
 				return scores.get(r).getPlayTime();
-
 			}
 			throw new InvalidParameterException();
 		}
-
 	}
 }

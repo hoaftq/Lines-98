@@ -21,6 +21,7 @@ public class PlayerScoreHistory {
 
 	private static PlayerScoreHistory instance = new PlayerScoreHistory();
 
+	@SuppressWarnings("unchecked")
 	private PlayerScoreHistory() {
 		try (ObjectInputStream stream = new ObjectInputStream(new FileInputStream(SCORE_HISTORY_FILE_NAME))) {
 			scores = (List<PlayerScore>) stream.readObject();
@@ -43,7 +44,8 @@ public class PlayerScoreHistory {
 	}
 
 	public boolean isNewRecord(int score) {
-		return (scores.size() < SCORE_HISTORY_LIMIT) || (scores.stream().anyMatch(ps -> ps.getScore() < score));
+		return score > 0
+				&& (scores.size() < SCORE_HISTORY_LIMIT || scores.stream().anyMatch(ps -> ps.getScore() < score));
 	}
 
 	public void addHighScore(PlayerScore playerScore) {

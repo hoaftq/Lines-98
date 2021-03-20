@@ -5,7 +5,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -32,7 +31,7 @@ public class GameFrame extends JFrame {
 		gamePanel = new GamePanel(this);
 		add(gamePanel);
 
-		GameBoard gameBoard = new GameBoard(gamePanel);
+		gameBoard = new GameBoard(gamePanel);
 		gamePanel.setGameBoard(gameBoard);
 
 		setJMenuBar(new JMenuBar());
@@ -47,7 +46,6 @@ public class GameFrame extends JFrame {
 		setResizable(false);
 
 		WindowUtil.centerOwner(this);
-
 	}
 
 	private void addGameMenu() {
@@ -57,7 +55,8 @@ public class GameFrame extends JFrame {
 		gameMenu.add(newMenuItem = new JMenuItem("New", 'N'));
 		newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
 		newMenuItem.addActionListener((e) -> {
-			gamePanel.getGameBoard().newGame();
+			saveHighScore();
+			gameBoard.newGame();
 		});
 
 		gameMenu.addSeparator();
@@ -65,22 +64,25 @@ public class GameFrame extends JFrame {
 		JMenuItem newLinesMenuItem = new JMenuItem("New Lines Game", 'L');
 		gameMenu.add(newLinesMenuItem);
 		newLinesMenuItem.addActionListener((e) -> {
+			saveHighScore();
 			GameInfo.getInstance().setGameType(GameType.Lines);
-			gamePanel.getGameBoard().newGame();
+			gameBoard.newGame();
 		});
 
 		JMenuItem newSquaresMenuItem = new JMenuItem("New Squares Game", 'S');
 		gameMenu.add(newSquaresMenuItem);
 		newSquaresMenuItem.addActionListener((e) -> {
+			saveHighScore();
 			GameInfo.getInstance().setGameType(GameType.Squares);
-			gamePanel.getGameBoard().newGame();
+			gameBoard.newGame();
 		});
 
 		JMenuItem newBlocksMenuItem = new JMenuItem("New Blocks Game", 'B');
 		gameMenu.add(newBlocksMenuItem);
 		newBlocksMenuItem.addActionListener((e) -> {
+			saveHighScore();
 			GameInfo.getInstance().setGameType(GameType.Blocks);
-			gamePanel.getGameBoard().newGame();
+			gameBoard.newGame();
 		});
 
 		gameMenu.addSeparator();
@@ -88,13 +90,13 @@ public class GameFrame extends JFrame {
 		JMenuItem saveGameMenuItem = new JMenuItem("Save Game", 'S');
 		gameMenu.add(saveGameMenuItem);
 		saveGameMenuItem.addActionListener((e) -> {
-			gamePanel.getGameBoard().saveGame();
+			gameBoard.saveGame();
 		});
 
 		JMenuItem loadGameMenuItem = new JMenuItem("Load Game", 'L');
 		gameMenu.add(loadGameMenuItem);
 		loadGameMenuItem.addActionListener((e) -> {
-			gamePanel.getGameBoard().loadGame();
+			gameBoard.loadGame();
 		});
 
 		JMenuItem endGameMenuItem = new JMenuItem("End Game", 'E');
@@ -142,73 +144,42 @@ public class GameFrame extends JFrame {
 	}
 
 	public void endGame() {
-//		int minScore;
-//
-//		while (true) {
-//			try {
-//				minScore = HighScoreUtil.getSmallestScore();
-//				break;
-//			} catch (NumberFormatException | IOException e1) {
-//				e1.printStackTrace();
-//				if (JOptionPane.showConfirmDialog(GameFrame.this, "Occur error while connect to server, retry?",
-//						"Lines", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
-//					return;
-//				}
-//			}
-//		}
-//
-//		GameInfoBoard gameInfoBoard = gamePanel.getGameBoard().getGameInfoBoard();
-//		if (gameInfoBoard.getScore().getScore() > minScore) {
-//			String playerName = JOptionPane.showInputDialog(GameFrame.this, "Please input your name", "Game Over",
-//					JOptionPane.QUESTION_MESSAGE);
-//			if (playerName != null) {
-//				while (true) {
-//					String status = HighScoreUtil.sendHighScore(playerName, gameInfoBoard.getScore().getScore(),
-//							gameInfoBoard.getClock().toString());
-//					if ("true".equals(status)) {
-//						break;
-//					}
-//
-//					if (JOptionPane.showConfirmDialog(GameFrame.this,
-//							"Occur error while send your information to server, retry?", "Lines",
-//							JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
-//						break;
-//					}
-//
-//				}
-//			}
-//		}
-		
-		GameInfoBoard gameInfoBoard = gamePanel.getGameBoard().getGameInfoBoard();
+		saveHighScore();
+		gamePanel.getGameBoard().newGame();
+	}
+
+	private void saveHighScore() {
+		GameInfoBoard gameInfoBoard = gameBoard.getGameInfoBoard();
+
+		// Stop the playing clock
+		gameInfoBoard.setClockState(false);
+
 		PlayerScoreHistory playerScoreHistory = PlayerScoreHistory.getInstance();
-		
+
 		// Player gets a new high score
-		if(playerScoreHistory.isNewRecord(gameInfoBoard.getScore().getScore())) {
-			String playerName = JOptionPane.showInputDialog(GameFrame.this, "You've got a high score. Please input your name", "Game Over", JOptionPane.QUESTION_MESSAGE);
-			if(playerName != null) {
+		if (playerScoreHistory.isNewRecord(gameInfoBoard.getScore().getScore())) {
+			String playerName = JOptionPane.showInputDialog(GameFrame.this,
+					"You've got a high score. Please input your name", "New high score", JOptionPane.QUESTION_MESSAGE);
+			if (playerName != null && !"".equals(playerName)) {
 				// Add a new record to high score history
-				playerScoreHistory.addHighScore(new PlayerScore(playerName, gameInfoBoard.getScore().getScore(), gameInfoBoard.getClock().toString()));
+				playerScoreHistory.addHighScore(new PlayerScore(playerName, gameInfoBoard.getScore().getScore(),
+						gameInfoBoard.getClock().toString()));
 				playerScoreHistory.save();
+
+				showHighScoreDialog();
 			}
 		}
 
-		showHighScoreDialog();
-
-//		if (gameInfoBoard.getScore().getScore() > gameInfoBoard.getHigherScore().getScore()) {
-//			gameInfoBoard.getHigherScore().setScore(gameInfoBoard.getScore().getScore());
-//		}
-		
 		// Update highest score on the game status board
 		gameInfoBoard.getHighestScore().setScore(playerScoreHistory.getHighestScore());
-		
-		gamePanel.getGameBoard().newGame();
 	}
 
 	private void showHighScoreDialog() {
 		HighScoreDialog highScoreDialog = new HighScoreDialog(GameFrame.this);
-		highScoreDialog.display();
+		highScoreDialog.setVisible(true);
 	}
 
+	private GameBoard gameBoard;
 	private GamePanel gamePanel;
 	private static final long serialVersionUID = -8199515970527728642L;
 }
