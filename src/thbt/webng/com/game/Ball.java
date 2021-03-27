@@ -67,7 +67,7 @@ public class Ball extends PrimitiveBall {
 						top += 2;
 					} else {
 						isUpDirect = !isUpDirect;
-						if (GameInfo.getInstance().isSelectedBallSound()) {
+						if (GameInfo.getCurrentInstance().isBallJumpingSound()) {
 							SoundManager.playJumSound();
 						}
 					}
@@ -76,7 +76,7 @@ public class Ball extends PrimitiveBall {
 				square.repaint();
 
 				try {
-					Thread.sleep(GameInfo.getInstance().getJumpValue());
+					Thread.sleep(GameInfo.getCurrentInstance().getJumpValue());
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -123,7 +123,7 @@ public class Ball extends PrimitiveBall {
 			}
 
 			try {
-				Thread.sleep(GameInfo.getInstance().getAppearanceValue());
+				Thread.sleep(GameInfo.getCurrentInstance().getAppearanceValue());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -147,7 +147,7 @@ public class Ball extends PrimitiveBall {
 			}
 
 			try {
-				Thread.sleep(GameInfo.getInstance().getExplosionValue());
+				Thread.sleep(GameInfo.getCurrentInstance().getExplosionValue());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -158,16 +158,14 @@ public class Ball extends PrimitiveBall {
 			square.repaint();
 		}
 
-		if (GameInfo.getInstance().isShapeCompleteSound()) {
+		if (GameInfo.getCurrentInstance().isDestroySound()) {
 			SoundManager.playDestroySound();
 		}
 	}
 
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
-		Ball ball = new Ball(color, ballState == BallState.Animate ? BallState.Maturity : ballState, square);
-
-		return ball;
+		return new Ball(color, ballState == BallState.Animate ? BallState.Maturity : ballState, square);
 	}
 
 	protected Square square;

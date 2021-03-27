@@ -148,7 +148,7 @@ public class GameBoard {
 		selectedPos = null;
 		squareFrom.setBall(null);
 
-		if (GameInfo.getInstance().isMovementSound()) {
+		if (GameInfo.getCurrentInstance().isMovementSound()) {
 			SoundManager.playMoveSound();
 		}
 
@@ -387,9 +387,9 @@ public class GameBoard {
 	}
 
 	private List<Square> getCompleteSquare(Position pos) {
-		if (GameInfo.getInstance().getGameType() == GameType.Lines) {
+		if (GameInfo.getCurrentInstance().getGameType() == GameType.LINE) {
 			return getLinesComplete(pos);
-		} else if (GameInfo.getInstance().getGameType() == GameType.Squares) {
+		} else if (GameInfo.getCurrentInstance().getGameType() == GameType.SQUARE) {
 			return getSquaresComplete(pos);
 		} else {
 			return getBlocksComplete(pos);

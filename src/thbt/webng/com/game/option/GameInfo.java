@@ -1,13 +1,12 @@
 package thbt.webng.com.game.option;
 
-public class GameInfo {
+import java.io.Serializable;
 
-	public static GameInfo getInstance() {
-		return instance;
-	}
+import thbt.webng.com.game.common.StorageUtil;
 
-	private GameInfo() {
-	}
+public class GameInfo implements Cloneable, Serializable {
+
+	private static final long serialVersionUID = -4449406179310549758L;
 
 	public GameType getGameType() {
 		return gameType;
@@ -65,20 +64,20 @@ public class GameInfo {
 		this.appearanceValue = appearanceValue;
 	}
 
-	public boolean isSelectedBallSound() {
-		return selectedBallSound;
+	public boolean isBallJumpingSound() {
+		return ballJumpingSound;
 	}
 
-	public void setSelectedBallSound(boolean selectedBallSound) {
-		this.selectedBallSound = selectedBallSound;
+	public void setBallJumpingSound(boolean ballJumpingSound) {
+		this.ballJumpingSound = ballJumpingSound;
 	}
 
-	public boolean isShapeCompleteSound() {
-		return shapeCompleteSound;
+	public boolean isDestroySound() {
+		return destroySound;
 	}
 
-	public void setShapeCompleteSound(boolean shapeCompleteSound) {
-		this.shapeCompleteSound = shapeCompleteSound;
+	public void setDestroySound(boolean destroySound) {
+		this.destroySound = destroySound;
 	}
 
 	public boolean isMovementSound() {
@@ -89,10 +88,33 @@ public class GameInfo {
 		this.movementSound = movementSound;
 	}
 
-	private static GameInfo instance = new GameInfo();
+	public static GameInfo getCurrentInstance() {
+		return currentInstance;
+	}
 
-	private GameType gameType = GameType.Lines;
-	private GameType defaultGameType = GameType.Lines;
+	public static void setCurrentInstance(GameInfo gameInfo) {
+		currentInstance = gameInfo;
+		StorageUtil.save(currentInstance, CONFIG_FILE_NAME);
+	}
+
+	@Override
+	protected GameInfo clone() {
+		GameInfo gi = new GameInfo();
+		gi.setGameType(gameType);
+		gi.setDefaultGameType(defaultGameType);
+		gi.setNextBallDisplayType(nextBallDisplayType);
+		gi.setJumpValue(jumpValue);
+		gi.setExplosionValue(explosionValue);
+		gi.setMovementValue(movementValue);
+		gi.setAppearanceValue(appearanceValue);
+		gi.setBallJumpingSound(ballJumpingSound);
+		gi.setDestroySound(destroySound);
+		gi.setMovementSound(movementSound);
+		return gi;
+	}
+
+	private GameType gameType = GameType.LINE;
+	private GameType defaultGameType = GameType.LINE;
 
 	private NextBallDisplayType nextBallDisplayType = NextBallDisplayType.ShowBoth;
 
@@ -101,7 +123,13 @@ public class GameInfo {
 	private int movementValue = 10;
 	private int appearanceValue = 20;
 
-	private boolean selectedBallSound = false;
-	private boolean shapeCompleteSound = true;
+	private boolean ballJumpingSound = false;
+	private boolean destroySound = true;
 	private boolean movementSound = true;
+
+	private static GameInfo currentInstance;
+	private final static String CONFIG_FILE_NAME = "Config";
+	static {
+		currentInstance = StorageUtil.<GameInfo>load(CONFIG_FILE_NAME).orElse(new GameInfo());
+	}
 }

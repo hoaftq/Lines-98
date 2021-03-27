@@ -1,15 +1,12 @@
 package thbt.webng.com.game.status;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import thbt.webng.com.game.common.StorageUtil;
 
 public class PlayerScoreHistory {
 
@@ -21,14 +18,8 @@ public class PlayerScoreHistory {
 
 	private static PlayerScoreHistory instance = new PlayerScoreHistory();
 
-	@SuppressWarnings("unchecked")
 	private PlayerScoreHistory() {
-		try (ObjectInputStream stream = new ObjectInputStream(new FileInputStream(SCORE_HISTORY_FILE_NAME))) {
-			scores = (List<PlayerScore>) stream.readObject();
-		} catch (ClassNotFoundException | IOException e) {
-			scores = new ArrayList<>();
-			e.printStackTrace();
-		}
+		scores = StorageUtil.<List<PlayerScore>>load(SCORE_HISTORY_FILE_NAME).orElse(new ArrayList<>());
 	}
 
 	public static PlayerScoreHistory getInstance() {
@@ -55,11 +46,7 @@ public class PlayerScoreHistory {
 	}
 
 	public void save() {
-		try (ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(SCORE_HISTORY_FILE_NAME))) {
-			stream.writeObject(scores);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		StorageUtil.save(scores, SCORE_HISTORY_FILE_NAME);
 	}
 
 }

@@ -18,6 +18,7 @@ import thbt.webng.com.game.GamePanel;
 import thbt.webng.com.game.common.WindowUtil;
 import thbt.webng.com.game.option.GameInfo;
 import thbt.webng.com.game.option.GameType;
+import thbt.webng.com.game.option.OptionDialog;
 import thbt.webng.com.game.status.GameInfoBoard;
 import thbt.webng.com.game.status.PlayerScore;
 import thbt.webng.com.game.status.PlayerScoreHistory;
@@ -56,6 +57,7 @@ public class GameFrame extends JFrame {
 		newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
 		newMenuItem.addActionListener((e) -> {
 			saveHighScore();
+			GameInfo.getCurrentInstance().setGameType(GameInfo.getCurrentInstance().getDefaultGameType());
 			gameBoard.newGame();
 		});
 
@@ -65,7 +67,7 @@ public class GameFrame extends JFrame {
 		gameMenu.add(newLinesMenuItem);
 		newLinesMenuItem.addActionListener((e) -> {
 			saveHighScore();
-			GameInfo.getInstance().setGameType(GameType.Lines);
+			GameInfo.getCurrentInstance().setGameType(GameType.LINE);
 			gameBoard.newGame();
 		});
 
@@ -73,7 +75,7 @@ public class GameFrame extends JFrame {
 		gameMenu.add(newSquaresMenuItem);
 		newSquaresMenuItem.addActionListener((e) -> {
 			saveHighScore();
-			GameInfo.getInstance().setGameType(GameType.Squares);
+			GameInfo.getCurrentInstance().setGameType(GameType.SQUARE);
 			gameBoard.newGame();
 		});
 
@@ -81,8 +83,17 @@ public class GameFrame extends JFrame {
 		gameMenu.add(newBlocksMenuItem);
 		newBlocksMenuItem.addActionListener((e) -> {
 			saveHighScore();
-			GameInfo.getInstance().setGameType(GameType.Blocks);
+			GameInfo.getCurrentInstance().setGameType(GameType.BLOCK);
 			gameBoard.newGame();
+		});
+
+		gameMenu.addSeparator();
+
+		JMenuItem optionsMenuItem = new JMenuItem("Options", 'O');
+		gameMenu.add(optionsMenuItem);
+		optionsMenuItem.addActionListener((e) -> {
+			OptionDialog optionDialog = new OptionDialog(this);
+			optionDialog.setVisible(true);
 		});
 
 		gameMenu.addSeparator();

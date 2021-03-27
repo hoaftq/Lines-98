@@ -69,7 +69,7 @@ public class GameInfoBoard {
 	}
 
 	private void drawGameType(Graphics g) {
-		String gameTypeString = GameInfo.getInstance().getGameType().toString().toUpperCase();
+		String gameTypeString = GameInfo.getCurrentInstance().getGameType().toString().toUpperCase();
 
 		g.setFont(g.getFont().deriveFont(Font.BOLD, 7f));
 
