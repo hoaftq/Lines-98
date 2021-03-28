@@ -33,29 +33,29 @@ public class Ball extends PrimitiveBall {
 	public void setBallState(BallState ballState) {
 		this.ballState = ballState;
 
-		if (ballState == BallState.Growing) {
+		if (ballState == BallState.GROWING) {
 			setSize(GROWING_SIZE);
-		} else if (ballState == BallState.Maturity) {
+		} else if (ballState == BallState.MATURE) {
 			setSize(MATURITY_SIZE);
-		} else if (ballState == BallState.Animate) {
+		} else if (ballState == BallState.ANIMATE) {
 			setSize(MATURITY_SIZE);
 			select();
 		}
 	}
 
 	public void select() {
-		if (ballState == BallState.Growing || ballState == BallState.Removed) {
+		if (ballState == BallState.GROWING || ballState == BallState.REMOVED) {
 			throw new IllegalStateException();
 		}
 
-		if (ballState == BallState.Animate) {
+		if (ballState == BallState.ANIMATE) {
 			unSelect();
 		}
 
-		ballState = BallState.Animate;
+		ballState = BallState.ANIMATE;
 
 		animateThread = new Thread(() -> {
-			while (ballState == BallState.Animate) {
+			while (ballState == BallState.ANIMATE) {
 				if (isUpDirect) {
 					if (top > 2) {
 						top -= 2;
@@ -87,7 +87,7 @@ public class Ball extends PrimitiveBall {
 	}
 
 	public void unSelect() {
-		ballState = BallState.Maturity;
+		ballState = BallState.MATURE;
 
 		// animateThread.stop();
 		try {
@@ -108,11 +108,11 @@ public class Ball extends PrimitiveBall {
 
 	public static void growBall(final List<Square> squareList) {
 		for (Square square : squareList) {
-			if (square.getBallState() != BallState.Growing) {
+			if (square.getBallState() != BallState.GROWING) {
 				throw new IllegalStateException();
 			}
 
-			square.getBall().ballState = BallState.Maturity;
+			square.getBall().ballState = BallState.MATURE;
 		}
 
 		while (squareList.get(0).getBall().width < MATURITY_SIZE) {
@@ -132,11 +132,11 @@ public class Ball extends PrimitiveBall {
 
 	public static void hideBall(final List<Square> squareList) {
 		for (Square square : squareList) {
-			if (square.getBallState() != BallState.Maturity && square.getBallState() != BallState.Animate) {
+			if (square.getBallState() != BallState.MATURE && square.getBallState() != BallState.ANIMATE) {
 				throw new IllegalStateException();
 			}
 
-			square.getBall().ballState = BallState.Removed;
+			square.getBall().ballState = BallState.REMOVED;
 		}
 
 		while (squareList.get(0).getBall().width > GROWING_SIZE) {
@@ -165,7 +165,7 @@ public class Ball extends PrimitiveBall {
 
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
-		return new Ball(color, ballState == BallState.Animate ? BallState.Maturity : ballState, square);
+		return new Ball(color, ballState == BallState.ANIMATE ? BallState.MATURE : ballState, square);
 	}
 
 	protected Square square;

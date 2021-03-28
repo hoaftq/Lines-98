@@ -53,7 +53,7 @@ public class Square {
 
 	public BallState getBallState() {
 		if (ball == null) {
-			return BallState.Removed;
+			return BallState.REMOVED;
 		}
 
 		return ball.getBallState();
@@ -64,7 +64,7 @@ public class Square {
 			return false;
 		}
 
-		return ball.getBallState() == BallState.Maturity && ball.getColor().equals(color);
+		return ball.getBallState() == BallState.MATURE && ball.getColor().equals(color);
 	}
 
 	public void draw(Graphics g, boolean showGrowingBalls) {
@@ -73,7 +73,7 @@ public class Square {
 		if (ball != null) {
 			if (showGrowingBalls) {
 				ball.draw(g);
-			} else if (ball.getBallState() != BallState.Growing) {
+			} else if (ball.getBallState() != BallState.GROWING) {
 				ball.draw(g);
 			}
 		}

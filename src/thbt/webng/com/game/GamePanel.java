@@ -32,7 +32,7 @@ public class GamePanel extends JPanel {
 
 					Square square = gameBoard.getSquare(pos);
 
-					if (square.getBallState() == BallState.Maturity) {
+					if (square.getBallState() == BallState.MATURE) {
 						gameBoard.selectBall(pos);
 					} else {
 						if (gameBoard.getSelectedPosition() != null) {

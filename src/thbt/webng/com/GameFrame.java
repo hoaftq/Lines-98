@@ -17,6 +17,7 @@ import thbt.webng.com.game.common.WindowUtil;
 import thbt.webng.com.game.option.GameType;
 import thbt.webng.com.game.option.OptionDialog;
 import thbt.webng.com.game.status.GameInfoBoard;
+import thbt.webng.com.game.status.HighScoreDialog;
 import thbt.webng.com.game.status.PlayerScore;
 import thbt.webng.com.game.status.PlayerScoreHistory;
 

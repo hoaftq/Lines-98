@@ -172,7 +172,7 @@ public class GameBoard {
 
 				saveBall = square.getBall();
 
-				square.setBall(new Ball(ballFrom.getColor(), BallState.Maturity, square));
+				square.setBall(new Ball(ballFrom.getColor(), BallState.MATURE, square));
 
 				gamePanel.repaint();
 
@@ -243,7 +243,7 @@ public class GameBoard {
 		Ball.growBall(squareList);
 
 		for (Position pos : nextPositionList) {
-			if (getSquare(pos).hasBall() && getSquare(pos).getBallState() == BallState.Maturity) {
+			if (getSquare(pos).hasBall() && getSquare(pos).getBallState() == BallState.MATURE) {
 				List<Square> listCompleteSquare = getCompleteSquare(pos);
 				if (listCompleteSquare.size() > 0) {
 					explosionBall(listCompleteSquare);
@@ -276,7 +276,7 @@ public class GameBoard {
 		for (int i = 0; i < 5; i++) {
 			int idx = random.nextInt(listEmptyPosition.size());
 			Square square = getSquare(listEmptyPosition.get(idx));
-			square.setBall(new Ball(ColorUtil.getRandomColor(), BallState.Maturity, square));
+			square.setBall(new Ball(ColorUtil.getRandomColor(), BallState.MATURE, square));
 			listEmptyPosition.remove(idx);
 		}
 	}
@@ -286,7 +286,7 @@ public class GameBoard {
 		generateNextColor();
 		for (int i = 0; i < nextPositionList.size(); i++) {
 			Square square = getSquare(nextPositionList.get(i));
-			square.setBall(new Ball(nextColorArray[i], BallState.Growing, square));
+			square.setBall(new Ball(nextColorArray[i], BallState.GROWING, square));
 		}
 	}
 
@@ -364,7 +364,7 @@ public class GameBoard {
 		if (pos.x > 0) {
 			x = pos.x - 1;
 			y = pos.y;
-			if (!visitedArray[x][y] && squareArray[x][y].getBallState() != BallState.Maturity) {
+			if (!visitedArray[x][y] && squareArray[x][y].getBallState() != BallState.MATURE) {
 				positionList.add(new Position2(x, y, pos));
 			}
 		}
@@ -372,7 +372,7 @@ public class GameBoard {
 		if (pos.x < col - 1) {
 			x = pos.x + 1;
 			y = pos.y;
-			if (!visitedArray[x][y] && squareArray[x][y].getBallState() != BallState.Maturity) {
+			if (!visitedArray[x][y] && squareArray[x][y].getBallState() != BallState.MATURE) {
 				positionList.add(new Position2(x, y, pos));
 			}
 		}
@@ -380,7 +380,7 @@ public class GameBoard {
 		if (pos.y > 0) {
 			x = pos.x;
 			y = pos.y - 1;
-			if (!visitedArray[x][y] && squareArray[x][y].getBallState() != BallState.Maturity) {
+			if (!visitedArray[x][y] && squareArray[x][y].getBallState() != BallState.MATURE) {
 				positionList.add(new Position2(x, y, pos));
 			}
 		}
@@ -388,7 +388,7 @@ public class GameBoard {
 		if (pos.y < row - 1) {
 			x = pos.x;
 			y = pos.y + 1;
-			if (!visitedArray[x][y] && squareArray[x][y].getBallState() != BallState.Maturity) {
+			if (!visitedArray[x][y] && squareArray[x][y].getBallState() != BallState.MATURE) {
 				positionList.add(new Position2(x, y, pos));
 			}
 		}
