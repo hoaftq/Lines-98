@@ -11,11 +11,8 @@ It supports 3 difference types of game where you get scores if you move balls in
 Something need to be improved:
 - [x] Updated some frame properties like size, position, title, etc (They are not necessary in an Applet)
 - [x] Correct high score function since it is still for Applet and connects to my old website
-- [ ] Make the ball look better
+- [x] Make the ball look better
 - [ ] Improve concurrent processing in order make movement smoother
 - [x] Refactor source code since it was developed long time ago
 - [x] Add an option dialog
 - [ ] Convert to an Android game
-
-Bugs
-- [ ] Closing frame should ask for storing new high score

@@ -61,28 +61,23 @@ public class PrimitiveBall {
 	public void draw(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		Point leftBottomPoint = new Point(getLeft()
-				+ (int) (width * (1 - 1 / Math.sqrt(2)) / 2), getTop() + height
-				- (int) (height * (1 - 1 / Math.sqrt(2)) / 2));
+		int dx = (int) (width / Math.sqrt(2));
+		int dy = (int) (height / Math.sqrt(2));
+		Point leftBottomPoint = new Point(getLeft() + (width - dx) / 2, getTop() + (height + dy) / 2);
+		Point middlePoint = new Point(leftBottomPoint.x + dx / 2, leftBottomPoint.y - dy / 2);
+		Point rightTopPoint = new Point(leftBottomPoint.x + dx, leftBottomPoint.y - dy);
 
-		Point middlePoint = new Point(leftBottomPoint.x
-				+ (int) (width / 2 / Math.sqrt(2)), leftBottomPoint.y
-				- (int) (width / 2 / Math.sqrt(2)));
+		Paint p = new GradientPaint(leftBottomPoint, Color.BLACK, rightTopPoint, Color.BLACK);
+		g2.setPaint(p);
+		g2.fillArc(getLeft() + 1, getTop() + 1, width - 2, height - 2, 0, 360);
 
-		Point rightTopPoint = new Point(leftBottomPoint.x
-				+ (int) (width / Math.sqrt(2)), leftBottomPoint.y
-				- (int) (width / Math.sqrt(2)));
-
-		Paint paint = new GradientPaint(leftBottomPoint, color, middlePoint,
-				Color.BLACK);
+		Paint paint = new GradientPaint(leftBottomPoint, color, middlePoint, Color.BLACK);
 		g2.setPaint(paint);
 		g2.fillArc(getLeft(), getTop(), width, height, 134, 182);
 
-		Paint paint2 = new GradientPaint(middlePoint, Color.BLACK,
-				rightTopPoint, color);
+		Paint paint2 = new GradientPaint(middlePoint, Color.BLACK, rightTopPoint, color);
 		g2.setPaint(paint2);
 		g2.fillArc(getLeft(), getTop(), width, height, -46, 182);
 	}

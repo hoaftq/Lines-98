@@ -10,20 +10,8 @@ import thbt.webng.com.game.common.StorageUtil;
 
 public class PlayerScoreHistory {
 
-	private final static int SCORE_HISTORY_LIMIT = 10;
-
-	private final static String SCORE_HISTORY_FILE_NAME = "ScoreHistory";
-
-	private List<PlayerScore> scores;
-
-	private static PlayerScoreHistory instance = new PlayerScoreHistory();
-
 	private PlayerScoreHistory() {
 		scores = StorageUtil.<List<PlayerScore>>load(SCORE_HISTORY_FILE_NAME).orElse(new ArrayList<>());
-	}
-
-	public static PlayerScoreHistory getInstance() {
-		return instance;
 	}
 
 	public int getHighestScore() {
@@ -49,4 +37,15 @@ public class PlayerScoreHistory {
 		StorageUtil.save(scores, SCORE_HISTORY_FILE_NAME);
 	}
 
+	private final static int SCORE_HISTORY_LIMIT = 10;
+
+	private final static String SCORE_HISTORY_FILE_NAME = "ScoreHistory";
+
+	private List<PlayerScore> scores;
+
+	private static PlayerScoreHistory instance = new PlayerScoreHistory();
+
+	public static PlayerScoreHistory getInstance() {
+		return instance;
+	}
 }

@@ -1,4 +1,4 @@
-package thbt.webng.com.sound;
+package thbt.webng.com.game.sound;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

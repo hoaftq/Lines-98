@@ -13,8 +13,8 @@ import thbt.webng.com.game.common.ColorUtil;
 import thbt.webng.com.game.option.GameInfo;
 import thbt.webng.com.game.option.GameType;
 import thbt.webng.com.game.option.NextBallDisplayType;
+import thbt.webng.com.game.sound.SoundManager;
 import thbt.webng.com.game.status.GameInfoBoard;
-import thbt.webng.com.sound.SoundManager;
 
 public class GameBoard {
 

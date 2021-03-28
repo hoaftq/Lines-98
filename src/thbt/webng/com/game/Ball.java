@@ -5,7 +5,7 @@ import java.util.List;
 
 import thbt.webng.com.game.common.PrimitiveBall;
 import thbt.webng.com.game.option.GameInfo;
-import thbt.webng.com.sound.SoundManager;
+import thbt.webng.com.game.sound.SoundManager;
 
 public class Ball extends PrimitiveBall {
 

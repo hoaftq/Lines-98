@@ -2,6 +2,8 @@ package thbt.webng.com;
 
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -41,6 +43,18 @@ public class GameFrame extends JFrame {
 		setResizable(false);
 
 		WindowUtil.centerOwner(this);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				super.windowClosing(e);
+				saveHighScore();
+			}
+		});
+	}
+
+	public void endGame() {
+		saveHighScore();
+		gamePanel.getGameBoard().newGame();
 	}
 
 	private void addGameMenu() {
@@ -144,11 +158,6 @@ public class GameFrame extends JFrame {
 		});
 
 		getJMenuBar().add(helpMenu);
-	}
-
-	public void endGame() {
-		saveHighScore();
-		gamePanel.getGameBoard().newGame();
 	}
 
 	private void saveHighScore() {
