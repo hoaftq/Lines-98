@@ -12,6 +12,7 @@ import java.util.Random;
 import thbt.webng.com.game.common.ColorUtil;
 import thbt.webng.com.game.option.GameInfo;
 import thbt.webng.com.game.option.GameType;
+import thbt.webng.com.game.option.NextBallDisplayType;
 import thbt.webng.com.game.status.GameInfoBoard;
 import thbt.webng.com.sound.SoundManager;
 
@@ -33,9 +34,12 @@ public class GameBoard {
 	public void draw(Graphics g) {
 		gameInfoBoard.draw(g);
 
+		boolean displayGrowingBalls = GameInfo.getCurrentInstance()
+				.getNextBallDisplayType() == NextBallDisplayType.ShowBoth
+				|| GameInfo.getCurrentInstance().getNextBallDisplayType() == NextBallDisplayType.ShowOnField;
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
-				squareArray[i][j].draw(g);
+				squareArray[i][j].draw(g, displayGrowingBalls);
 			}
 		}
 	}
@@ -52,7 +56,7 @@ public class GameBoard {
 		return new Dimension(2 * left + col * Square.SIZE, top + row * Square.SIZE);
 	}
 
-	public void newGame() {
+	public void newGame(GameType gameType) {
 		initBoard();
 		addGrowingBall();
 		bakGameState = null;
@@ -63,7 +67,13 @@ public class GameBoard {
 		gameInfoBoard.getScore().setScore(0);
 		gameInfoBoard.setClockState(true);
 
+		GameInfo.getCurrentInstance().setGameType(gameType);
+
 		gamePanel.repaint();
+	}
+
+	public void newGame() {
+		newGame(GameInfo.getCurrentInstance().getDefaultGameType());
 	}
 
 	public Square getSquare(Position pos) {

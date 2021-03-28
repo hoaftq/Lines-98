@@ -3,8 +3,6 @@ package thbt.webng.com;
 import java.awt.Dimension;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -16,7 +14,6 @@ import javax.swing.KeyStroke;
 import thbt.webng.com.game.GameBoard;
 import thbt.webng.com.game.GamePanel;
 import thbt.webng.com.game.common.WindowUtil;
-import thbt.webng.com.game.option.GameInfo;
 import thbt.webng.com.game.option.GameType;
 import thbt.webng.com.game.option.OptionDialog;
 import thbt.webng.com.game.status.GameInfoBoard;
@@ -32,13 +29,13 @@ public class GameFrame extends JFrame {
 		gamePanel = new GamePanel(this);
 		add(gamePanel);
 
-		gameBoard = new GameBoard(gamePanel);
+		GameBoard gameBoard = new GameBoard(gamePanel);
 		gamePanel.setGameBoard(gameBoard);
 
 		setJMenuBar(new JMenuBar());
 		addGameMenu();
+		addControlMenu();
 		addHelpMenu();
-		addHighScoreMenu();
 
 		pack();
 		Dimension frameSize = getSize();
@@ -57,8 +54,7 @@ public class GameFrame extends JFrame {
 		newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
 		newMenuItem.addActionListener((e) -> {
 			saveHighScore();
-			GameInfo.getCurrentInstance().setGameType(GameInfo.getCurrentInstance().getDefaultGameType());
-			gameBoard.newGame();
+			gamePanel.getGameBoard().newGame();
 		});
 
 		gameMenu.addSeparator();
@@ -67,24 +63,21 @@ public class GameFrame extends JFrame {
 		gameMenu.add(newLinesMenuItem);
 		newLinesMenuItem.addActionListener((e) -> {
 			saveHighScore();
-			GameInfo.getCurrentInstance().setGameType(GameType.LINE);
-			gameBoard.newGame();
+			gamePanel.getGameBoard().newGame(GameType.LINE);
 		});
 
 		JMenuItem newSquaresMenuItem = new JMenuItem("New Squares Game", 'S');
 		gameMenu.add(newSquaresMenuItem);
 		newSquaresMenuItem.addActionListener((e) -> {
 			saveHighScore();
-			GameInfo.getCurrentInstance().setGameType(GameType.SQUARE);
-			gameBoard.newGame();
+			gamePanel.getGameBoard().newGame(GameType.SQUARE);
 		});
 
 		JMenuItem newBlocksMenuItem = new JMenuItem("New Blocks Game", 'B');
 		gameMenu.add(newBlocksMenuItem);
 		newBlocksMenuItem.addActionListener((e) -> {
 			saveHighScore();
-			GameInfo.getCurrentInstance().setGameType(GameType.BLOCK);
-			gameBoard.newGame();
+			gamePanel.getGameBoard().newGame(GameType.BLOCK);
 		});
 
 		gameMenu.addSeparator();
@@ -94,38 +87,49 @@ public class GameFrame extends JFrame {
 		optionsMenuItem.addActionListener((e) -> {
 			OptionDialog optionDialog = new OptionDialog(this);
 			optionDialog.setVisible(true);
+			gamePanel.repaint();
 		});
 
-		gameMenu.addSeparator();
-
-		JMenuItem saveGameMenuItem = new JMenuItem("Save Game", 'S');
+		JMenuItem saveGameMenuItem = new JMenuItem("High Scores", 'H');
 		gameMenu.add(saveGameMenuItem);
 		saveGameMenuItem.addActionListener((e) -> {
-			gameBoard.saveGame();
+			showHighScoreDialog();
+		});
+
+		getJMenuBar().add(gameMenu);
+	}
+
+	private void addControlMenu() {
+		JMenu controlMenu = new JMenu("Control");
+
+		JMenuItem saveGameMenuItem = new JMenuItem("Save Game", 'S');
+		controlMenu.add(saveGameMenuItem);
+		saveGameMenuItem.addActionListener((e) -> {
+			gamePanel.getGameBoard().saveGame();
 		});
 
 		JMenuItem loadGameMenuItem = new JMenuItem("Load Game", 'L');
-		gameMenu.add(loadGameMenuItem);
+		controlMenu.add(loadGameMenuItem);
 		loadGameMenuItem.addActionListener((e) -> {
-			gameBoard.loadGame();
+			gamePanel.getGameBoard().loadGame();
 		});
 
 		JMenuItem endGameMenuItem = new JMenuItem("End Game", 'E');
-		gameMenu.add(endGameMenuItem);
+		controlMenu.add(endGameMenuItem);
 		endGameMenuItem.addActionListener((e) -> {
 			endGame();
 		});
 
-		gameMenu.addSeparator();
+		controlMenu.addSeparator();
 
 		JMenuItem stepBackMenuItem = new JMenuItem("Step back");
 		stepBackMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK));
-		gameMenu.add(stepBackMenuItem);
+		controlMenu.add(stepBackMenuItem);
 		stepBackMenuItem.addActionListener((e) -> {
 			gamePanel.getGameBoard().stepBack();
 		});
 
-		getJMenuBar().add(gameMenu);
+		getJMenuBar().add(controlMenu);
 	}
 
 	private void addHelpMenu() {
@@ -142,25 +146,13 @@ public class GameFrame extends JFrame {
 		getJMenuBar().add(helpMenu);
 	}
 
-	private void addHighScoreMenu() {
-		JMenu highScoreMenu = new JMenu("High scores");
-		highScoreMenu.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				showHighScoreDialog();
-			}
-		});
-
-		getJMenuBar().add(highScoreMenu);
-	}
-
 	public void endGame() {
 		saveHighScore();
 		gamePanel.getGameBoard().newGame();
 	}
 
 	private void saveHighScore() {
-		GameInfoBoard gameInfoBoard = gameBoard.getGameInfoBoard();
+		GameInfoBoard gameInfoBoard = gamePanel.getGameBoard().getGameInfoBoard();
 
 		// Stop the playing clock
 		gameInfoBoard.setClockState(false);
@@ -190,7 +182,6 @@ public class GameFrame extends JFrame {
 		highScoreDialog.setVisible(true);
 	}
 
-	private GameBoard gameBoard;
 	private GamePanel gamePanel;
 	private static final long serialVersionUID = -8199515970527728642L;
 }

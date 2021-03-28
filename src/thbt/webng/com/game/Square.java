@@ -64,15 +64,18 @@ public class Square {
 			return false;
 		}
 
-		return ball.getBallState() == BallState.Maturity
-				&& ball.getColor().equals(color);
+		return ball.getBallState() == BallState.Maturity && ball.getColor().equals(color);
 	}
 
-	public void draw(Graphics g) {
+	public void draw(Graphics g, boolean showGrowingBalls) {
 		drawBackground(g);
 
 		if (ball != null) {
-			ball.draw(g);
+			if (showGrowingBalls) {
+				ball.draw(g);
+			} else if (ball.getBallState() != BallState.Growing) {
+				ball.draw(g);
+			}
 		}
 	}
 

@@ -8,6 +8,7 @@ import javax.swing.Timer;
 
 import thbt.webng.com.game.GamePanel;
 import thbt.webng.com.game.option.GameInfo;
+import thbt.webng.com.game.option.NextBallDisplayType;
 
 public class GameInfoBoard {
 
@@ -37,7 +38,12 @@ public class GameInfoBoard {
 		g.fill3DRect(left, top, width, height, true);
 		highestScore.draw(g);
 		score.draw(g);
-		nextBallBoard.draw(g);
+
+		NextBallDisplayType displayType = GameInfo.getCurrentInstance().getNextBallDisplayType();
+		if (displayType == NextBallDisplayType.ShowBoth || displayType == NextBallDisplayType.ShowOnTop) {
+			nextBallBoard.draw(g);
+		}
+
 		drawGameType(g);
 		clock.draw(g);
 	}
