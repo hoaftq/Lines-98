@@ -16,6 +16,7 @@ public class GamePanel extends JPanel {
 
 	public void setGameBoard(final GameBoard gameBoard) {
 		this.gameBoard = gameBoard;
+		setPreferredSize(gameBoard.getBoardSize());
 
 		gameBoard.newGame();
 
@@ -24,8 +25,7 @@ public class GamePanel extends JPanel {
 			public void mousePressed(MouseEvent e) {
 
 				if (e.getButton() == MouseEvent.BUTTON1) {
-					Position pos = gameBoard.squareFromMousePos(e.getX(),
-							e.getY());
+					Position pos = gameBoard.squareFromMousePos(e.getX(), e.getY());
 					if (pos == null) {
 						return;
 					}

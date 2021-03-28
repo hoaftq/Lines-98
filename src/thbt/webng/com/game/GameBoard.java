@@ -53,7 +53,7 @@ public class GameBoard {
 	 *         top
 	 */
 	public Dimension getBoardSize() {
-		return new Dimension(2 * left + col * Square.SIZE, top + row * Square.SIZE);
+		return new Dimension(2 * left + col * Square.SIZE, top + row * Square.SIZE + 1);
 	}
 
 	public void newGame(GameType gameType) {

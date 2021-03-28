@@ -1,6 +1,5 @@
 package thbt.webng.com;
 
-import java.awt.Dimension;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
@@ -39,9 +38,6 @@ public class GameFrame extends JFrame {
 		addHelpMenu();
 
 		pack();
-		Dimension frameSize = getSize();
-		Dimension boardSize = gameBoard.getBoardSize();
-		setSize(boardSize.width, frameSize.height + boardSize.height - 2);
 		setResizable(false);
 
 		WindowUtil.centerOwner(this);
