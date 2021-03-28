@@ -22,10 +22,10 @@ public class GameInfoBoard {
 		score.setTop(top + (height - score.getHeight()) / 2);
 
 		clock.setLeft(left + (width - clock.getWidth()) / 2);
-		clock.setTop(35);
+		clock.setTop(36);
 
 		nextBallBoard.setLeft(left + (width - nextBallBoard.getWidth()) / 2);
-		nextBallBoard.setTop(10);
+		nextBallBoard.setTop(11);
 		nextBallBoard.setNextColors(new Color[] { Color.BLACK, Color.BLACK, Color.BLACK });
 
 		clockTimer.start();
@@ -82,7 +82,7 @@ public class GameInfoBoard {
 		int w = g.getFontMetrics().stringWidth(gameTypeString);
 
 		g.setColor(new Color(0, 96, 191));
-		g.drawString(gameTypeString, left + (width - w) / 2, top + 6);
+		g.drawString(gameTypeString, left + (width - w) / 2, top + 8);
 	}
 
 	private int left = 1;

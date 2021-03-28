@@ -17,7 +17,7 @@ public class DigitalClock {
 
 		int tmp = digits[0].getHeight() / 4;
 		int tmpLeft;
-
+		
 		tmpLeft = left + digits[4].getWidth() + 1;
 		g.fillRect(tmpLeft, top + tmp, 1, 1);
 		g.fillRect(tmpLeft, top + 3 * tmp, 1, 1);

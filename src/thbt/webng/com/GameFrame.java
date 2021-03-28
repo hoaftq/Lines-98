@@ -48,6 +48,7 @@ public class GameFrame extends JFrame {
 
 	private void addGameMenu() {
 		JMenu gameMenu = new JMenu("Game");
+		gameMenu.setMnemonic('G');
 
 		JMenuItem newMenuItem;
 		gameMenu.add(newMenuItem = new JMenuItem("New", 'N'));
@@ -56,8 +57,6 @@ public class GameFrame extends JFrame {
 			saveHighScore();
 			gamePanel.getGameBoard().newGame();
 		});
-
-		gameMenu.addSeparator();
 
 		JMenuItem newLinesMenuItem = new JMenuItem("New Lines Game", 'L');
 		gameMenu.add(newLinesMenuItem);
@@ -90,6 +89,8 @@ public class GameFrame extends JFrame {
 			gamePanel.repaint();
 		});
 
+		gameMenu.addSeparator();
+
 		JMenuItem saveGameMenuItem = new JMenuItem("High Scores", 'H');
 		gameMenu.add(saveGameMenuItem);
 		saveGameMenuItem.addActionListener((e) -> {
@@ -101,6 +102,7 @@ public class GameFrame extends JFrame {
 
 	private void addControlMenu() {
 		JMenu controlMenu = new JMenu("Control");
+		controlMenu.setMnemonic('C');
 
 		JMenuItem saveGameMenuItem = new JMenuItem("Save Game", 'S');
 		controlMenu.add(saveGameMenuItem);
@@ -134,6 +136,7 @@ public class GameFrame extends JFrame {
 
 	private void addHelpMenu() {
 		JMenu helpMenu = new JMenu("Help");
+		helpMenu.setMnemonic('H');
 
 		JMenuItem aboutMenuItem = new JMenuItem("About", 'A');
 		helpMenu.add(aboutMenuItem);
