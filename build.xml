@@ -1,4 +1,4 @@
-<project name="lines" default="package" basedir=".">
+<project name="Lines98" default="package" basedir=".">
 	<target name="init">
 		<property name="src.dir" value="src" />
 		<property name="build.dir" value="build" />
