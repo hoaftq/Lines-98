@@ -1,0 +1,28 @@
+name: Lines-98
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: '19'
+        distribution: 'temurin'
+    - name: Build
+      run: ant clean package
+    - name: Upload the artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: 'Lines98'
+        path: build/Lines98.jar
+    - name: Create a release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files:
+         build/Lines98.jar
