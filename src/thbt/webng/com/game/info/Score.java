@@ -1,4 +1,4 @@
-package thbt.webng.com.game.status;
+package thbt.webng.com.game.info;
 import java.awt.Graphics;
 
 public class Score {

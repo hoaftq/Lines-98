@@ -1,4 +1,4 @@
-package thbt.webng.com.game.common;
+package thbt.webng.com.game.util;
 
 import java.awt.Color;
 import java.awt.GradientPaint;

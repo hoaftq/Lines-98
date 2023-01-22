@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 
-import thbt.webng.com.game.common.ColorUtil;
-import thbt.webng.com.game.option.GameInfo;
+import thbt.webng.com.game.info.GameInfoBoard;
+import thbt.webng.com.game.option.GameOptions;
 import thbt.webng.com.game.option.GameType;
 import thbt.webng.com.game.option.NextBallDisplayType;
 import thbt.webng.com.game.sound.SoundManager;
-import thbt.webng.com.game.status.GameInfoBoard;
+import thbt.webng.com.game.util.ColorUtil;
 
 public class GameBoard {
 
@@ -34,9 +34,9 @@ public class GameBoard {
 	public void draw(Graphics g) {
 		gameInfoBoard.draw(g);
 
-		boolean displayGrowingBalls = GameInfo.getCurrentInstance()
+		boolean displayGrowingBalls = GameOptions.getCurrentInstance()
 				.getNextBallDisplayType() == NextBallDisplayType.ShowBoth
-				|| GameInfo.getCurrentInstance().getNextBallDisplayType() == NextBallDisplayType.ShowOnField;
+				|| GameOptions.getCurrentInstance().getNextBallDisplayType() == NextBallDisplayType.ShowOnField;
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
 				squareArray[i][j].draw(g, displayGrowingBalls);
@@ -67,13 +67,13 @@ public class GameBoard {
 		gameInfoBoard.getScore().setScore(0);
 		gameInfoBoard.setClockState(true);
 
-		GameInfo.getCurrentInstance().setGameType(gameType);
+		GameOptions.getCurrentInstance().setGameType(gameType);
 
 		gamePanel.repaint();
 	}
 
 	public void newGame() {
-		newGame(GameInfo.getCurrentInstance().getDefaultGameType());
+		newGame(GameOptions.getCurrentInstance().getDefaultGameType());
 	}
 
 	public Square getSquare(Position pos) {
@@ -158,7 +158,7 @@ public class GameBoard {
 		selectedPos = null;
 		squareFrom.setBall(null);
 
-		if (GameInfo.getCurrentInstance().isMovementSound()) {
+		if (GameOptions.getCurrentInstance().isMovementSound()) {
 			SoundManager.playMoveSound();
 		}
 
@@ -397,9 +397,9 @@ public class GameBoard {
 	}
 
 	private List<Square> getCompleteSquare(Position pos) {
-		if (GameInfo.getCurrentInstance().getGameType() == GameType.LINE) {
+		if (GameOptions.getCurrentInstance().getGameType() == GameType.LINE) {
 			return getLinesComplete(pos);
-		} else if (GameInfo.getCurrentInstance().getGameType() == GameType.SQUARE) {
+		} else if (GameOptions.getCurrentInstance().getGameType() == GameType.SQUARE) {
 			return getSquaresComplete(pos);
 		} else {
 			return getBlocksComplete(pos);

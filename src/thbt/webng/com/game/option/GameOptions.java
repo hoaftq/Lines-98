@@ -2,9 +2,9 @@ package thbt.webng.com.game.option;
 
 import java.io.Serializable;
 
-import thbt.webng.com.game.common.StorageUtil;
+import thbt.webng.com.game.util.StorageUtil;
 
-public class GameInfo implements Cloneable, Serializable {
+public class GameOptions implements Cloneable, Serializable {
 
 	private static final long serialVersionUID = -4449406179310549758L;
 
@@ -88,18 +88,18 @@ public class GameInfo implements Cloneable, Serializable {
 		this.movementSound = movementSound;
 	}
 
-	public static GameInfo getCurrentInstance() {
+	public static GameOptions getCurrentInstance() {
 		return currentInstance;
 	}
 
-	public static void setCurrentInstance(GameInfo gameInfo) {
+	public static void setCurrentInstance(GameOptions gameInfo) {
 		currentInstance = gameInfo;
 		StorageUtil.save(currentInstance, CONFIG_FILE_NAME);
 	}
 
 	@Override
-	protected GameInfo clone() {
-		GameInfo gi = new GameInfo();
+	protected GameOptions clone() {
+		GameOptions gi = new GameOptions();
 		gi.setGameType(gameType);
 		gi.setDefaultGameType(defaultGameType);
 		gi.setNextBallDisplayType(nextBallDisplayType);
@@ -127,9 +127,9 @@ public class GameInfo implements Cloneable, Serializable {
 	private boolean destroySound = true;
 	private boolean movementSound = true;
 
-	private static GameInfo currentInstance;
+	private static GameOptions currentInstance;
 	private final static String CONFIG_FILE_NAME = "Config";
 	static {
-		currentInstance = StorageUtil.<GameInfo>load(CONFIG_FILE_NAME).orElse(new GameInfo());
+		currentInstance = StorageUtil.<GameOptions>load(CONFIG_FILE_NAME).orElse(new GameOptions());
 	}
 }

@@ -1,4 +1,4 @@
-package thbt.webng.com.game.status;
+package thbt.webng.com.game.info;
 
 import java.awt.BorderLayout;
 import java.security.InvalidParameterException;
@@ -14,7 +14,7 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import thbt.webng.com.game.common.WindowUtil;
+import thbt.webng.com.game.util.WindowUtil;
 
 public class HighScoreDialog extends JDialog {
 

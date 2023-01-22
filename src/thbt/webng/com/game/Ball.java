@@ -3,9 +3,9 @@ package thbt.webng.com.game;
 import java.awt.Color;
 import java.util.List;
 
-import thbt.webng.com.game.common.PrimitiveBall;
-import thbt.webng.com.game.option.GameInfo;
+import thbt.webng.com.game.option.GameOptions;
 import thbt.webng.com.game.sound.SoundManager;
+import thbt.webng.com.game.util.PrimitiveBall;
 
 public class Ball extends PrimitiveBall {
 
@@ -67,7 +67,7 @@ public class Ball extends PrimitiveBall {
 						top += 2;
 					} else {
 						isUpDirect = !isUpDirect;
-						if (GameInfo.getCurrentInstance().isBallJumpingSound()) {
+						if (GameOptions.getCurrentInstance().isBallJumpingSound()) {
 							SoundManager.playJumSound();
 						}
 					}
@@ -76,7 +76,7 @@ public class Ball extends PrimitiveBall {
 				square.repaint();
 
 				try {
-					Thread.sleep(GameInfo.getCurrentInstance().getJumpValue());
+					Thread.sleep(GameOptions.getCurrentInstance().getJumpValue());
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -123,7 +123,7 @@ public class Ball extends PrimitiveBall {
 			}
 
 			try {
-				Thread.sleep(GameInfo.getCurrentInstance().getAppearanceValue());
+				Thread.sleep(GameOptions.getCurrentInstance().getAppearanceValue());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -147,7 +147,7 @@ public class Ball extends PrimitiveBall {
 			}
 
 			try {
-				Thread.sleep(GameInfo.getCurrentInstance().getExplosionValue());
+				Thread.sleep(GameOptions.getCurrentInstance().getExplosionValue());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -158,7 +158,7 @@ public class Ball extends PrimitiveBall {
 			square.repaint();
 		}
 
-		if (GameInfo.getCurrentInstance().isDestroySound()) {
+		if (GameOptions.getCurrentInstance().isDestroySound()) {
 			SoundManager.playDestroySound();
 		}
 	}

@@ -1,4 +1,4 @@
-package thbt.webng.com.game.status;
+package thbt.webng.com.game.info;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -7,7 +7,7 @@ import java.awt.Graphics;
 import javax.swing.Timer;
 
 import thbt.webng.com.game.GamePanel;
-import thbt.webng.com.game.option.GameInfo;
+import thbt.webng.com.game.option.GameOptions;
 import thbt.webng.com.game.option.NextBallDisplayType;
 
 public class GameInfoBoard {
@@ -39,7 +39,7 @@ public class GameInfoBoard {
 		highestScore.draw(g);
 		score.draw(g);
 
-		NextBallDisplayType displayType = GameInfo.getCurrentInstance().getNextBallDisplayType();
+		NextBallDisplayType displayType = GameOptions.getCurrentInstance().getNextBallDisplayType();
 		if (displayType == NextBallDisplayType.ShowBoth || displayType == NextBallDisplayType.ShowOnTop) {
 			nextBallBoard.draw(g);
 		}
@@ -75,7 +75,7 @@ public class GameInfoBoard {
 	}
 
 	private void drawGameType(Graphics g) {
-		String gameTypeString = GameInfo.getCurrentInstance().getGameType().toString().toUpperCase();
+		String gameTypeString = GameOptions.getCurrentInstance().getGameType().toString().toUpperCase();
 
 		g.setFont(g.getFont().deriveFont(Font.BOLD, 7f));
 

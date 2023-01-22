@@ -1,4 +1,4 @@
-package thbt.webng.com.game.common;
+package thbt.webng.com.game.util;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

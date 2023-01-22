@@ -17,7 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import thbt.webng.com.game.common.WindowUtil;
+import thbt.webng.com.game.util.WindowUtil;
 
 /**
  * Puzzle about dialog
@@ -102,10 +102,10 @@ public class AboutDialog extends JDialog {
 		setResizable(false);
 	}
 
-	private static final String VERSION = "1.1.0";
+	private static final String VERSION = "1.0.0";
 	/**
 	 * My home page address
 	 */
-	private static final String THBT_WEB_ADDRESS = "https://github.com/hoaftq";
+	private static final String THBT_WEB_ADDRESS = "https://github.com/hoaftq/Lines-98";
 	private static final long serialVersionUID = 1L;
 }

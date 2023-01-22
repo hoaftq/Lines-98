@@ -1,9 +1,9 @@
-package thbt.webng.com.game.status;
+package thbt.webng.com.game.info;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
-import thbt.webng.com.game.common.PrimitiveBall;
+import thbt.webng.com.game.util.PrimitiveBall;
 
 public class NextBallBoard {
 

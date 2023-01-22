@@ -14,13 +14,13 @@ import javax.swing.KeyStroke;
 
 import thbt.webng.com.game.GameBoard;
 import thbt.webng.com.game.GamePanel;
-import thbt.webng.com.game.common.WindowUtil;
+import thbt.webng.com.game.info.GameInfoBoard;
+import thbt.webng.com.game.info.HighScoreDialog;
+import thbt.webng.com.game.info.PlayerScore;
+import thbt.webng.com.game.info.PlayerScoreHistory;
 import thbt.webng.com.game.option.GameType;
-import thbt.webng.com.game.option.OptionDialog;
-import thbt.webng.com.game.status.GameInfoBoard;
-import thbt.webng.com.game.status.HighScoreDialog;
-import thbt.webng.com.game.status.PlayerScore;
-import thbt.webng.com.game.status.PlayerScoreHistory;
+import thbt.webng.com.game.option.OptionsDialog;
+import thbt.webng.com.game.util.WindowUtil;
 
 public class GameFrame extends JFrame {
 
@@ -95,7 +95,7 @@ public class GameFrame extends JFrame {
 		JMenuItem optionsMenuItem = new JMenuItem("Options", 'O');
 		gameMenu.add(optionsMenuItem);
 		optionsMenuItem.addActionListener((e) -> {
-			OptionDialog optionDialog = new OptionDialog(this);
+			OptionsDialog optionDialog = new OptionsDialog(this);
 			optionDialog.setVisible(true);
 			gamePanel.repaint();
 		});

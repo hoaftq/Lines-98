@@ -21,13 +21,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import thbt.webng.com.game.common.WindowUtil;
+import thbt.webng.com.game.util.WindowUtil;
 
-public class OptionDialog extends JDialog implements ActionListener, ItemListener {
+public class OptionsDialog extends JDialog implements ActionListener, ItemListener {
 
 	private static final long serialVersionUID = -3458511180350780500L;
 
-	private GameInfo gameInfo = GameInfo.getCurrentInstance().clone();
+	private GameOptions gameInfo = GameOptions.getCurrentInstance().clone();
 
 	private JRadioButton lineButton;
 
@@ -47,7 +47,7 @@ public class OptionDialog extends JDialog implements ActionListener, ItemListene
 
 	private JButton okButton;
 
-	public OptionDialog(JFrame owner) {
+	public OptionsDialog(JFrame owner) {
 		super(owner, "Options", true);
 
 		JPanel optionPane = new JPanel();
@@ -132,7 +132,7 @@ public class OptionDialog extends JDialog implements ActionListener, ItemListene
 		} else if (e.getSource() == nextBallDisplayComboBox) {
 			gameInfo.setNextBallDisplayType((NextBallDisplayType) nextBallDisplayComboBox.getSelectedItem());
 		} else if (e.getSource() == okButton) {
-			GameInfo.setCurrentInstance(gameInfo);
+			GameOptions.setCurrentInstance(gameInfo);
 			setVisible(false);
 			dispose();
 		} else if (e.getSource() == cancelButton) {
