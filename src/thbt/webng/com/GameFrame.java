@@ -25,7 +25,7 @@ import thbt.webng.com.game.util.WindowUtil;
 public class GameFrame extends JFrame {
 
 	public GameFrame() {
-		setTitle("Lines");
+		setTitle("Lines 98");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		gamePanel = new GamePanel(this);

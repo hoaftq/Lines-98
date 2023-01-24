@@ -11,7 +11,7 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-public class SoundManager {
+public final class SoundManager {
 
 	private SoundManager() {
 	}

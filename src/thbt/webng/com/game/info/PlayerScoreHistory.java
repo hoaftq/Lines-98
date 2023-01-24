@@ -15,7 +15,7 @@ public class PlayerScoreHistory {
 	}
 
 	public int getHighestScore() {
-		return scores.stream().mapToInt(s -> s.getScore()).max().orElse(0);
+		return scores.stream().mapToInt(s -> s.score()).max().orElse(0);
 	}
 
 	public List<PlayerScore> getTopScores() {
@@ -23,13 +23,12 @@ public class PlayerScoreHistory {
 	}
 
 	public boolean isNewRecord(int score) {
-		return score > 0
-				&& (scores.size() < SCORE_HISTORY_LIMIT || scores.stream().anyMatch(ps -> ps.getScore() < score));
+		return score > 0 && (scores.size() < SCORE_HISTORY_LIMIT || scores.stream().anyMatch(ps -> ps.score() < score));
 	}
 
 	public void addHighScore(PlayerScore playerScore) {
 		scores = Stream.concat(scores.stream(), Stream.of(playerScore))
-				.sorted(Comparator.comparingInt(PlayerScore::getScore).reversed()).limit(SCORE_HISTORY_LIMIT)
+				.sorted(Comparator.comparingInt(PlayerScore::score).reversed()).limit(SCORE_HISTORY_LIMIT)
 				.collect(Collectors.toList());
 	}
 

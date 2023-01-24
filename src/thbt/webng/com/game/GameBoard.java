@@ -325,11 +325,11 @@ public class GameBoard {
 
 	private List<Position> findPath(Position positionTo) {
 		List<Position> pathList = new LinkedList<Position>();
-		Queue<Position2> positionQueue = new LinkedList<Position2>();
+		Queue<ExtPosition> positionQueue = new LinkedList<ExtPosition>();
 
 		resetVisitedArray();
 
-		positionQueue.add(new Position2(selectedPos.x, selectedPos.y));
+		positionQueue.add(new ExtPosition(selectedPos.x, selectedPos.y));
 		while (positionQueue.size() > 0) {
 			Position pos = positionQueue.poll();
 			visitedArray[pos.x][pos.y] = true;
@@ -337,13 +337,13 @@ public class GameBoard {
 			if (pos.x == positionTo.x && pos.y == positionTo.y) {
 				do {
 					pathList.add(0, pos);
-					pos = ((Position2) pos).prevPosition;
+					pos = ((ExtPosition) pos).prevPosition;
 				} while (pos != null);
 
 				break;
 			}
 
-			positionQueue.addAll(getNeighborsSquare((Position2) pos));
+			positionQueue.addAll(getNeighborsSquare((ExtPosition) pos));
 		}
 
 		return pathList;
@@ -357,15 +357,15 @@ public class GameBoard {
 		}
 	}
 
-	private List<Position2> getNeighborsSquare(Position2 pos) {
-		List<Position2> positionList = new LinkedList<Position2>();
+	private List<ExtPosition> getNeighborsSquare(ExtPosition pos) {
+		List<ExtPosition> positionList = new LinkedList<ExtPosition>();
 		int x, y;
 
 		if (pos.x > 0) {
 			x = pos.x - 1;
 			y = pos.y;
 			if (!visitedArray[x][y] && squareArray[x][y].getBallState() != BallState.MATURE) {
-				positionList.add(new Position2(x, y, pos));
+				positionList.add(new ExtPosition(x, y, pos));
 			}
 		}
 
@@ -373,7 +373,7 @@ public class GameBoard {
 			x = pos.x + 1;
 			y = pos.y;
 			if (!visitedArray[x][y] && squareArray[x][y].getBallState() != BallState.MATURE) {
-				positionList.add(new Position2(x, y, pos));
+				positionList.add(new ExtPosition(x, y, pos));
 			}
 		}
 
@@ -381,7 +381,7 @@ public class GameBoard {
 			x = pos.x;
 			y = pos.y - 1;
 			if (!visitedArray[x][y] && squareArray[x][y].getBallState() != BallState.MATURE) {
-				positionList.add(new Position2(x, y, pos));
+				positionList.add(new ExtPosition(x, y, pos));
 			}
 		}
 
@@ -389,7 +389,7 @@ public class GameBoard {
 			x = pos.x;
 			y = pos.y + 1;
 			if (!visitedArray[x][y] && squareArray[x][y].getBallState() != BallState.MATURE) {
-				positionList.add(new Position2(x, y, pos));
+				positionList.add(new ExtPosition(x, y, pos));
 			}
 		}
 
@@ -681,14 +681,14 @@ public class GameBoard {
 
 	private boolean gameOver;
 
-	private class Position2 extends Position {
-		public Position2 prevPosition;
+	private class ExtPosition extends Position {
+		public ExtPosition prevPosition;
 
-		public Position2(int x, int y) {
+		public ExtPosition(int x, int y) {
 			super(x, y);
 		}
 
-		public Position2(int x, int y, Position2 prevPosition) {
+		public ExtPosition(int x, int y, ExtPosition prevPosition) {
 			super(x, y);
 			this.prevPosition = prevPosition;
 		}

@@ -73,15 +73,12 @@ public class HighScoreDialog extends JDialog {
 
 		@Override
 		public Object getValueAt(int r, int c) {
-			switch (c) {
-			case 0:
-				return scores.get(r).getName();
-			case 1:
-				return scores.get(r).getScore();
-			case 2:
-				return scores.get(r).getPlayTime();
-			}
-			throw new InvalidParameterException();
+			return switch (c) {
+			case 0 -> scores.get(r).name();
+			case 1 -> scores.get(r).score();
+			case 2 -> scores.get(r).playTime();
+			default -> throw new InvalidParameterException();
+			};
 		}
 	}
 }

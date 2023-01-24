@@ -27,18 +27,30 @@ public class AboutDialog extends JDialog {
 	/**
 	 * Create about dialog
 	 * 
-	 * @param owner
-	 *            owner of the dialog
+	 * @param owner owner of the dialog
 	 */
 	public AboutDialog(JFrame owner) {
-		super(owner, "About Lines", true);
+		super(owner, "About", true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		// Create puzzle information label
-		JLabel infoLabel = new JLabel(
-				"<html><table>" + "<tr><td colspan=2 align=center><font size=5 color=Red>Game Lines</font></td></tr>"
-						+ "<tr><td>Author:</td><td>Trac Quang Hoa</td><td></td></tr>" + "<tr><td>Version:</td><td>"
-						+ VERSION + "</td><td></td></tr>" + "</table></html>");
+		JLabel infoLabel = new JLabel("""
+				<html>
+					<table>
+						<tr>
+							<td colspan=2 align=center><font size=5 color=Red>Lines 98</font></td>
+						</tr>
+						<tr>
+							<td>Write by:</td>
+							<td>hoaftq</td>
+						</tr>
+						<tr>
+							<td>Version:</td>
+							<td>%s</td>
+						</tr>
+					</table>
+				</html>
+				""".formatted(VERSION));
 		JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		infoPanel.add(infoLabel);
 		add(infoPanel, BorderLayout.NORTH);
