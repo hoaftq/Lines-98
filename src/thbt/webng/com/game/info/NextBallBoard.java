@@ -11,7 +11,6 @@ public class NextBallBoard {
 		for (int i = 0; i < nextBallArray.length; i++) {
 			nextBallArray[i] = new PrimitiveBall(23, 23);
 		}
-
 	}
 
 	public void draw(Graphics g) {

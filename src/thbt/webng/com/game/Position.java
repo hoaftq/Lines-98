@@ -1,4 +1,5 @@
 package thbt.webng.com.game;
+
 public class Position {
 	public int x;
 	public int y;
@@ -10,11 +11,9 @@ public class Position {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Position)) {
+		if (!(obj instanceof Position pos)) {
 			return false;
 		}
-
-		Position pos = (Position) obj;
 
 		return x == pos.x && y == pos.y;
 	}
@@ -23,5 +22,4 @@ public class Position {
 	public int hashCode() {
 		return x * 1000 + y;
 	}
-
 }
