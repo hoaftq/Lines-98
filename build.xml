@@ -12,7 +12,7 @@
 	</target>
 
 	<target name="compile" description="Compile source code and copy sound files to target directory" depends="prepare">
-		<javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false" source="1.8" target="1.8" />
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false" source="19" target="19" />
 		<copy todir="${classes.dir}">
 			<fileset dir="src" includes="thbt/webng/com/resources/**" />
 		</copy>
