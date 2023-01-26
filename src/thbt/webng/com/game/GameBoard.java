@@ -188,7 +188,7 @@ public class GameBoard {
 			Ball ballTo = square.getBall();
 			square.setBall(ballFrom);
 
-			List<Square> completeSquareList = getCompleteSquare(positionTo);
+			List<Square> completeSquareList = getCompleteArea(positionTo);
 			if (completeSquareList.size() > 0) {
 				explosionBall(completeSquareList);
 
@@ -244,7 +244,7 @@ public class GameBoard {
 
 		for (Position pos : nextPositionList) {
 			if (getSquare(pos).hasBall() && getSquare(pos).getBallState() == BallState.MATURE) {
-				List<Square> listCompleteSquare = getCompleteSquare(pos);
+				List<Square> listCompleteSquare = getCompleteArea(pos);
 				if (listCompleteSquare.size() > 0) {
 					explosionBall(listCompleteSquare);
 				}
@@ -396,25 +396,24 @@ public class GameBoard {
 		return positionList;
 	}
 
-	private List<Square> getCompleteSquare(Position pos) {
+	private List<Square> getCompleteArea(Position pos) {
 		if (GameOptions.getCurrentInstance().getGameType() == GameType.LINE) {
-			return getLinesComplete(pos);
+			return getCompleteLine(pos);
 		} else if (GameOptions.getCurrentInstance().getGameType() == GameType.SQUARE) {
-			return getSquaresComplete(pos);
+			return getCompleteSquare(pos);
 		} else {
-			return getBlocksComplete(pos);
+			return getCompleteBlock(pos);
 		}
 	}
 
-	private List<Square> getLinesComplete(Position pos) {
+	private List<Square> getCompleteLine(Position pos) {
 		List<Square> listCompleteSquare = new ArrayList<Square>();
 		Color color = getSquare(pos).getBall().getColor();
 
-		List<Square> listTempSquare;
 		Square square;
 		int i, j;
 
-		listTempSquare = new ArrayList<Square>();
+		var listTempSquare = new ArrayList<Square>();
 		j = 1;
 		while (pos.y + j < col && (square = squareArray[pos.x][pos.y + j]).isEnableDestroy(color)) {
 			listTempSquare.add(square);
@@ -493,7 +492,7 @@ public class GameBoard {
 		return listCompleteSquare;
 	}
 
-	private List<Square> getSquaresComplete(Position pos) {
+	private List<Square> getCompleteSquare(Position pos) {
 		List<Square> listCompleteSquare = new ArrayList<Square>();
 
 		Color color = squareArray[pos.x][pos.y].getBall().getColor();
@@ -568,10 +567,10 @@ public class GameBoard {
 		return listCompleteSquare;
 	}
 
-	private List<Square> getBlocksComplete(Position pos) {
+	private List<Square> getCompleteBlock(Position pos) {
 		resetVisitedArray();
 
-		List<Square> listCompleteSquare = getBlocksComplete(pos, getSquare(pos).getBall().getColor());
+		List<Square> listCompleteSquare = getCompleteBlock(pos, getSquare(pos).getBall().getColor());
 
 		if (listCompleteSquare.size() >= 7) {
 			return listCompleteSquare;
@@ -580,7 +579,7 @@ public class GameBoard {
 		return new ArrayList<Square>();
 	}
 
-	private List<Square> getBlocksComplete(Position pos, Color color) {
+	private List<Square> getCompleteBlock(Position pos, Color color) {
 		List<Square> listSquare = new ArrayList<Square>();
 
 		if (!visitedArray[pos.x][pos.y]) {
@@ -591,19 +590,19 @@ public class GameBoard {
 				listSquare.add(square);
 
 				if (pos.y > 0) {
-					listSquare.addAll(getBlocksComplete(new Position(pos.x, pos.y - 1), color));
+					listSquare.addAll(getCompleteBlock(new Position(pos.x, pos.y - 1), color));
 				}
 
 				if (pos.x > 0) {
-					listSquare.addAll(getBlocksComplete(new Position(pos.x - 1, pos.y), color));
+					listSquare.addAll(getCompleteBlock(new Position(pos.x - 1, pos.y), color));
 				}
 
 				if (pos.y < row - 1) {
-					listSquare.addAll(getBlocksComplete(new Position(pos.x, pos.y + 1), color));
+					listSquare.addAll(getCompleteBlock(new Position(pos.x, pos.y + 1), color));
 				}
 
 				if (pos.x < col - 1) {
-					listSquare.addAll(getBlocksComplete(new Position(pos.x + 1, pos.y), color));
+					listSquare.addAll(getCompleteBlock(new Position(pos.x + 1, pos.y), color));
 				}
 			}
 		}
