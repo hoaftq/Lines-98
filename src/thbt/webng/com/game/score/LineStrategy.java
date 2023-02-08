@@ -3,102 +3,45 @@ package thbt.webng.com.game.score;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import thbt.webng.com.game.Position;
 import thbt.webng.com.game.Square;
 
-public class LineStrategy extends ScoreStrategy{
+class LineStrategy extends ScoreStrategy {
 
-	public LineStrategy(Square[][] squareArray) {
-		super(squareArray);
+	private static final int MIN_COMPLETED_SQUARES_COUNT = 5;
+
+	public LineStrategy(Square[][] squares) {
+		super(squares);
 	}
 
 	@Override
-	public List<Square> getCompleteArea(Position pos) {
-		List<Square> listCompleteSquare = new ArrayList<Square>();
-		Color color = squareArray[pos.x][pos.y].getBall().getColor();
+	public List<Square> getCompletedArea(Position pos) {
+		var completedSquares = Stream
+				.concat(List
+						.of(Direction.TO_RIGHT, Direction.TO_BOTTOM, Direction.TO_TOP_RIGHT, Direction.TO_BOTTOM_RIGHT)
+						.stream().flatMap(d -> getCompletedLine(pos, d).stream()), Stream.of(squares[pos.x][pos.y]))
+				.toList();
 
-		int row = squareArray.length;
-		int col = squareArray[0].length;
-		Square square;
-		int i, j;
+		return completedSquares.size() > 1 ? completedSquares : List.of();
+	}
 
-		var listTempSquare = new ArrayList<Square>();
-		j = 1;
-		while (pos.y + j < col && (square = squareArray[pos.x][pos.y + j]).isEnableDestroy(color)) {
-			listTempSquare.add(square);
-			j++;
-		}
-		j = -1;
-		while (pos.y + j >= 0 && (square = squareArray[pos.x][pos.y + j]).isEnableDestroy(color)) {
-			listTempSquare.add(square);
-			j--;
-		}
-		if (listTempSquare.size() >= 4) {
-			listCompleteSquare.addAll(listTempSquare);
-		}
+	private List<Square> getCompletedLine(Position pos, Direction dir) {
+		Color color = squares[pos.x][pos.y].getBall().getColor();
+		var lineSquares = new ArrayList<Square>();
 
-		listTempSquare = new ArrayList<Square>();
-		i = 1;
-		while (pos.x + i < col && (square = squareArray[pos.x + i][pos.y]).isEnableDestroy(color)) {
-			listTempSquare.add(square);
-			i++;
-		}
-		i = -1;
-		while (pos.x + i >= 0 && (square = squareArray[pos.x + i][pos.y]).isEnableDestroy(color)) {
-			listTempSquare.add(square);
-			i--;
-		}
-		if (listTempSquare.size() >= 4) {
-			listCompleteSquare.addAll(listTempSquare);
+		for (var d : new Direction[] { dir, dir.opposite() }) {
+			var i = d.getX();
+			var j = d.getY();
+			while (pos.x + i >= 0 && pos.x + i < getColCount() && pos.y + j >= 0 && pos.y + j < getRowCount()
+					&& squares[pos.x + i][pos.y + j].isEnableDestroy(color)) {
+				lineSquares.add(squares[pos.x + i][pos.y + j]);
+				i += d.getX();
+				j += d.getY();
+			}
 		}
 
-		listTempSquare = new ArrayList<Square>();
-		i = 1;
-		j = 1;
-		while (pos.x + i < col && pos.y + j < row
-				&& (square = squareArray[pos.x + i][pos.y + j]).isEnableDestroy(color)) {
-			listTempSquare.add(square);
-			i++;
-			j++;
-		}
-		i = -1;
-		j = -1;
-		while (pos.x + i >= 0 && pos.y + j >= 0
-				&& (square = squareArray[pos.x + i][pos.y + j]).isEnableDestroy(color)) {
-			listTempSquare.add(square);
-			i--;
-			j--;
-		}
-		if (listTempSquare.size() >= 4) {
-			listCompleteSquare.addAll(listTempSquare);
-		}
-
-		listTempSquare = new ArrayList<Square>();
-		i = 1;
-		j = -1;
-		while (pos.x + i < col && pos.y + j >= 0
-				&& (square = squareArray[pos.x + i][pos.y + j]).isEnableDestroy(color)) {
-			listTempSquare.add(square);
-			i++;
-			j--;
-		}
-		i = -1;
-		j = 1;
-		while (pos.x + i >= 0 && pos.y + j < row
-				&& (square = squareArray[pos.x + i][pos.y + j]).isEnableDestroy(color)) {
-			listTempSquare.add(square);
-			i--;
-			j++;
-		}
-		if (listTempSquare.size() >= 4) {
-			listCompleteSquare.addAll(listTempSquare);
-		}
-
-		if (listCompleteSquare.size() > 0) {
-			listCompleteSquare.add(squareArray[pos.x][pos.y]);
-		}
-
-		return listCompleteSquare;
+		return lineSquares.size() >= MIN_COMPLETED_SQUARES_COUNT - 1 ? lineSquares : List.of();
 	}
 }

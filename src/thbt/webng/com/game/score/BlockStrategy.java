@@ -7,68 +7,52 @@ import java.util.List;
 import thbt.webng.com.game.Position;
 import thbt.webng.com.game.Square;
 
-public class BlockStrategy extends ScoreStrategy {
+class BlockStrategy extends ScoreStrategy {
 
-	private boolean[][] visitedArray;
+	private static final int MIN_BLOCK_COUNT_TO_COMPLETE = 7;
 
-	public BlockStrategy(Square[][] squareArray) {
-		super(squareArray);
-		visitedArray = new boolean[squareArray.length][squareArray[0].length];
+	private boolean[][] visited;
+
+	public BlockStrategy(Square[][] squares) {
+		super(squares);
 	}
 
 	@Override
-	public List<Square> getCompleteArea(Position pos) {
-		resetVisitedArray();
-
-		List<Square> listCompleteSquare = getCompleteBlock(pos, squareArray[pos.x][pos.y].getBall().getColor());
-
-		if (listCompleteSquare.size() >= 7) {
-			return listCompleteSquare;
-		}
-
-		return new ArrayList<Square>();
+	public List<Square> getCompletedArea(Position pos) {
+		visited = new boolean[getRowCount()][getColCount()];
+		var completedSquares = getCompletedBlock(pos, squares[pos.x][pos.y].getBall().getColor());
+		return completedSquares.size() >= MIN_BLOCK_COUNT_TO_COMPLETE ? completedSquares : List.of();
 	}
 
-	private List<Square> getCompleteBlock(Position pos, Color color) {
-		var row = squareArray.length;
-		var col = squareArray[0].length;
+	private List<Square> getCompletedBlock(Position pos, Color color) {
+		var completedSquares = new ArrayList<Square>();
 
-		List<Square> listSquare = new ArrayList<Square>();
-
-		if (!visitedArray[pos.x][pos.y]) {
-			visitedArray[pos.x][pos.y] = true;
-
-			Square square = squareArray[pos.x][pos.y];
+		if (!visited[pos.x][pos.y]) {
+			var square = squares[pos.x][pos.y];
 			if (square.isEnableDestroy(color)) {
-				listSquare.add(square);
+				completedSquares.add(square);
 
 				if (pos.y > 0) {
-					listSquare.addAll(getCompleteBlock(new Position(pos.x, pos.y - 1), color));
+					// TODO add methods like left(), right(), etc to Position
+					completedSquares.addAll(getCompletedBlock(new Position(pos.x, pos.y - 1), color));
 				}
 
 				if (pos.x > 0) {
-					listSquare.addAll(getCompleteBlock(new Position(pos.x - 1, pos.y), color));
+					completedSquares.addAll(getCompletedBlock(new Position(pos.x - 1, pos.y), color));
 				}
 
-				if (pos.y < row - 1) {
-					listSquare.addAll(getCompleteBlock(new Position(pos.x, pos.y + 1), color));
+				if (pos.y < getRowCount() - 1) {
+					completedSquares.addAll(getCompletedBlock(new Position(pos.x, pos.y + 1), color));
 				}
 
-				if (pos.x < col - 1) {
-					listSquare.addAll(getCompleteBlock(new Position(pos.x + 1, pos.y), color));
+				if (pos.x < getColCount() - 1) {
+					completedSquares.addAll(getCompletedBlock(new Position(pos.x + 1, pos.y), color));
 				}
 			}
+
+			visited[pos.x][pos.y] = true;
 		}
 
-		return listSquare;
+		return completedSquares;
 	}
-
-	private void resetVisitedArray() {
-		for (int i = 0; i < visitedArray.length; i++) {
-			for (int j = 0; j < visitedArray[0].length; j++) {
-				visitedArray[i][j] = false;
-			}
-		}
-	}
-
 }

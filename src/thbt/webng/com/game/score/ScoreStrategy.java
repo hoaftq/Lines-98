@@ -7,11 +7,19 @@ import thbt.webng.com.game.Square;
 
 public abstract class ScoreStrategy {
 
-	protected Square[][] squareArray;
+	protected Square[][] squares;
 
-	public ScoreStrategy(Square[][] squareArray) {
-		this.squareArray = squareArray;
+	public int getRowCount() {
+		return squares.length;
 	}
 
-	abstract List<Square> getCompleteArea(Position pos);
+	public int getColCount() {
+		return squares[0].length;
+	}
+
+	public ScoreStrategy(Square[][] squares) {
+		this.squares = squares;
+	}
+
+	abstract List<Square> getCompletedArea(Position pos);
 }
