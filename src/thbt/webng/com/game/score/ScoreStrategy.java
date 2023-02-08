@@ -1,5 +1,6 @@
 package thbt.webng.com.game.score;
 
+import java.util.Collection;
 import java.util.List;
 
 import thbt.webng.com.game.Position;
@@ -21,5 +22,17 @@ public abstract class ScoreStrategy {
 		this.squares = squares;
 	}
 
-	abstract List<Square> getCompletedArea(Position pos);
+	public abstract List<Square> getCompletedArea(Position pos);
+
+	protected boolean isValidPosition(int x, int y) {
+		return x >= 0 && x < getColCount() && y >= 0 && y < getRowCount();
+	}
+
+	protected boolean isValidPosition(Position pos) {
+		return isValidPosition(pos.x, pos.y);
+	}
+
+	protected List<Square> mapPositionsToSquares(Collection<Position> positions) {
+		return positions.stream().map(p -> squares[p.x][p.y]).toList();
+	}
 }
