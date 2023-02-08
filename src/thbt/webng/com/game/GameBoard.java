@@ -6,13 +6,13 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Random;
 
 import thbt.webng.com.game.info.GameInfoBoard;
 import thbt.webng.com.game.option.GameOptions;
 import thbt.webng.com.game.option.GameType;
 import thbt.webng.com.game.option.NextBallDisplayType;
+import thbt.webng.com.game.path.MovingPath;
 import thbt.webng.com.game.score.ScoreStrategyContext;
 import thbt.webng.com.game.sound.SoundManager;
 import thbt.webng.com.game.util.ColorUtil;
@@ -141,7 +141,7 @@ public class GameBoard {
 			return false;
 		}
 
-		final List<Position> positionList = findPath(positionTo);
+		final List<Position> positionList = new MovingPath(squareArray).findPath(selectedPos, positionTo);
 		if (positionList.size() == 0) {
 			SoundManager.playCantMoveSound();
 			return false;
@@ -324,79 +324,6 @@ public class GameBoard {
 		nextColorArray[2] = ColorUtil.getRandomColor();
 	}
 
-	private List<Position> findPath(Position positionTo) {
-		List<Position> pathList = new LinkedList<Position>();
-		Queue<ExtPosition> positionQueue = new LinkedList<ExtPosition>();
-
-		resetVisitedArray();
-
-		positionQueue.add(new ExtPosition(selectedPos.x, selectedPos.y));
-		while (positionQueue.size() > 0) {
-			Position pos = positionQueue.poll();
-			visitedArray[pos.x][pos.y] = true;
-
-			if (pos.x == positionTo.x && pos.y == positionTo.y) {
-				do {
-					pathList.add(0, pos);
-					pos = ((ExtPosition) pos).prevPosition;
-				} while (pos != null);
-
-				break;
-			}
-
-			positionQueue.addAll(getNeighborsSquare((ExtPosition) pos));
-		}
-
-		return pathList;
-	}
-
-	private void resetVisitedArray() {
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < col; j++) {
-				visitedArray[i][j] = false;
-			}
-		}
-	}
-
-	private List<ExtPosition> getNeighborsSquare(ExtPosition pos) {
-		List<ExtPosition> positionList = new LinkedList<ExtPosition>();
-		int x, y;
-
-		if (pos.x > 0) {
-			x = pos.x - 1;
-			y = pos.y;
-			if (!visitedArray[x][y] && squareArray[x][y].getBallState() != BallState.MATURE) {
-				positionList.add(new ExtPosition(x, y, pos));
-			}
-		}
-
-		if (pos.x < col - 1) {
-			x = pos.x + 1;
-			y = pos.y;
-			if (!visitedArray[x][y] && squareArray[x][y].getBallState() != BallState.MATURE) {
-				positionList.add(new ExtPosition(x, y, pos));
-			}
-		}
-
-		if (pos.y > 0) {
-			x = pos.x;
-			y = pos.y - 1;
-			if (!visitedArray[x][y] && squareArray[x][y].getBallState() != BallState.MATURE) {
-				positionList.add(new ExtPosition(x, y, pos));
-			}
-		}
-
-		if (pos.y < row - 1) {
-			x = pos.x;
-			y = pos.y + 1;
-			if (!visitedArray[x][y] && squareArray[x][y].getBallState() != BallState.MATURE) {
-				positionList.add(new ExtPosition(x, y, pos));
-			}
-		}
-
-		return positionList;
-	}
-
 	private List<Square> getCompleteArea(Position pos) {
 		return new ScoreStrategyContext().getCompleteArea(squareArray, pos);
 	}
@@ -452,7 +379,6 @@ public class GameBoard {
 	private int row = 9;
 	private int col = 9;
 	private Square[][] squareArray = new Square[row][col];
-	boolean[][] visitedArray = new boolean[row][col];
 	private Position selectedPos;
 
 	private int left = 1;
@@ -470,19 +396,6 @@ public class GameBoard {
 	private GameInfoBoard gameInfoBoard;
 
 	private boolean gameOver;
-
-	private class ExtPosition extends Position {
-		public ExtPosition prevPosition;
-
-		public ExtPosition(int x, int y) {
-			super(x, y);
-		}
-
-		public ExtPosition(int x, int y, ExtPosition prevPosition) {
-			super(x, y);
-			this.prevPosition = prevPosition;
-		}
-	}
 
 	private class GameState {
 		public Ball[][] bakBallArray = new Ball[row][col];
