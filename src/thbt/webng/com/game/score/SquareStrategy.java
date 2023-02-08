@@ -27,7 +27,7 @@ class SquareStrategy extends ScoreStrategy {
 
 		if (completedSquares.size() > 0) {
 			completedSquares.add(pos);
-			return completedSquares.stream().map(p -> squares[p.x][p.y]).toList();
+			return mapPositionsToSquares(completedSquares);
 		}
 
 		return List.of();
@@ -39,9 +39,5 @@ class SquareStrategy extends ScoreStrategy {
 				.filter(SquareStrategy.this::isValidPosition).filter(p -> squares[p.x][p.y].isEnableDestroy(color))
 				.toList();
 		return completedSquares.size() == 3 ? completedSquares : List.of();
-	}
-
-	private boolean isValidPosition(Position pos) {
-		return pos.x >= 0 && pos.x < getColCount() && pos.y >= 0 && pos.y < getRowCount();
 	}
 }
