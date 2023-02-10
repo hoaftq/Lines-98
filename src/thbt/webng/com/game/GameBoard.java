@@ -60,10 +60,10 @@ public class GameBoard {
 	public void newGame(GameType gameType) {
 		initBoard();
 		addGrowingBall();
-		bakGameState = null;
+		previousGameState = null;
 		gameOver = false;
 
-		gameInfoBoard.getNextBallBoard().setNextColors(nextColorArray);
+		gameInfoBoard.getNextBallBoard().setNextColors(nextBallColors);
 		gameInfoBoard.getClock().setSeconds(0);
 		gameInfoBoard.getScore().setScore(0);
 		gameInfoBoard.setClockState(true);
@@ -99,21 +99,19 @@ public class GameBoard {
 	}
 
 	public void stepBack() {
-		if (bakGameState != null) {
-			restoreGame(bakGameState);
+		if (previousGameState != null) {
+			restoreGame(previousGameState, false);
 		}
 	}
 
 	public void saveGame() {
-		savSeconds = gameInfoBoard.getClock().getSeconds();
-		saveGame(savGameState = new GameState());
+		saveGame(savedGameState = new GameState());
 	}
 
 	public void loadGame() {
-		if (savGameState != null) {
-			gameInfoBoard.getClock().setSeconds(savSeconds);
-			restoreGame(savGameState);
-			bakGameState = null;
+		if (savedGameState != null) {
+			restoreGame(savedGameState, true);
+			previousGameState = null;
 		}
 	}
 
@@ -147,10 +145,10 @@ public class GameBoard {
 			return false;
 		}
 
-		if (bakGameState == null) {
-			bakGameState = new GameState();
+		if (previousGameState == null) {
+			previousGameState = new GameState();
 		}
-		saveGame(bakGameState);
+		saveGame(previousGameState);
 
 		final Square squareFrom = squareArray[selectedPos.x][selectedPos.y];
 		final Ball ballFrom = squareFrom.getBall();
@@ -223,7 +221,7 @@ public class GameBoard {
 	}
 
 	private void setNewGrowingPos(Position oldPos, Ball ball) {
-		if (!nextPositionList.remove(oldPos)) {
+		if (!nextBallPositions.remove(oldPos)) {
 			throw new IllegalArgumentException();
 		}
 
@@ -232,18 +230,18 @@ public class GameBoard {
 			Position pos = positionList.get(new Random().nextInt(positionList.size()));
 			getSquare(pos).setBall(ball);
 
-			nextPositionList.add(pos);
+			nextBallPositions.add(pos);
 		}
 	}
 
 	private void nextStep() {
 		List<Square> squareList = new ArrayList<Square>();
-		for (Position pos : nextPositionList) {
+		for (Position pos : nextBallPositions) {
 			squareList.add(getSquare(pos));
 		}
 		Ball.growBall(squareList);
 
-		for (Position pos : nextPositionList) {
+		for (Position pos : nextBallPositions) {
 			if (getSquare(pos).hasBall() && getSquare(pos).getBallState() == BallState.MATURE) {
 				List<Square> listCompleteSquare = getCompleteArea(pos);
 				if (listCompleteSquare.size() > 0) {
@@ -253,9 +251,9 @@ public class GameBoard {
 		}
 
 		addGrowingBall();
-		gameInfoBoard.getNextBallBoard().setNextColors(nextColorArray);
+		gameInfoBoard.getNextBallBoard().setNextColors(nextBallColors);
 
-		if (nextPositionList.size() < 3) {
+		if (nextBallPositions.size() < 3) {
 			gameOver = true;
 		}
 	}
@@ -285,21 +283,21 @@ public class GameBoard {
 	private void addGrowingBall() {
 		generateNextBall();
 		generateNextColor();
-		for (int i = 0; i < nextPositionList.size(); i++) {
-			Square square = getSquare(nextPositionList.get(i));
-			square.setBall(new Ball(nextColorArray[i], BallState.GROWING, square));
+		for (int i = 0; i < nextBallPositions.size(); i++) {
+			Square square = getSquare(nextBallPositions.get(i));
+			square.setBall(new Ball(nextBallColors[i], BallState.GROWING, square));
 		}
 	}
 
 	private void generateNextBall() {
-		nextPositionList = new ArrayList<Position>();
+		nextBallPositions = new ArrayList<Position>();
 		Random random = new Random();
 		List<Position> listEmptySquare = getEmptyPositions();
 
 		for (int i = 0; i < 3; i++) {
 			if (listEmptySquare.size() > 0) {
 				int idx = random.nextInt(listEmptySquare.size());
-				nextPositionList.add(listEmptySquare.get(idx));
+				nextBallPositions.add(listEmptySquare.get(idx));
 				listEmptySquare.remove(idx);
 			}
 		}
@@ -319,9 +317,9 @@ public class GameBoard {
 	}
 
 	private void generateNextColor() {
-		nextColorArray[0] = ColorUtil.getRandomColor();
-		nextColorArray[1] = ColorUtil.getRandomColor();
-		nextColorArray[2] = ColorUtil.getRandomColor();
+		nextBallColors[0] = ColorUtil.getRandomColor();
+		nextBallColors[1] = ColorUtil.getRandomColor();
+		nextBallColors[2] = ColorUtil.getRandomColor();
 	}
 
 	private List<Square> getCompleteArea(Position pos) {
@@ -333,9 +331,9 @@ public class GameBoard {
 			for (int i = 0; i < row; i++) {
 				for (int j = 0; j < col; j++) {
 					if (squareArray[i][j].getBall() != null) {
-						gameState.bakBallArray[i][j] = (Ball) (squareArray[i][j].getBall().clone());
+						gameState.balls[i][j] = (Ball) (squareArray[i][j].getBall().clone());
 					} else {
-						gameState.bakBallArray[i][j] = null;
+						gameState.balls[i][j] = null;
 					}
 				}
 			}
@@ -344,16 +342,17 @@ public class GameBoard {
 		}
 
 		for (int i = 0; i < 3; i++) {
-			gameState.bakNextColorArray[i] = nextColorArray[i];
+			gameState.nextBallColors[i] = nextBallColors[i];
 		}
 
-		gameState.bakNextPositionList = new ArrayList<Position>();
-		gameState.bakNextPositionList.addAll(nextPositionList);
+		gameState.nextBallPositions = new ArrayList<Position>();
+		gameState.nextBallPositions.addAll(nextBallPositions);
 
 		gameState.score = gameInfoBoard.getScore().getScore();
+		gameState.spentTime = gameInfoBoard.getClock().getSeconds();
 	}
 
-	private void restoreGame(GameState gameState) {
+	private void restoreGame(GameState gameState, boolean withSpentTime) {
 		if (selectedPos != null) {
 			getSquare(selectedPos).getBall().unSelect();
 			selectedPos = null;
@@ -361,17 +360,21 @@ public class GameBoard {
 
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
-				squareArray[i][j].setBall(gameState.bakBallArray[i][j]);
+				squareArray[i][j].setBall(gameState.balls[i][j]);
 			}
 		}
 
 		for (int i = 0; i < 3; i++) {
-			nextColorArray[i] = gameState.bakNextColorArray[i];
+			nextBallColors[i] = gameState.nextBallColors[i];
 		}
 
-		nextPositionList = gameState.bakNextPositionList;
+		nextBallPositions = gameState.nextBallPositions;
 
 		gameInfoBoard.getScore().setScore(gameState.score);
+
+		if (withSpentTime) {
+			gameInfoBoard.getClock().setSeconds(gameState.spentTime);
+		}
 
 		gamePanel.repaint();
 	}
@@ -384,23 +387,23 @@ public class GameBoard {
 	private int left = 1;
 	private int top = 53;
 
-	private Color[] nextColorArray = new Color[3];
-	private List<Position> nextPositionList;
+	private Color[] nextBallColors = new Color[3];
+	private List<Position> nextBallPositions;
 	private GamePanel gamePanel;
 	private Thread moveThread;
-
-	private GameState bakGameState;
-	private GameState savGameState;
-	private int savSeconds;
 
 	private GameInfoBoard gameInfoBoard;
 
 	private boolean gameOver;
 
+	private GameState previousGameState;
+	private GameState savedGameState;
+
 	private class GameState {
-		public Ball[][] bakBallArray = new Ball[row][col];
-		public Color[] bakNextColorArray = new Color[3];
-		public List<Position> bakNextPositionList;
-		public int score;
+		Ball[][] balls = new Ball[row][col];
+		Color[] nextBallColors = new Color[3];
+		List<Position> nextBallPositions;
+		int score;
+		int spentTime;
 	}
 }
