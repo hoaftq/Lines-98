@@ -164,7 +164,7 @@ public class Ball extends PrimitiveBall {
 	}
 
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
+	public Object clone() throws CloneNotSupportedException {
 		return new Ball(color, ballState == BallState.ANIMATE ? BallState.MATURE : ballState, square);
 	}
 
