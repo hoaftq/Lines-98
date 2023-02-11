@@ -7,41 +7,38 @@ import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
 
 import thbt.webng.com.GameFrame;
+import thbt.webng.com.game.board.GameBoardModel;
+import thbt.webng.com.game.board.GameBoardPresenter;
+import thbt.webng.com.game.board.GameBoardView;
+import thbt.webng.com.game.info.GameInfoBoard;
+import thbt.webng.com.game.option.GameType;
 
 public class GamePanel extends JPanel {
+	private static final long serialVersionUID = -5724271697960761395L;
 
-	public GamePanel(GameFrame gameFrame) {
-		this.gameFrame = gameFrame;
+	private GameFrame gameFrame;
+	private GameBoardPresenter presenter;
+
+	public GamePanel(GameFrame frame) {
+		gameFrame = frame;
+		presenter = new GameBoardPresenter(new GameBoardModel(), new GameBoardView(this));
+
+		initialize();
 	}
 
-	public void setGameBoard(final GameBoard gameBoard) {
-		this.gameBoard = gameBoard;
-		setPreferredSize(gameBoard.getBoardSize());
+	public void initialize() {
+		setPreferredSize(presenter.getBoardSize());
 
-		gameBoard.newGame();
+		presenter.newGame();
 
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 
 				if (e.getButton() == MouseEvent.BUTTON1) {
-					Position pos = gameBoard.squareFromMousePos(e.getX(), e.getY());
-					if (pos == null) {
-						return;
-					}
+					presenter.playAt(e.getX(), e.getY());
 
-					Square square = gameBoard.getSquare(pos);
-
-					if (square.getBallState() == BallState.MATURE) {
-						gameBoard.selectBall(pos);
-					} else {
-						if (gameBoard.getSelectedPosition() != null) {
-							if (gameBoard.moveTo(pos)) {
-							}
-						}
-					}
-
-					if (gameBoard.isGameOver()) {
+					if (presenter.isGameOver()) {
 						gameFrame.endGame();
 					}
 				}
@@ -49,18 +46,33 @@ public class GamePanel extends JPanel {
 		});
 	}
 
-	public GameBoard getGameBoard() {
-		return gameBoard;
-	}
-
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		gameBoard.draw(g);
+		presenter.draw(g);
 	}
 
-	private GameBoard gameBoard;
-	private GameFrame gameFrame;
+	public void newGame() {
+		presenter.newGame();
+	}
 
-	private static final long serialVersionUID = -5724271697960761395L;
+	public void newGame(GameType gameType) {
+		presenter.newGame(gameType);
+	}
+
+	public void saveGame() {
+		presenter.saveGame();
+	}
+
+	public void loadGame() {
+		presenter.loadGame();
+	}
+
+	public void stepBack() {
+		presenter.stepBack();
+	}
+
+	public GameInfoBoard getGameInfoBoard() {
+		return presenter.getGameInfoBoard();
+	}
 }

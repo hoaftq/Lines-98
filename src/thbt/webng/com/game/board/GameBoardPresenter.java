@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import thbt.webng.com.game.BallState;
 import thbt.webng.com.game.Position;
 import thbt.webng.com.game.Square;
+import thbt.webng.com.game.info.GameInfoBoard;
 import thbt.webng.com.game.option.GameOptions;
 import thbt.webng.com.game.option.GameType;
 
@@ -49,13 +50,29 @@ public class GameBoardPresenter {
 	public boolean isGameOver() {
 		return view.isGameOver();
 	}
-	
+
 	public Dimension getBoardSize() {
 		return view.getBoardSize();
 	}
 
 	public void draw(Graphics g) {
 		view.draw(g);
+	}
+
+	public void saveGame() {
+		view.saveGame();
+	}
+
+	public void loadGame() {
+		view.loadGame();
+	}
+
+	public void stepBack() {
+		view.stepBack();
+	}
+
+	public GameInfoBoard getGameInfoBoard() {
+		return view.getGameInfoBoard();
 	}
 
 }
