@@ -12,7 +12,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
-import thbt.webng.com.game.GameBoard;
 import thbt.webng.com.game.GamePanel;
 import thbt.webng.com.game.info.GameInfoBoard;
 import thbt.webng.com.game.info.HighScoreDialog;
@@ -30,9 +29,6 @@ public class GameFrame extends JFrame {
 
 		gamePanel = new GamePanel(this);
 		add(gamePanel);
-
-		GameBoard gameBoard = new GameBoard(gamePanel);
-		gamePanel.setGameBoard(gameBoard);
 
 		setJMenuBar(new JMenuBar());
 		addGameMenu();
@@ -54,7 +50,7 @@ public class GameFrame extends JFrame {
 
 	public void endGame() {
 		saveHighScore();
-		gamePanel.getGameBoard().newGame();
+		gamePanel.newGame();
 	}
 
 	private void addGameMenu() {
@@ -66,28 +62,28 @@ public class GameFrame extends JFrame {
 		newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
 		newMenuItem.addActionListener((e) -> {
 			saveHighScore();
-			gamePanel.getGameBoard().newGame();
+			gamePanel.newGame();
 		});
 
 		JMenuItem newLinesMenuItem = new JMenuItem("New Lines Game", 'L');
 		gameMenu.add(newLinesMenuItem);
 		newLinesMenuItem.addActionListener((e) -> {
 			saveHighScore();
-			gamePanel.getGameBoard().newGame(GameType.LINE);
+			gamePanel.newGame(GameType.LINE);
 		});
 
 		JMenuItem newSquaresMenuItem = new JMenuItem("New Squares Game", 'S');
 		gameMenu.add(newSquaresMenuItem);
 		newSquaresMenuItem.addActionListener((e) -> {
 			saveHighScore();
-			gamePanel.getGameBoard().newGame(GameType.SQUARE);
+			gamePanel.newGame(GameType.SQUARE);
 		});
 
 		JMenuItem newBlocksMenuItem = new JMenuItem("New Blocks Game", 'B');
 		gameMenu.add(newBlocksMenuItem);
 		newBlocksMenuItem.addActionListener((e) -> {
 			saveHighScore();
-			gamePanel.getGameBoard().newGame(GameType.BLOCK);
+			gamePanel.newGame(GameType.BLOCK);
 		});
 
 		gameMenu.addSeparator();
@@ -118,13 +114,13 @@ public class GameFrame extends JFrame {
 		JMenuItem saveGameMenuItem = new JMenuItem("Save Game", 'S');
 		controlMenu.add(saveGameMenuItem);
 		saveGameMenuItem.addActionListener((e) -> {
-			gamePanel.getGameBoard().saveGame();
+			gamePanel.saveGame();
 		});
 
 		JMenuItem loadGameMenuItem = new JMenuItem("Load Game", 'L');
 		controlMenu.add(loadGameMenuItem);
 		loadGameMenuItem.addActionListener((e) -> {
-			gamePanel.getGameBoard().loadGame();
+			gamePanel.loadGame();
 		});
 
 		JMenuItem endGameMenuItem = new JMenuItem("End Game", 'E');
@@ -139,7 +135,7 @@ public class GameFrame extends JFrame {
 		stepBackMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK));
 		controlMenu.add(stepBackMenuItem);
 		stepBackMenuItem.addActionListener((e) -> {
-			gamePanel.getGameBoard().stepBack();
+			gamePanel.stepBack();
 		});
 
 		getJMenuBar().add(controlMenu);
@@ -161,7 +157,7 @@ public class GameFrame extends JFrame {
 	}
 
 	private void saveHighScore() {
-		GameInfoBoard gameInfoBoard = gamePanel.getGameBoard().getGameInfoBoard();
+		GameInfoBoard gameInfoBoard = gamePanel.getGameInfoBoard();
 
 		// Stop the playing clock
 		gameInfoBoard.setClockState(false);
