@@ -64,7 +64,7 @@ public class GameBoard {
 		gameOver = false;
 
 		gameInfoBoard.getNextBallBoard().setNextColors(nextBallColors);
-		gameInfoBoard.getClock().setSeconds(0);
+		gameInfoBoard.getClock().setTimeInSeconds(0);
 		gameInfoBoard.getScore().setScore(0);
 		gameInfoBoard.setClockState(true);
 
@@ -349,7 +349,7 @@ public class GameBoard {
 		gameState.nextBallPositions.addAll(nextBallPositions);
 
 		gameState.score = gameInfoBoard.getScore().getScore();
-		gameState.spentTime = gameInfoBoard.getClock().getSeconds();
+		gameState.spentTime = gameInfoBoard.getClock().getTimeInSeconds();
 	}
 
 	private void restoreGame(GameState gameState, boolean withSpentTime) {
@@ -373,7 +373,7 @@ public class GameBoard {
 		gameInfoBoard.getScore().setScore(gameState.score);
 
 		if (withSpentTime) {
-			gameInfoBoard.getClock().setSeconds(gameState.spentTime);
+			gameInfoBoard.getClock().setTimeInSeconds(gameState.spentTime);
 		}
 
 		gamePanel.repaint();
