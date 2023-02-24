@@ -1,34 +1,38 @@
 package thbt.webng.com.game.info;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-
-import javax.swing.Timer;
-
 import thbt.webng.com.game.GamePanel;
 import thbt.webng.com.game.option.GameOptions;
 import thbt.webng.com.game.option.NextBallDisplayType;
 
+import java.awt.*;
+
 public class GameInfoBoard {
 
-	public GameInfoBoard(GamePanel gamePanel) {
-		this.gamePanel = gamePanel;
+	private int left = 1;
+	private int top = 2;
+	private int width = 45 * 9;
+	private int height = 50;
 
+	private Score highestScore = new Score();
+	private Score score = new Score();
+	private DigitalClockPresenter clock;
+	private NextBallBoard nextBallBoard = new NextBallBoard();
+
+	public GameInfoBoard(GamePanel gamePanel) {
 		highestScore.setLeft(10);
 		highestScore.setTop(top + (height - highestScore.getHeight()) / 2);
 
 		score.setLeft(left + width - score.getWidth() - 10);
 		score.setTop(top + (height - score.getHeight()) / 2);
 
+		clock = new DigitalClockPresenter(new DigitalClockModel(), new DigitalClockView(gamePanel));
 		clock.setLeft(left + (width - clock.getWidth()) / 2);
 		clock.setTop(36);
+		clock.start();
 
 		nextBallBoard.setLeft(left + (width - nextBallBoard.getWidth()) / 2);
 		nextBallBoard.setTop(11);
 		nextBallBoard.setNextColors(new Color[] { Color.BLACK, Color.BLACK, Color.BLACK });
-
-		clockTimer.start();
 
 		new Thread(() -> highestScore.setScore(PlayerScoreHistory.getInstance().getHighestScore())).start();
 	}
@@ -56,7 +60,8 @@ public class GameInfoBoard {
 		return score;
 	}
 
-	public DigitalClock getClock() {
+	// TODO shouldn't we expose this class? create wrapper methods instead
+	public DigitalClockPresenter getClock() {
 		return clock;
 	}
 
@@ -66,12 +71,11 @@ public class GameInfoBoard {
 
 	public void setClockState(boolean isRun) {
 		if (isRun) {
-			if (!clockTimer.isRunning()) {
-				clockTimer.start();
-			}
+			clock.start();
 		} else {
-			clockTimer.stop();
+			clock.stop();
 		}
+
 	}
 
 	private void drawGameType(Graphics g) {
@@ -84,21 +88,4 @@ public class GameInfoBoard {
 		g.setColor(new Color(0, 96, 191));
 		g.drawString(gameTypeString, left + (width - w) / 2, top + 8);
 	}
-
-	private int left = 1;
-	private int top = 2;
-	private int width = 45 * 9;
-	private int height = 50;
-
-	private GamePanel gamePanel;
-
-	private Score highestScore = new Score();
-	private Score score = new Score();
-	private DigitalClock clock = new DigitalClock();
-	private NextBallBoard nextBallBoard = new NextBallBoard();
-
-	private Timer clockTimer = new Timer(1000, (e) -> {
-		clock.setSeconds(clock.getSeconds() + 1);
-		gamePanel.repaint(left, top, width, height);
-	});
 }
