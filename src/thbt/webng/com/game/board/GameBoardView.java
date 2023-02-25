@@ -14,6 +14,7 @@ import thbt.webng.com.game.GamePanel;
 import thbt.webng.com.game.Position;
 import thbt.webng.com.game.Square;
 import thbt.webng.com.game.info.GameInfoBoard;
+import thbt.webng.com.game.info.NextBallsPresenter;
 import thbt.webng.com.game.option.GameOptions;
 import thbt.webng.com.game.option.GameType;
 import thbt.webng.com.game.option.NextBallDisplayType;
@@ -68,7 +69,6 @@ public class GameBoardView {
 		previousGameState = null;
 		gameOver = false;
 
-		gameInfoBoard.getNextBallBoard().setNextColors(nextBallColors);
 		gameInfoBoard.getClock().resetTime();
 		gameInfoBoard.getScore().setScore(0);
 		gameInfoBoard.setClockState(true);
@@ -256,7 +256,6 @@ public class GameBoardView {
 		}
 
 		addGrowingBall();
-		gameInfoBoard.getNextBallBoard().setNextColors(nextBallColors);
 
 		if (nextBallPositions.size() < 3) {
 			gameOver = true;
@@ -287,10 +286,11 @@ public class GameBoardView {
 
 	private void addGrowingBall() {
 		generateNextBall();
-		generateNextColor();
+		getNextBalls().generateNextColors();
+
 		for (int i = 0; i < nextBallPositions.size(); i++) {
 			Square square = getSquare(nextBallPositions.get(i));
-			square.setBall(new Ball(nextBallColors[i], BallState.GROWING, square));
+			square.setBall(new Ball(getNextBalls().getNextColors()[i], BallState.GROWING, square));
 		}
 	}
 
@@ -321,12 +321,6 @@ public class GameBoardView {
 		return listPosition;
 	}
 
-	private void generateNextColor() {
-		nextBallColors[0] = ColorUtil.getRandomColor();
-		nextBallColors[1] = ColorUtil.getRandomColor();
-		nextBallColors[2] = ColorUtil.getRandomColor();
-	}
-
 	private List<Square> getCompleteArea(Position pos) {
 		return new ScoreStrategyContext().getCompleteArea(squareArray, pos);
 	}
@@ -347,7 +341,8 @@ public class GameBoardView {
 		}
 
 		for (int i = 0; i < 3; i++) {
-			gameState.nextBallColors[i] = nextBallColors[i];
+			// TODO
+			gameState.nextBallColors[i] = getNextBalls().getNextColors()[i];
 		}
 
 		gameState.nextBallPositions = new ArrayList<Position>();
@@ -369,9 +364,7 @@ public class GameBoardView {
 			}
 		}
 
-		for (int i = 0; i < 3; i++) {
-			nextBallColors[i] = gameState.nextBallColors[i];
-		}
+		getNextBalls().setNextColors(gameState.nextBallColors);
 
 		nextBallPositions = gameState.nextBallPositions;
 
@@ -384,6 +377,10 @@ public class GameBoardView {
 		gamePanel.repaint();
 	}
 
+	private NextBallsPresenter getNextBalls() {
+		return getGameInfoBoard().getNextBalls();
+	}
+
 	private int row = 9;
 	private int col = 9;
 	private Square[][] squareArray = new Square[row][col];
@@ -392,7 +389,6 @@ public class GameBoardView {
 	private int left = 1;
 	private int top = 53;
 
-	private Color[] nextBallColors = new Color[3];
 	private List<Position> nextBallPositions;
 	private GamePanel gamePanel;
 	private Thread moveThread;
