@@ -3,6 +3,7 @@ package thbt.webng.com.game.info;
 import thbt.webng.com.game.GamePanel;
 import thbt.webng.com.game.option.GameOptions;
 import thbt.webng.com.game.option.NextBallDisplayType;
+import thbt.webng.com.game.scorehistory.PlayerScoreHistory;
 
 import java.awt.*;
 

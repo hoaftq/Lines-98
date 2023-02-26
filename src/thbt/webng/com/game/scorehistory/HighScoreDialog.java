@@ -1,20 +1,13 @@
-package thbt.webng.com.game.info;
-
-import java.awt.BorderLayout;
-import java.security.InvalidParameterException;
-import java.util.List;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
+package thbt.webng.com.game.scorehistory;
 
 import thbt.webng.com.game.util.WindowUtil;
+
+import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.*;
+import java.security.InvalidParameterException;
+import java.util.List;
 
 public class HighScoreDialog extends JDialog {
 
