@@ -14,9 +14,9 @@ import javax.swing.KeyStroke;
 
 import thbt.webng.com.game.GamePanel;
 import thbt.webng.com.game.info.GameInfoBoard;
-import thbt.webng.com.game.info.HighScoreDialog;
-import thbt.webng.com.game.info.PlayerScore;
-import thbt.webng.com.game.info.PlayerScoreHistory;
+import thbt.webng.com.game.scorehistory.HighScoreDialog;
+import thbt.webng.com.game.scorehistory.PlayerScore;
+import thbt.webng.com.game.scorehistory.PlayerScoreHistory;
 import thbt.webng.com.game.option.GameType;
 import thbt.webng.com.game.option.OptionsDialog;
 import thbt.webng.com.game.util.WindowUtil;

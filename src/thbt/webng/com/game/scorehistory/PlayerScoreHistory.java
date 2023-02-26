@@ -1,4 +1,4 @@
-package thbt.webng.com.game.info;
+package thbt.webng.com.game.scorehistory;
 
 import java.util.ArrayList;
 import java.util.Comparator;
