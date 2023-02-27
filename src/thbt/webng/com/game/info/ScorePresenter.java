@@ -13,6 +13,10 @@ public class ScorePresenter {
         this.view = view;
     }
 
+    public ScoreView getView() {
+        return view;
+    }
+
     public void draw(Graphics g) {
         view.draw(g);
     }

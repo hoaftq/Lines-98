@@ -16,6 +16,10 @@ public class DigitalClockPresenter {
         this.view = view;
     }
 
+    public DigitalClockView getView() {
+        return view;
+    }
+
     public void start() {
         if (clockTimer.isRunning()) {
             return;
