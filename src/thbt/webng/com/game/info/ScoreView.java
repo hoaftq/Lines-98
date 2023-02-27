@@ -31,6 +31,14 @@ public class ScoreView {
         }
     }
 
+    public int getLeft() {
+        return digits[digits.length - 1].getLeft();
+    }
+
+    public int getTop() {
+        return digits[0].getTop();
+    }
+
     public int getWidth() {
         return 5 * digits[0].getWidth() + 4 * 3;
     }

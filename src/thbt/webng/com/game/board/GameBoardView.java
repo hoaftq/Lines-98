@@ -13,7 +13,7 @@ import thbt.webng.com.game.BallState;
 import thbt.webng.com.game.GamePanel;
 import thbt.webng.com.game.Position;
 import thbt.webng.com.game.Square;
-import thbt.webng.com.game.info.GameInfoBoard;
+import thbt.webng.com.game.info.GameInfoPresenter;
 import thbt.webng.com.game.info.NextBallsPresenter;
 import thbt.webng.com.game.option.GameOptions;
 import thbt.webng.com.game.option.GameType;
@@ -27,7 +27,7 @@ public class GameBoardView {
 
 	public GameBoardView(GamePanel gamePanel) {
 		this.gamePanel = gamePanel;
-		gameInfoBoard = new GameInfoBoard(gamePanel);
+		gameInfoBoard = new GameInfoPresenter(gamePanel);
 
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
@@ -51,7 +51,7 @@ public class GameBoardView {
 		}
 	}
 
-	public GameInfoBoard getGameInfoBoard() {
+	public GameInfoPresenter getGameInfoBoard() {
 		return gameInfoBoard;
 	}
 
@@ -69,9 +69,9 @@ public class GameBoardView {
 		previousGameState = null;
 		gameOver = false;
 
-		gameInfoBoard.getClock().resetTime();
-		gameInfoBoard.getScore().setScore(0);
-		gameInfoBoard.setClockState(true);
+		gameInfoBoard.getDigitalClockPresenter().resetTime();
+		gameInfoBoard.getDigitalClockPresenter().start();
+		gameInfoBoard.getScorePresenter().setScore(0);
 
 		GameOptions.getCurrentInstance().setGameType(gameType);
 
@@ -222,7 +222,7 @@ public class GameBoardView {
 	private void explosionBall(List<Square> listCompleteSquare) {
 		Ball.hideBall(listCompleteSquare);
 		int score = listCompleteSquare.size() + (listCompleteSquare.size() - 4) * listCompleteSquare.size();
-		gameInfoBoard.getScore().setScore(gameInfoBoard.getScore().getScore() + score);
+		gameInfoBoard.getScorePresenter().setScore(gameInfoBoard.getScorePresenter().getScore() + score);
 	}
 
 	private void setNewGrowingPos(Position oldPos, Ball ball) {
@@ -348,8 +348,8 @@ public class GameBoardView {
 		gameState.nextBallPositions = new ArrayList<Position>();
 		gameState.nextBallPositions.addAll(nextBallPositions);
 
-		gameState.score = gameInfoBoard.getScore().getScore();
-		gameState.spentTime = gameInfoBoard.getClock().getTimeInSeconds();
+		gameState.score = gameInfoBoard.getScorePresenter().getScore();
+		gameState.spentTime = gameInfoBoard.getDigitalClockPresenter().getTimeInSeconds();
 	}
 
 	private void restoreGame(GameState gameState, boolean withSpentTime) {
@@ -368,17 +368,17 @@ public class GameBoardView {
 
 		nextBallPositions = gameState.nextBallPositions;
 
-		gameInfoBoard.getScore().setScore(gameState.score);
+		gameInfoBoard.getScorePresenter().setScore(gameState.score);
 
 		if (withSpentTime) {
-			gameInfoBoard.getClock().setTimeInSeconds(gameState.spentTime);
+			gameInfoBoard.getDigitalClockPresenter().setTimeInSeconds(gameState.spentTime);
 		}
 
 		gamePanel.repaint();
 	}
 
 	private NextBallsPresenter getNextBalls() {
-		return getGameInfoBoard().getNextBalls();
+		return getGameInfoBoard().getNextBallsPresenter();
 	}
 
 	private int row = 9;
@@ -393,7 +393,7 @@ public class GameBoardView {
 	private GamePanel gamePanel;
 	private Thread moveThread;
 
-	private GameInfoBoard gameInfoBoard;
+	private GameInfoPresenter gameInfoBoard;
 
 	private boolean gameOver;
 

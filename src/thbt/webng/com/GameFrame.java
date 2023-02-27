@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import thbt.webng.com.game.GamePanel;
-import thbt.webng.com.game.info.GameInfoBoard;
+import thbt.webng.com.game.info.GameInfoPresenter;
 import thbt.webng.com.game.scorehistory.HighScoreDialog;
 import thbt.webng.com.game.scorehistory.PlayerScore;
 import thbt.webng.com.game.scorehistory.PlayerScoreHistory;
@@ -157,21 +157,21 @@ public class GameFrame extends JFrame {
 	}
 
 	private void saveHighScore() {
-		GameInfoBoard gameInfoBoard = gamePanel.getGameInfoBoard();
+		GameInfoPresenter gameInfoBoard = gamePanel.getGameInfoBoard();
 
 		// Stop the playing clock
-		gameInfoBoard.setClockState(false);
+		gameInfoBoard.getDigitalClockPresenter().stop();
 
 		PlayerScoreHistory playerScoreHistory = PlayerScoreHistory.getInstance();
 
 		// Player gets a new high score
-		if (playerScoreHistory.isNewRecord(gameInfoBoard.getScore().getScore())) {
+		if (playerScoreHistory.isNewRecord(gameInfoBoard.getScorePresenter().getScore())) {
 			String playerName = JOptionPane.showInputDialog(GameFrame.this,
 					"You've got a high score. Please input your name", "New high score", JOptionPane.QUESTION_MESSAGE);
 			if (playerName != null && !"".equals(playerName)) {
 				// Add a new record to high score history
-				playerScoreHistory.addHighScore(new PlayerScore(playerName, gameInfoBoard.getScore().getScore(),
-						gameInfoBoard.getClock().toString()));
+				playerScoreHistory.addHighScore(new PlayerScore(playerName, gameInfoBoard.getScorePresenter().getScore(),
+						gameInfoBoard.getDigitalClockPresenter().toString()));
 				playerScoreHistory.save();
 
 				showHighScoreDialog();
@@ -179,7 +179,7 @@ public class GameFrame extends JFrame {
 		}
 
 		// Update highest score on the game status board
-		gameInfoBoard.getHighestScore().setScore(playerScoreHistory.getHighestScore());
+		gameInfoBoard.getHighestScorePresenter().setScore(playerScoreHistory.getHighestScore());
 	}
 
 	private void showHighScoreDialog() {

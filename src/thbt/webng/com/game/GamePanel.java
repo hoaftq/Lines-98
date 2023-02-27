@@ -10,7 +10,7 @@ import thbt.webng.com.GameFrame;
 import thbt.webng.com.game.board.GameBoardModel;
 import thbt.webng.com.game.board.GameBoardPresenter;
 import thbt.webng.com.game.board.GameBoardView;
-import thbt.webng.com.game.info.GameInfoBoard;
+import thbt.webng.com.game.info.GameInfoPresenter;
 import thbt.webng.com.game.option.GameType;
 
 public class GamePanel extends JPanel {
@@ -72,7 +72,7 @@ public class GamePanel extends JPanel {
 		presenter.stepBack();
 	}
 
-	public GameInfoBoard getGameInfoBoard() {
+	public GameInfoPresenter getGameInfoBoard() {
 		return presenter.getGameInfoBoard();
 	}
 }

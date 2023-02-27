@@ -6,7 +6,7 @@ import java.awt.Graphics;
 import thbt.webng.com.game.BallState;
 import thbt.webng.com.game.Position;
 import thbt.webng.com.game.Square;
-import thbt.webng.com.game.info.GameInfoBoard;
+import thbt.webng.com.game.info.GameInfoPresenter;
 import thbt.webng.com.game.option.GameOptions;
 import thbt.webng.com.game.option.GameType;
 
@@ -71,7 +71,7 @@ public class GameBoardPresenter {
 		view.stepBack();
 	}
 
-	public GameInfoBoard getGameInfoBoard() {
+	public GameInfoPresenter getGameInfoBoard() {
 		return view.getGameInfoBoard();
 	}
 

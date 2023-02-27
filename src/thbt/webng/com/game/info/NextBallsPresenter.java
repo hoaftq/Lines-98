@@ -13,6 +13,10 @@ public class NextBallsPresenter {
         this.view = view;
     }
 
+    public NextBallsView getView() {
+        return view;
+    }
+
     public void draw(Graphics g) {
         view.draw(g);
     }
