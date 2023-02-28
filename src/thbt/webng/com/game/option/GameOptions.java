@@ -5,9 +5,9 @@ import java.io.Serializable;
 public class GameOptions implements Cloneable, Serializable {
     private static final long serialVersionUID = -4449406179310549758L;
 
-    private GameTypes gameTypes = GameTypes.LINE;
-    private GameTypes defaultGameTypes = GameTypes.LINE;
-    private NextBallsDisplayTypes nextBallsDisplayTypes = NextBallsDisplayTypes.ShowBoth;
+    private GameType gameType = GameType.LINE;
+    private GameType defaultGameType = GameType.LINE;
+    private NextBallsDisplayType nextBallsDisplayType = NextBallsDisplayType.ShowBoth;
     private int jumpValue = 60;
     private int explosionValue = 30;
     private int movementValue = 10;
@@ -16,30 +16,30 @@ public class GameOptions implements Cloneable, Serializable {
     private boolean destroySound = true;
     private boolean movementSound = true;
 
-    public GameTypes getGameType() {
-        return gameTypes;
+    public GameType getGameType() {
+        return gameType;
     }
 
-    public GameOptions setGameType(GameTypes gameTypes) {
-        this.gameTypes = gameTypes;
+    public GameOptions setGameType(GameType gameType) {
+        this.gameType = gameType;
         return this;
     }
 
-    public GameTypes getDefaultGameType() {
-        return defaultGameTypes;
+    public GameType getDefaultGameType() {
+        return defaultGameType;
     }
 
-    public GameOptions setDefaultGameType(GameTypes defaultGameTypes) {
-        this.defaultGameTypes = defaultGameTypes;
+    public GameOptions setDefaultGameType(GameType defaultGameType) {
+        this.defaultGameType = defaultGameType;
         return this;
     }
 
-    public NextBallsDisplayTypes getNextBallDisplayType() {
-        return nextBallsDisplayTypes;
+    public NextBallsDisplayType getNextBallsDisplayTypes() {
+        return nextBallsDisplayType;
     }
 
-    public GameOptions setNextBallDisplayType(NextBallsDisplayTypes nextBallsDisplayTypes) {
-        this.nextBallsDisplayTypes = nextBallsDisplayTypes;
+    public GameOptions setNextBallsDisplayType(NextBallsDisplayType nextBallsDisplayType) {
+        this.nextBallsDisplayType = nextBallsDisplayType;
         return this;
     }
 
@@ -109,9 +109,9 @@ public class GameOptions implements Cloneable, Serializable {
     @Override
     protected GameOptions clone() {
         return new GameOptions()
-                .setGameType(gameTypes)
-                .setDefaultGameType(defaultGameTypes)
-                .setNextBallDisplayType(nextBallsDisplayTypes)
+                .setGameType(gameType)
+                .setDefaultGameType(defaultGameType)
+                .setNextBallsDisplayType(nextBallsDisplayType)
                 .setJumpValue(jumpValue)
                 .setExplosionValue(explosionValue)
                 .setMovementValue(movementValue)

@@ -3,10 +3,9 @@ package thbt.webng.com.game.board;
 import thbt.webng.com.game.*;
 import thbt.webng.com.game.info.GameInfoPresenter;
 import thbt.webng.com.game.info.NextBallsPresenter;
-import thbt.webng.com.game.option.GameOptions;
 import thbt.webng.com.game.option.GameOptionsManager;
-import thbt.webng.com.game.option.GameTypes;
-import thbt.webng.com.game.option.NextBallsDisplayTypes;
+import thbt.webng.com.game.option.GameType;
+import thbt.webng.com.game.option.NextBallsDisplayType;
 import thbt.webng.com.game.path.MovingPath;
 import thbt.webng.com.game.score.ScoreStrategyContext;
 import thbt.webng.com.game.sound.SoundManager;
@@ -51,8 +50,8 @@ public class GameBoardView {
         gameInfoBoard.draw(g);
 
         boolean displayGrowingBalls = GameOptionsManager.getCurrentGameOptions()
-                .getNextBallDisplayType() == NextBallsDisplayTypes.ShowBoth
-                || GameOptionsManager.getCurrentGameOptions().getNextBallDisplayType() == NextBallsDisplayTypes.ShowOnField;
+                .getNextBallsDisplayTypes() == NextBallsDisplayType.ShowBoth
+                || GameOptionsManager.getCurrentGameOptions().getNextBallsDisplayTypes() == NextBallsDisplayType.ShowOnField;
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 squareArray[i][j].draw(g, displayGrowingBalls);
@@ -72,7 +71,7 @@ public class GameBoardView {
         return new Dimension(2 * left + col * Square.SIZE, top + row * Square.SIZE + 1);
     }
 
-    public void newGame(GameTypes gameTypes) {
+    public void newGame(GameType gameType) {
         initBoard();
         addGrowingBall();
         previousGameState = null;
@@ -82,7 +81,7 @@ public class GameBoardView {
         gameInfoBoard.getDigitalClockPresenter().start();
         gameInfoBoard.getScorePresenter().setScore(0);
 
-        GameOptionsManager.getCurrentGameOptions().setGameType(gameTypes);
+        GameOptionsManager.getCurrentGameOptions().setGameType(gameType);
 
         gamePanel.repaint();
     }

@@ -2,8 +2,8 @@ package thbt.webng.com;
 
 import thbt.webng.com.game.GamePanel;
 import thbt.webng.com.game.info.GameInfoPresenter;
-import thbt.webng.com.game.option.GameTypes;
-import thbt.webng.com.game.option.OptionsDialog;
+import thbt.webng.com.game.option.GameType;
+import thbt.webng.com.game.option.OptionsDialogPresenter;
 import thbt.webng.com.game.scorehistory.HighScoreDialog;
 import thbt.webng.com.game.scorehistory.PlayerScore;
 import thbt.webng.com.game.scorehistory.PlayerScoreHistory;
@@ -66,21 +66,21 @@ public class GameFrame extends JFrame {
         gameMenu.add(newLinesMenuItem);
         newLinesMenuItem.addActionListener((e) -> {
             saveHighScore();
-            gamePanel.newGame(GameTypes.LINE);
+            gamePanel.newGame(GameType.LINE);
         });
 
         JMenuItem newSquaresMenuItem = new JMenuItem("New Squares Game", 'S');
         gameMenu.add(newSquaresMenuItem);
         newSquaresMenuItem.addActionListener((e) -> {
             saveHighScore();
-            gamePanel.newGame(GameTypes.SQUARE);
+            gamePanel.newGame(GameType.SQUARE);
         });
 
         JMenuItem newBlocksMenuItem = new JMenuItem("New Blocks Game", 'B');
         gameMenu.add(newBlocksMenuItem);
         newBlocksMenuItem.addActionListener((e) -> {
             saveHighScore();
-            gamePanel.newGame(GameTypes.BLOCK);
+            gamePanel.newGame(GameType.BLOCK);
         });
 
         gameMenu.addSeparator();
@@ -88,8 +88,8 @@ public class GameFrame extends JFrame {
         JMenuItem optionsMenuItem = new JMenuItem("Options", 'O');
         gameMenu.add(optionsMenuItem);
         optionsMenuItem.addActionListener((e) -> {
-            OptionsDialog optionDialog = new OptionsDialog(this);
-            optionDialog.setVisible(true);
+            var optionsDialogPresenter = new OptionsDialogPresenter(this);
+            optionsDialogPresenter.getView().setVisible(true);
             gamePanel.repaint();
         });
 
@@ -128,7 +128,7 @@ public class GameFrame extends JFrame {
 
         controlMenu.addSeparator();
 
-        JMenuItem stepBackMenuItem = new JMenuItem("Step back");
+        JMenuItem stepBackMenuItem = new JMenuItem("Step Back");
         stepBackMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK));
         controlMenu.add(stepBackMenuItem);
         stepBackMenuItem.addActionListener((e) -> {

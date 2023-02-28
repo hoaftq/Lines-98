@@ -1,7 +1,7 @@
 package thbt.webng.com.game.info;
 
 import thbt.webng.com.game.option.GameOptionsManager;
-import thbt.webng.com.game.option.NextBallsDisplayTypes;
+import thbt.webng.com.game.option.NextBallsDisplayType;
 
 import java.awt.*;
 
@@ -30,8 +30,8 @@ public class GameInfoView {
         highestScoreView.draw(g);
         scoreView.draw(g);
 
-        NextBallsDisplayTypes displayType = GameOptionsManager.getCurrentGameOptions().getNextBallDisplayType();
-        if (displayType == NextBallsDisplayTypes.ShowBoth || displayType == NextBallsDisplayTypes.ShowOnTop) {
+        NextBallsDisplayType displayType = GameOptionsManager.getCurrentGameOptions().getNextBallsDisplayTypes();
+        if (displayType == NextBallsDisplayType.ShowBoth || displayType == NextBallsDisplayType.ShowOnTop) {
             nextBallsView.draw(g);
         }
 

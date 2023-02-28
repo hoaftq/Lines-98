@@ -5,7 +5,7 @@ import thbt.webng.com.game.board.GameBoardModel;
 import thbt.webng.com.game.board.GameBoardPresenter;
 import thbt.webng.com.game.board.GameBoardView;
 import thbt.webng.com.game.info.GameInfoPresenter;
-import thbt.webng.com.game.option.GameTypes;
+import thbt.webng.com.game.option.GameType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -55,8 +55,8 @@ public class GamePanel extends JPanel {
         presenter.newGame();
     }
 
-    public void newGame(GameTypes gameTypes) {
-        presenter.newGame(gameTypes);
+    public void newGame(GameType gameType) {
+        presenter.newGame(gameType);
     }
 
     public void saveGame() {

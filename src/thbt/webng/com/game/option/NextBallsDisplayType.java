@@ -1,6 +1,6 @@
 package thbt.webng.com.game.option;
 
-public enum NextBallsDisplayTypes {
+public enum NextBallsDisplayType {
     ShowBoth("Show both"),
     ShowOnField("Show on field"),
     ShowOnTop("Show on top"),
@@ -8,7 +8,7 @@ public enum NextBallsDisplayTypes {
 
     private String description;
 
-    private NextBallsDisplayTypes(String description) {
+    private NextBallsDisplayType(String description) {
         this.description = description;
     }
 
