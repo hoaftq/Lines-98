@@ -4,6 +4,7 @@ import thbt.webng.com.game.*;
 import thbt.webng.com.game.info.GameInfoPresenter;
 import thbt.webng.com.game.info.NextBallsPresenter;
 import thbt.webng.com.game.option.GameOptions;
+import thbt.webng.com.game.option.GameOptionsManager;
 import thbt.webng.com.game.option.GameTypes;
 import thbt.webng.com.game.option.NextBallsDisplayTypes;
 import thbt.webng.com.game.path.MovingPath;
@@ -49,9 +50,9 @@ public class GameBoardView {
     public void draw(Graphics g) {
         gameInfoBoard.draw(g);
 
-        boolean displayGrowingBalls = GameOptions.getCurrentInstance()
+        boolean displayGrowingBalls = GameOptionsManager.getCurrentGameOptions()
                 .getNextBallDisplayType() == NextBallsDisplayTypes.ShowBoth
-                || GameOptions.getCurrentInstance().getNextBallDisplayType() == NextBallsDisplayTypes.ShowOnField;
+                || GameOptionsManager.getCurrentGameOptions().getNextBallDisplayType() == NextBallsDisplayTypes.ShowOnField;
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 squareArray[i][j].draw(g, displayGrowingBalls);
@@ -81,13 +82,13 @@ public class GameBoardView {
         gameInfoBoard.getDigitalClockPresenter().start();
         gameInfoBoard.getScorePresenter().setScore(0);
 
-        GameOptions.getCurrentInstance().setGameType(gameTypes);
+        GameOptionsManager.getCurrentGameOptions().setGameType(gameTypes);
 
         gamePanel.repaint();
     }
 
     public void newGame() {
-        newGame(GameOptions.getCurrentInstance().getDefaultGameType());
+        newGame(GameOptionsManager.getCurrentGameOptions().getDefaultGameType());
     }
 
     public Square getSquare(Position pos) {
@@ -170,7 +171,7 @@ public class GameBoardView {
         selectedPos = null;
         squareFrom.setBall(null);
 
-        if (GameOptions.getCurrentInstance().isMovementSound()) {
+        if (GameOptionsManager.getCurrentGameOptions().isMovementSound()) {
             SoundManager.playMoveSound();
         }
 

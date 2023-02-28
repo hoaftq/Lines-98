@@ -13,7 +13,7 @@ public class OptionsDialog extends JDialog implements ActionListener, ItemListen
 
     private static final long serialVersionUID = -3458511180350780500L;
 
-    private GameOptions gameInfo = GameOptions.getCurrentInstance().clone();
+    private GameOptions gameInfo = GameOptionsManager.getCurrentGameOptions().clone();
 
     private JRadioButton lineButton;
 
@@ -118,7 +118,7 @@ public class OptionsDialog extends JDialog implements ActionListener, ItemListen
         } else if (e.getSource() == nextBallDisplayComboBox) {
             gameInfo.setNextBallDisplayType((NextBallsDisplayTypes) nextBallDisplayComboBox.getSelectedItem());
         } else if (e.getSource() == okButton) {
-            GameOptions.setCurrentInstance(gameInfo);
+            GameOptionsManager.setCurrentGameOptions(gameInfo);
             setVisible(false);
             dispose();
         } else if (e.getSource() == cancelButton) {

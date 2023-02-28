@@ -1,6 +1,7 @@
 package thbt.webng.com.game;
 
 import thbt.webng.com.game.option.GameOptions;
+import thbt.webng.com.game.option.GameOptionsManager;
 import thbt.webng.com.game.sound.SoundManager;
 import thbt.webng.com.game.util.PrimitiveBall;
 
@@ -40,7 +41,7 @@ public class Ball extends PrimitiveBall {
             }
 
             try {
-                Thread.sleep(GameOptions.getCurrentInstance().getAppearanceValue());
+                Thread.sleep(GameOptionsManager.getCurrentGameOptions().getAppearanceValue());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -64,7 +65,7 @@ public class Ball extends PrimitiveBall {
             }
 
             try {
-                Thread.sleep(GameOptions.getCurrentInstance().getExplosionValue());
+                Thread.sleep(GameOptionsManager.getCurrentGameOptions().getExplosionValue());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -75,7 +76,7 @@ public class Ball extends PrimitiveBall {
             square.repaint();
         }
 
-        if (GameOptions.getCurrentInstance().isDestroySound()) {
+        if (GameOptionsManager.getCurrentGameOptions().isDestroySound()) {
             SoundManager.playDestroySound();
         }
     }
@@ -131,7 +132,7 @@ public class Ball extends PrimitiveBall {
                         top += 2;
                     } else {
                         isUpDirect = !isUpDirect;
-                        if (GameOptions.getCurrentInstance().isBallJumpingSound()) {
+                        if (GameOptionsManager.getCurrentGameOptions().isBallJumpingSound()) {
                             SoundManager.playJumSound();
                         }
                     }
@@ -140,7 +141,7 @@ public class Ball extends PrimitiveBall {
                 square.repaint();
 
                 try {
-                    Thread.sleep(GameOptions.getCurrentInstance().getJumpValue());
+                    Thread.sleep(GameOptionsManager.getCurrentGameOptions().getJumpValue());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
