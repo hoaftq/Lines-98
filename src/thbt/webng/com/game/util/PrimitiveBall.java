@@ -1,90 +1,84 @@
 package thbt.webng.com.game.util;
 
-import java.awt.Color;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Paint;
-import java.awt.Point;
-import java.awt.RenderingHints;
+import java.awt.*;
 
 public class PrimitiveBall {
 
-	public PrimitiveBall() {
-	}
+    protected int left;
+    protected int top;
+    protected int width;
+    protected int height;
+    protected Color color;
 
-	public PrimitiveBall(int width, int height) {
-		this.width = width;
-		this.height = height;
-	}
+    public PrimitiveBall() {
+    }
 
-	public int getLeft() {
-		return left;
-	}
+    public PrimitiveBall(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
 
-	public void setLeft(int left) {
-		this.left = left;
-	}
+    public int getLeft() {
+        return left;
+    }
 
-	public int getTop() {
-		return top;
-	}
+    public void setLeft(int left) {
+        this.left = left;
+    }
 
-	public void setTop(int top) {
-		this.top = top;
-	}
+    public int getTop() {
+        return top;
+    }
 
-	public int getWidth() {
-		return width;
-	}
+    public void setTop(int top) {
+        this.top = top;
+    }
 
-	public void setWidth(int width) {
-		this.width = width;
-	}
+    public int getWidth() {
+        return width;
+    }
 
-	public int getHeight() {
-		return height;
-	}
+    public void setWidth(int width) {
+        this.width = width;
+    }
 
-	public void setHeight(int height) {
-		this.height = height;
-	}
+    public int getHeight() {
+        return height;
+    }
 
-	public Color getColor() {
-		return color;
-	}
+    public void setHeight(int height) {
+        this.height = height;
+    }
 
-	public void setColor(Color color) {
-		this.color = color;
-	}
+    public Color getColor() {
+        return color;
+    }
 
-	public void draw(Graphics g) {
-		Graphics2D g2 = (Graphics2D) g;
+    public void setColor(Color color) {
+        this.color = color;
+    }
 
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    public void draw(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
 
-		int dx = (int) (width / Math.sqrt(2));
-		int dy = (int) (height / Math.sqrt(2));
-		Point leftBottomPoint = new Point(getLeft() + (width - dx) / 2, getTop() + (height + dy) / 2);
-		Point middlePoint = new Point(leftBottomPoint.x + dx / 2, leftBottomPoint.y - dy / 2);
-		Point rightTopPoint = new Point(leftBottomPoint.x + dx, leftBottomPoint.y - dy);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		Paint p = new GradientPaint(leftBottomPoint, Color.BLACK, rightTopPoint, Color.BLACK);
-		g2.setPaint(p);
-		g2.fillArc(getLeft() + 1, getTop() + 1, width - 2, height - 2, 0, 360);
+        int dx = (int) (width / Math.sqrt(2));
+        int dy = (int) (height / Math.sqrt(2));
+        Point leftBottomPoint = new Point(getLeft() + (width - dx) / 2, getTop() + (height + dy) / 2);
+        Point middlePoint = new Point(leftBottomPoint.x + dx / 2, leftBottomPoint.y - dy / 2);
+        Point rightTopPoint = new Point(leftBottomPoint.x + dx, leftBottomPoint.y - dy);
 
-		Paint paint = new GradientPaint(leftBottomPoint, color, middlePoint, Color.BLACK);
-		g2.setPaint(paint);
-		g2.fillArc(getLeft(), getTop(), width, height, 134, 182);
+        Paint p = new GradientPaint(leftBottomPoint, Color.BLACK, rightTopPoint, Color.BLACK);
+        g2.setPaint(p);
+        g2.fillArc(getLeft() + 1, getTop() + 1, width - 2, height - 2, 0, 360);
 
-		Paint paint2 = new GradientPaint(middlePoint, Color.BLACK, rightTopPoint, color);
-		g2.setPaint(paint2);
-		g2.fillArc(getLeft(), getTop(), width, height, -46, 182);
-	}
+        Paint paint = new GradientPaint(leftBottomPoint, color, middlePoint, Color.BLACK);
+        g2.setPaint(paint);
+        g2.fillArc(getLeft(), getTop(), width, height, 134, 182);
 
-	protected int left;
-	protected int top;
-	protected int width;
-	protected int height;
-	protected Color color;
+        Paint paint2 = new GradientPaint(middlePoint, Color.BLACK, rightTopPoint, color);
+        g2.setPaint(paint2);
+        g2.fillArc(getLeft(), getTop(), width, height, -46, 182);
+    }
 }

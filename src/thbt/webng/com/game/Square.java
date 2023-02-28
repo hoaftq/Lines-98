@@ -1,99 +1,95 @@
 package thbt.webng.com.game;
 
-import java.awt.Color;
-import java.awt.Graphics;
-
-import javax.swing.JComponent;
+import javax.swing.*;
+import java.awt.*;
 
 public class Square {
 
-	public Square(JComponent component) {
-		this.component = component;
-	}
+    public static final int SIZE = 45;
+    private int left;
+    private int top;
+    private int size = SIZE;
+    private Ball ball;
+    private JComponent component;
 
-	public int getLeft() {
-		return left;
-	}
+    public Square(JComponent component) {
+        this.component = component;
+    }
 
-	public void setLeft(int left) {
-		this.left = left;
-	}
+    public int getLeft() {
+        return left;
+    }
 
-	public int getTop() {
-		return top;
-	}
+    public void setLeft(int left) {
+        this.left = left;
+    }
 
-	public void setTop(int top) {
-		this.top = top;
-	}
+    public int getTop() {
+        return top;
+    }
 
-	public int getSize() {
-		return size;
-	}
+    public void setTop(int top) {
+        this.top = top;
+    }
 
-	public void setSize(int size) {
-		this.size = size;
-	}
+    public int getSize() {
+        return size;
+    }
 
-	public Ball getBall() {
-		return ball;
-	}
+    public void setSize(int size) {
+        this.size = size;
+    }
 
-	public void setBall(Ball ball) {
-		this.ball = ball;
+    public Ball getBall() {
+        return ball;
+    }
 
-		if (this.ball != null) {
-			this.ball.square = this;
-		}
-	}
+    public void setBall(Ball ball) {
+        this.ball = ball;
 
-	public boolean hasBall() {
-		return ball != null;
-	}
+        if (this.ball != null) {
+            this.ball.square = this;
+        }
+    }
 
-	public BallState getBallState() {
-		if (ball == null) {
-			return BallState.REMOVED;
-		}
+    public boolean hasBall() {
+        return ball != null;
+    }
 
-		return ball.getBallState();
-	}
+    public BallState getBallState() {
+        if (ball == null) {
+            return BallState.REMOVED;
+        }
 
-	public boolean isEnableDestroy(Color color) {
-		if (ball == null) {
-			return false;
-		}
+        return ball.getBallState();
+    }
 
-		return ball.getBallState() == BallState.MATURE && ball.getColor().equals(color);
-	}
+    public boolean isEnableDestroy(Color color) {
+        if (ball == null) {
+            return false;
+        }
 
-	public void draw(Graphics g, boolean showGrowingBalls) {
-		drawBackground(g);
+        return ball.getBallState() == BallState.MATURE && ball.getColor().equals(color);
+    }
 
-		if (ball != null) {
-			if (showGrowingBalls) {
-				ball.draw(g);
-			} else if (ball.getBallState() != BallState.GROWING) {
-				ball.draw(g);
-			}
-		}
-	}
+    public void draw(Graphics g, boolean showGrowingBalls) {
+        drawBackground(g);
 
-	public void repaint() {
-		component.repaint(left, top, size, size);
-	}
+        if (ball != null) {
+            if (showGrowingBalls) {
+                ball.draw(g);
+            } else if (ball.getBallState() != BallState.GROWING) {
+                ball.draw(g);
+            }
+        }
+    }
 
-	private void drawBackground(Graphics g) {
-		g.setColor(Color.LIGHT_GRAY);
-		g.fill3DRect(left, top, SIZE, SIZE, true);
-	}
+    public void repaint() {
+        component.repaint(left, top, size, size);
+    }
 
-	private int left;
-	private int top;
-	private int size = SIZE;
-	private Ball ball;
-
-	private JComponent component;
-
-	public static final int SIZE = 45;
+    private void drawBackground(Graphics g) {
+        g.setColor(Color.LIGHT_GRAY);
+        g.fill3DRect(left, top, SIZE, SIZE, true);
+    }
 }

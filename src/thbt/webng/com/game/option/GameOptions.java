@@ -1,136 +1,141 @@
 package thbt.webng.com.game.option;
 
-import java.io.Serializable;
-
 import thbt.webng.com.game.util.StorageUtil;
 
+import java.io.Serializable;
+
 public class GameOptions implements Cloneable, Serializable {
-	private static final long serialVersionUID = -4449406179310549758L;
+    private static final long serialVersionUID = -4449406179310549758L;
 
-	private final static String CONFIG_FILE_NAME = "Config";
-	private static GameOptions currentInstance;
+    private final static String CONFIG_FILE_NAME = "Config";
+    private static GameOptions currentInstance;
 
-	static {
-		currentInstance = StorageUtil.<GameOptions>load(CONFIG_FILE_NAME).orElse(new GameOptions());
-	}
+    static {
+        currentInstance = StorageUtil.<GameOptions>load(CONFIG_FILE_NAME).orElse(new GameOptions());
+    }
 
-	public static GameOptions getCurrentInstance() {
-		return currentInstance;
-	}
+    private GameTypes gameTypes = GameTypes.LINE;
+    private GameTypes defaultGameTypes = GameTypes.LINE;
+    private NextBallsDisplayTypes nextBallsDisplayTypes = NextBallsDisplayTypes.ShowBoth;
+    private int jumpValue = 60;
+    private int explosionValue = 30;
+    private int movementValue = 10;
+    private int appearanceValue = 20;
+    private boolean ballJumpingSound = false;
+    private boolean destroySound = true;
+    private boolean movementSound = true;
 
-	public static void setCurrentInstance(GameOptions gameInfo) {
-		currentInstance = gameInfo;
-		StorageUtil.save(currentInstance, CONFIG_FILE_NAME);
-	}
+    public static GameOptions getCurrentInstance() {
+        return currentInstance;
+    }
 
-	private GameTypes gameTypes = GameTypes.LINE;
-	private GameTypes defaultGameTypes = GameTypes.LINE;
-	private NextBallsDisplayTypes nextBallsDisplayTypes = NextBallsDisplayTypes.ShowBoth;
+    public static void setCurrentInstance(GameOptions gameInfo) {
+        currentInstance = gameInfo;
+        StorageUtil.save(currentInstance, CONFIG_FILE_NAME);
+    }
 
-	private int jumpValue = 60;
-	private int explosionValue = 30;
-	private int movementValue = 10;
-	private int appearanceValue = 20;
+    public GameTypes getGameType() {
+        return gameTypes;
+    }
 
-	private boolean ballJumpingSound = false;
-	private boolean destroySound = true;
-	private boolean movementSound = true;
+    public GameOptions setGameType(GameTypes gameTypes) {
+        this.gameTypes = gameTypes;
+        return this;
+    }
 
-	public GameTypes getGameType() {
-		return gameTypes;
-	}
+    public GameTypes getDefaultGameType() {
+        return defaultGameTypes;
+    }
 
-	public GameOptions setGameType(GameTypes gameTypes) {
-		this.gameTypes = gameTypes;
-		return this;
-	}
+    public GameOptions setDefaultGameType(GameTypes defaultGameTypes) {
+        this.defaultGameTypes = defaultGameTypes;
+        return this;
+    }
 
-	public GameTypes getDefaultGameType() {
-		return defaultGameTypes;
-	}
+    public NextBallsDisplayTypes getNextBallDisplayType() {
+        return nextBallsDisplayTypes;
+    }
 
-	public GameOptions setDefaultGameType(GameTypes defaultGameTypes) {
-		this.defaultGameTypes = defaultGameTypes;
-		return this;
-	}
+    public GameOptions setNextBallDisplayType(NextBallsDisplayTypes nextBallsDisplayTypes) {
+        this.nextBallsDisplayTypes = nextBallsDisplayTypes;
+        return this;
+    }
 
-	public NextBallsDisplayTypes getNextBallDisplayType() {
-		return nextBallsDisplayTypes;
-	}
+    public int getJumpValue() {
+        return jumpValue;
+    }
 
-	public GameOptions setNextBallDisplayType(NextBallsDisplayTypes nextBallsDisplayTypes) {
-		this.nextBallsDisplayTypes = nextBallsDisplayTypes;
-		return this;
-	}
+    public GameOptions setJumpValue(int jumpValue) {
+        this.jumpValue = jumpValue;
+        return this;
+    }
 
-	public int getJumpValue() {
-		return jumpValue;
-	}
+    public int getExplosionValue() {
+        return explosionValue;
+    }
 
-	public GameOptions setJumpValue(int jumpValue) {
-		this.jumpValue = jumpValue;
-		return this;
-	}
+    public GameOptions setExplosionValue(int explosionValue) {
+        this.explosionValue = explosionValue;
+        return this;
+    }
 
-	public int getExplosionValue() {
-		return explosionValue;
-	}
+    public int getMovementValue() {
+        return movementValue;
+    }
 
-	public GameOptions setExplosionValue(int explosionValue) {
-		this.explosionValue = explosionValue;
-		return this;
-	}
+    public GameOptions setMovementValue(int movementValue) {
+        this.movementValue = movementValue;
+        return this;
+    }
 
-	public int getMovementValue() {
-		return movementValue;
-	}
+    public int getAppearanceValue() {
+        return appearanceValue;
+    }
 
-	public GameOptions setMovementValue(int movementValue) {
-		this.movementValue = movementValue;
-		return this;
-	}
+    public GameOptions setAppearanceValue(int appearanceValue) {
+        this.appearanceValue = appearanceValue;
+        return this;
+    }
 
-	public int getAppearanceValue() {
-		return appearanceValue;
-	}
+    public boolean isBallJumpingSound() {
+        return ballJumpingSound;
+    }
 
-	public GameOptions setAppearanceValue(int appearanceValue) {
-		this.appearanceValue = appearanceValue;
-		return this;
-	}
+    public GameOptions setBallJumpingSound(boolean ballJumpingSound) {
+        this.ballJumpingSound = ballJumpingSound;
+        return this;
+    }
 
-	public boolean isBallJumpingSound() {
-		return ballJumpingSound;
-	}
+    public boolean isDestroySound() {
+        return destroySound;
+    }
 
-	public GameOptions setBallJumpingSound(boolean ballJumpingSound) {
-		this.ballJumpingSound = ballJumpingSound;
-		return this;
-	}
+    public GameOptions setDestroySound(boolean destroySound) {
+        this.destroySound = destroySound;
+        return this;
+    }
 
-	public boolean isDestroySound() {
-		return destroySound;
-	}
+    public boolean isMovementSound() {
+        return movementSound;
+    }
 
-	public GameOptions setDestroySound(boolean destroySound) {
-		this.destroySound = destroySound;
-		return this;
-	}
+    public GameOptions setMovementSound(boolean movementSound) {
+        this.movementSound = movementSound;
+        return this;
+    }
 
-	public boolean isMovementSound() {
-		return movementSound;
-	}
-
-	public GameOptions setMovementSound(boolean movementSound) {
-		this.movementSound = movementSound;
-		return this;
-	}
-
-	@Override
-	protected GameOptions clone() {
-		return new GameOptions().setGameType(gameTypes).setDefaultGameType(defaultGameTypes)
-				.setNextBallDisplayType(nextBallsDisplayTypes).setJumpValue(jumpValue).setExplosionValue(explosionValue)
-				.setMovementValue(movementValue).setAppearanceValue(appearanceValue)
-				.setBallJumpingSound(ballJumpingSound).setDestroySound(destroySound).setMovementSound(movementSound);
-	}
+    @Override
+    protected GameOptions clone() {
+        return new GameOptions()
+                .setGameType(gameTypes)
+                .setDefaultGameType(defaultGameTypes)
+                .setNextBallDisplayType(nextBallsDisplayTypes)
+                .setJumpValue(jumpValue)
+                .setExplosionValue(explosionValue)
+                .setMovementValue(movementValue)
+                .setAppearanceValue(appearanceValue)
+                .setBallJumpingSound(ballJumpingSound)
+                .setDestroySound(destroySound)
+                .setMovementSound(movementSound);
+    }
 }

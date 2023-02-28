@@ -1,15 +1,15 @@
 package thbt.webng.com.game.util;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.Random;
 
 public final class ColorUtil {
-	private final static Color[] lineColorArray = new Color[] { Color.RED,
-			Color.BLUE, Color.GREEN, Color.YELLOW, Color.CYAN, Color.MAGENTA,
-			new Color(160, 0, 0) };
+    private final static Color[] lineColorArray = new Color[]{Color.RED,
+            Color.BLUE, Color.GREEN, Color.YELLOW, Color.CYAN, Color.MAGENTA,
+            new Color(160, 0, 0)};
 
-	public static Color getRandomColor() {
-		Random random = new Random();
-		return lineColorArray[random.nextInt(lineColorArray.length)];
-	}
+    public static Color getRandomColor() {
+        Random random = new Random();
+        return lineColorArray[random.nextInt(lineColorArray.length)];
+    }
 }

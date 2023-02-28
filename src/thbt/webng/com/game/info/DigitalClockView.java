@@ -18,8 +18,21 @@ public class DigitalClockView {
         return digits[4].getLeft();
     }
 
+    public void setLeft(int left) {
+        for (var i = digits.length - 1; i >= 0; i--) {
+            digits[i].setLeft(left);
+            left += digits[i].getWidth() + (i % 2 == 0 ? 3 : 2);
+        }
+    }
+
     public int getTop() {
         return digits[0].getTop();
+    }
+
+    public void setTop(int top) {
+        for (var digit : digits) {
+            digit.setTop(top);
+        }
     }
 
     public void draw(Graphics g) {
@@ -46,19 +59,6 @@ public class DigitalClockView {
         }
 
         panel.repaint(getLeft(), getTop(), getWidth(), getHeight());
-    }
-
-    public void setLeft(int left) {
-        for (var i = digits.length - 1; i >= 0; i--) {
-            digits[i].setLeft(left);
-            left += digits[i].getWidth() + (i % 2 == 0 ? 3 : 2);
-        }
-    }
-
-    public void setTop(int top) {
-        for (var digit : digits) {
-            digit.setTop(top);
-        }
     }
 
     public int getWidth() {
