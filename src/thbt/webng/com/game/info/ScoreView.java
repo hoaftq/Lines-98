@@ -18,6 +18,10 @@ public class ScoreView {
         }
     }
 
+    public int getLeft() {
+        return digits[digits.length - 1].getLeft();
+    }
+
     public void setLeft(int left) {
         for (var i = digits.length - 1; i >= 0; i--) {
             digits[i].setLeft(left);
@@ -25,18 +29,14 @@ public class ScoreView {
         }
     }
 
+    public int getTop() {
+        return digits[0].getTop();
+    }
+
     public void setTop(int top) {
         for (Digit digit : digits) {
             digit.setTop(top);
         }
-    }
-
-    public int getLeft() {
-        return digits[digits.length - 1].getLeft();
-    }
-
-    public int getTop() {
-        return digits[0].getTop();
     }
 
     public int getWidth() {

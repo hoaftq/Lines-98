@@ -42,12 +42,12 @@ public class NextBallsPresenter {
         view.setNextColors(model.getNextColors());
     }
 
+    public Color[] getNextColors() {
+        return model.getNextColors();
+    }
+
     public void setNextColors(Color[] nextColors) {
         model.setNextColors(nextColors);
         view.setNextColors(nextColors);
-    }
-
-    public Color[] getNextColors() {
-        return model.getNextColors();
     }
 }

@@ -1,178 +1,177 @@
 package thbt.webng.com.game;
 
-import java.awt.Color;
-import java.util.List;
-
 import thbt.webng.com.game.option.GameOptions;
 import thbt.webng.com.game.sound.SoundManager;
 import thbt.webng.com.game.util.PrimitiveBall;
 
+import java.awt.*;
+import java.util.List;
+
 public class Ball extends PrimitiveBall {
 
-	public Ball(Color color, BallState ballState, Square square) {
-		super();
-		this.square = square;
-		setBallState(ballState);
-		setColor(color);
-	}
+    public static final int MATURITY_SIZE = 33;
+    public static final int GROWING_SIZE = 9;
+    protected Square square;
+    private BallState ballState;
+    private boolean isUpDirect = true;
+    private Thread animateThread;
 
-	@Override
-	public int getLeft() {
-		return square.getLeft() + left;
-	}
+    public Ball(Color color, BallState ballState, Square square) {
+        super();
+        this.square = square;
+        setBallState(ballState);
+        setColor(color);
+    }
 
-	@Override
-	public int getTop() {
-		return square.getTop() + top;
-	}
+    public static void growBall(final List<Square> squareList) {
+        for (Square square : squareList) {
+            if (square.getBallState() != BallState.GROWING) {
+                throw new IllegalStateException();
+            }
 
-	public BallState getBallState() {
-		return ballState;
-	}
+            square.getBall().ballState = BallState.MATURE;
+        }
 
-	public void setBallState(BallState ballState) {
-		this.ballState = ballState;
+        while (squareList.get(0).getBall().width < MATURITY_SIZE) {
+            for (Square square : squareList) {
+                Ball ball = square.getBall();
+                ball.setSize(ball.width + 2);
+                square.repaint();
+            }
 
-		if (ballState == BallState.GROWING) {
-			setSize(GROWING_SIZE);
-		} else if (ballState == BallState.MATURE) {
-			setSize(MATURITY_SIZE);
-		} else if (ballState == BallState.ANIMATE) {
-			setSize(MATURITY_SIZE);
-			select();
-		}
-	}
+            try {
+                Thread.sleep(GameOptions.getCurrentInstance().getAppearanceValue());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-	public void select() {
-		if (ballState == BallState.GROWING || ballState == BallState.REMOVED) {
-			throw new IllegalStateException();
-		}
+    public static void hideBall(final List<Square> squareList) {
+        for (Square square : squareList) {
+            if (square.getBallState() != BallState.MATURE && square.getBallState() != BallState.ANIMATE) {
+                throw new IllegalStateException();
+            }
 
-		if (ballState == BallState.ANIMATE) {
-			unSelect();
-		}
+            square.getBall().ballState = BallState.REMOVED;
+        }
 
-		ballState = BallState.ANIMATE;
+        while (squareList.get(0).getBall().width > GROWING_SIZE) {
+            for (Square square : squareList) {
+                Ball ball = square.getBall();
+                ball.setSize(ball.width - 2);
+                square.repaint();
+            }
 
-		animateThread = new Thread(() -> {
-			while (ballState == BallState.ANIMATE) {
-				if (isUpDirect) {
-					if (top > 2) {
-						top -= 2;
-					} else {
-						isUpDirect = !isUpDirect;
-					}
-				} else {
-					if (top + height < square.getSize() - 2) {
-						top += 2;
-					} else {
-						isUpDirect = !isUpDirect;
-						if (GameOptions.getCurrentInstance().isBallJumpingSound()) {
-							SoundManager.playJumSound();
-						}
-					}
-				}
+            try {
+                Thread.sleep(GameOptions.getCurrentInstance().getExplosionValue());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
-				square.repaint();
+        for (Square square : squareList) {
+            square.setBall(null);
+            square.repaint();
+        }
 
-				try {
-					Thread.sleep(GameOptions.getCurrentInstance().getJumpValue());
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		});
+        if (GameOptions.getCurrentInstance().isDestroySound()) {
+            SoundManager.playDestroySound();
+        }
+    }
 
-		animateThread.start();
-	}
+    @Override
+    public int getLeft() {
+        return square.getLeft() + left;
+    }
 
-	public void unSelect() {
-		ballState = BallState.MATURE;
+    @Override
+    public int getTop() {
+        return square.getTop() + top;
+    }
 
-		// animateThread.stop();
-		try {
-			animateThread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+    public BallState getBallState() {
+        return ballState;
+    }
 
-		top = (square.getSize() - MATURITY_SIZE) / 2;
-		isUpDirect = true;
-		square.repaint();
-	}
+    public void setBallState(BallState ballState) {
+        this.ballState = ballState;
 
-	private void setSize(int size) {
-		width = height = size;
-		left = top = (square.getSize() - size) / 2;
-	}
+        if (ballState == BallState.GROWING) {
+            setSize(GROWING_SIZE);
+        } else if (ballState == BallState.MATURE) {
+            setSize(MATURITY_SIZE);
+        } else if (ballState == BallState.ANIMATE) {
+            setSize(MATURITY_SIZE);
+            select();
+        }
+    }
 
-	public static void growBall(final List<Square> squareList) {
-		for (Square square : squareList) {
-			if (square.getBallState() != BallState.GROWING) {
-				throw new IllegalStateException();
-			}
+    public void select() {
+        if (ballState == BallState.GROWING || ballState == BallState.REMOVED) {
+            throw new IllegalStateException();
+        }
 
-			square.getBall().ballState = BallState.MATURE;
-		}
+        if (ballState == BallState.ANIMATE) {
+            unSelect();
+        }
 
-		while (squareList.get(0).getBall().width < MATURITY_SIZE) {
-			for (Square square : squareList) {
-				Ball ball = square.getBall();
-				ball.setSize(ball.width + 2);
-				square.repaint();
-			}
+        ballState = BallState.ANIMATE;
 
-			try {
-				Thread.sleep(GameOptions.getCurrentInstance().getAppearanceValue());
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+        animateThread = new Thread(() -> {
+            while (ballState == BallState.ANIMATE) {
+                if (isUpDirect) {
+                    if (top > 2) {
+                        top -= 2;
+                    } else {
+                        isUpDirect = !isUpDirect;
+                    }
+                } else {
+                    if (top + height < square.getSize() - 2) {
+                        top += 2;
+                    } else {
+                        isUpDirect = !isUpDirect;
+                        if (GameOptions.getCurrentInstance().isBallJumpingSound()) {
+                            SoundManager.playJumSound();
+                        }
+                    }
+                }
 
-	public static void hideBall(final List<Square> squareList) {
-		for (Square square : squareList) {
-			if (square.getBallState() != BallState.MATURE && square.getBallState() != BallState.ANIMATE) {
-				throw new IllegalStateException();
-			}
+                square.repaint();
 
-			square.getBall().ballState = BallState.REMOVED;
-		}
+                try {
+                    Thread.sleep(GameOptions.getCurrentInstance().getJumpValue());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
-		while (squareList.get(0).getBall().width > GROWING_SIZE) {
-			for (Square square : squareList) {
-				Ball ball = square.getBall();
-				ball.setSize(ball.width - 2);
-				square.repaint();
-			}
+        animateThread.start();
+    }
 
-			try {
-				Thread.sleep(GameOptions.getCurrentInstance().getExplosionValue());
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+    public void unSelect() {
+        ballState = BallState.MATURE;
 
-		for (Square square : squareList) {
-			square.setBall(null);
-			square.repaint();
-		}
+        // animateThread.stop();
+        try {
+            animateThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-		if (GameOptions.getCurrentInstance().isDestroySound()) {
-			SoundManager.playDestroySound();
-		}
-	}
+        top = (square.getSize() - MATURITY_SIZE) / 2;
+        isUpDirect = true;
+        square.repaint();
+    }
 
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return new Ball(color, ballState == BallState.ANIMATE ? BallState.MATURE : ballState, square);
-	}
+    private void setSize(int size) {
+        width = height = size;
+        left = top = (square.getSize() - size) / 2;
+    }
 
-	protected Square square;
-	private BallState ballState;
-	private boolean isUpDirect = true;
-	private Thread animateThread;
-
-	public static final int MATURITY_SIZE = 33;
-	public static final int GROWING_SIZE = 9;
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return new Ball(color, ballState == BallState.ANIMATE ? BallState.MATURE : ballState, square);
+    }
 }
