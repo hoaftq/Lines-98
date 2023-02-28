@@ -5,6 +5,7 @@ import thbt.webng.com.game.Position;
 import thbt.webng.com.game.Square;
 import thbt.webng.com.game.info.GameInfoPresenter;
 import thbt.webng.com.game.option.GameOptions;
+import thbt.webng.com.game.option.GameOptionsManager;
 import thbt.webng.com.game.option.GameTypes;
 
 import java.awt.*;
@@ -25,7 +26,7 @@ public class GameBoardPresenter {
     }
 
     public void newGame() {
-        newGame(GameOptions.getCurrentInstance().getDefaultGameType());
+        newGame(GameOptionsManager.getCurrentGameOptions().getDefaultGameType());
     }
 
     public void playAt(int mouseX, int mouseY) {

@@ -1,6 +1,6 @@
 package thbt.webng.com.game.info;
 
-import thbt.webng.com.game.option.GameOptions;
+import thbt.webng.com.game.option.GameOptionsManager;
 import thbt.webng.com.game.option.NextBallsDisplayTypes;
 
 import java.awt.*;
@@ -30,7 +30,7 @@ public class GameInfoView {
         highestScoreView.draw(g);
         scoreView.draw(g);
 
-        NextBallsDisplayTypes displayType = GameOptions.getCurrentInstance().getNextBallDisplayType();
+        NextBallsDisplayTypes displayType = GameOptionsManager.getCurrentGameOptions().getNextBallDisplayType();
         if (displayType == NextBallsDisplayTypes.ShowBoth || displayType == NextBallsDisplayTypes.ShowOnTop) {
             nextBallsView.draw(g);
         }
@@ -56,7 +56,7 @@ public class GameInfoView {
     private void drawGameType(Graphics g) {
         g.setFont(g.getFont().deriveFont(Font.BOLD, 7f));
 
-        var gameType = GameOptions.getCurrentInstance().getGameType().toString().toUpperCase();
+        var gameType = GameOptionsManager.getCurrentGameOptions().getGameType().toString().toUpperCase();
         int gameTypeWidth = g.getFontMetrics().stringWidth(gameType);
         g.setColor(new Color(0, 96, 191));
         g.drawString(gameType, LEFT + (WIDTH - gameTypeWidth) / 2, TOP + 8);

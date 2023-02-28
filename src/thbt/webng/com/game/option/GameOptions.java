@@ -1,18 +1,9 @@
 package thbt.webng.com.game.option;
 
-import thbt.webng.com.game.util.StorageUtil;
-
 import java.io.Serializable;
 
 public class GameOptions implements Cloneable, Serializable {
     private static final long serialVersionUID = -4449406179310549758L;
-
-    private final static String CONFIG_FILE_NAME = "Config";
-    private static GameOptions currentInstance;
-
-    static {
-        currentInstance = StorageUtil.<GameOptions>load(CONFIG_FILE_NAME).orElse(new GameOptions());
-    }
 
     private GameTypes gameTypes = GameTypes.LINE;
     private GameTypes defaultGameTypes = GameTypes.LINE;
@@ -24,15 +15,6 @@ public class GameOptions implements Cloneable, Serializable {
     private boolean ballJumpingSound = false;
     private boolean destroySound = true;
     private boolean movementSound = true;
-
-    public static GameOptions getCurrentInstance() {
-        return currentInstance;
-    }
-
-    public static void setCurrentInstance(GameOptions gameInfo) {
-        currentInstance = gameInfo;
-        StorageUtil.save(currentInstance, CONFIG_FILE_NAME);
-    }
 
     public GameTypes getGameType() {
         return gameTypes;
