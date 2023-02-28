@@ -1,5 +1,5 @@
 package thbt.webng.com.game.option;
 
-public enum GameType {
+public enum GameTypes {
 	LINE, SQUARE, BLOCK
 }

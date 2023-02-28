@@ -35,7 +35,7 @@ public class OptionsDialog extends JDialog implements ActionListener, ItemListen
 
 	private JRadioButton squareButton;
 
-	private JComboBox<NextBallDisplayType> nextBallDisplayComboBox;
+	private JComboBox<NextBallsDisplayTypes> nextBallDisplayComboBox;
 
 	private JCheckBox destroySoundCheckBox;
 
@@ -57,11 +57,11 @@ public class OptionsDialog extends JDialog implements ActionListener, ItemListen
 		JLabel defaultGameTypeLabel = new JLabel("Default game type:");
 		optionPane.add(defaultGameTypeLabel);
 
-		lineButton = new JRadioButton("Line", gameInfo.getDefaultGameType() == GameType.LINE);
+		lineButton = new JRadioButton("Line", gameInfo.getDefaultGameType() == GameTypes.LINE);
 		lineButton.addActionListener(this);
-		blockButton = new JRadioButton("Block", gameInfo.getDefaultGameType() == GameType.BLOCK);
+		blockButton = new JRadioButton("Block", gameInfo.getDefaultGameType() == GameTypes.BLOCK);
 		blockButton.addActionListener(this);
-		squareButton = new JRadioButton("Square", gameInfo.getDefaultGameType() == GameType.SQUARE);
+		squareButton = new JRadioButton("Square", gameInfo.getDefaultGameType() == GameTypes.SQUARE);
 		squareButton.addActionListener(this);
 		ButtonGroup gameTypeGroup = new ButtonGroup();
 		gameTypeGroup.add(lineButton);
@@ -81,7 +81,7 @@ public class OptionsDialog extends JDialog implements ActionListener, ItemListen
 		optionPane.add(nextBallDisplayTypeLabel);
 
 		optionPane.add(Box.createRigidArea(new Dimension(0, 3)));
-		nextBallDisplayComboBox = new JComboBox<>(NextBallDisplayType.values());
+		nextBallDisplayComboBox = new JComboBox<>(NextBallsDisplayTypes.values());
 		nextBallDisplayComboBox.setAlignmentX(Component.LEFT_ALIGNMENT);
 		nextBallDisplayComboBox.setSelectedItem(gameInfo.getNextBallDisplayType());
 		nextBallDisplayComboBox.addActionListener(this);
@@ -124,13 +124,13 @@ public class OptionsDialog extends JDialog implements ActionListener, ItemListen
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == lineButton) {
-			gameInfo.setDefaultGameType(GameType.LINE);
+			gameInfo.setDefaultGameType(GameTypes.LINE);
 		} else if (e.getSource() == blockButton) {
-			gameInfo.setDefaultGameType(GameType.BLOCK);
+			gameInfo.setDefaultGameType(GameTypes.BLOCK);
 		} else if (e.getSource() == squareButton) {
-			gameInfo.setDefaultGameType(GameType.SQUARE);
+			gameInfo.setDefaultGameType(GameTypes.SQUARE);
 		} else if (e.getSource() == nextBallDisplayComboBox) {
-			gameInfo.setNextBallDisplayType((NextBallDisplayType) nextBallDisplayComboBox.getSelectedItem());
+			gameInfo.setNextBallDisplayType((NextBallsDisplayTypes) nextBallDisplayComboBox.getSelectedItem());
 		} else if (e.getSource() == okButton) {
 			GameOptions.setCurrentInstance(gameInfo);
 			setVisible(false);

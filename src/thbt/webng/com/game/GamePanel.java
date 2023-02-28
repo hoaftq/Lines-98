@@ -11,7 +11,7 @@ import thbt.webng.com.game.board.GameBoardModel;
 import thbt.webng.com.game.board.GameBoardPresenter;
 import thbt.webng.com.game.board.GameBoardView;
 import thbt.webng.com.game.info.GameInfoPresenter;
-import thbt.webng.com.game.option.GameType;
+import thbt.webng.com.game.option.GameTypes;
 
 public class GamePanel extends JPanel {
 	private static final long serialVersionUID = -5724271697960761395L;
@@ -56,8 +56,8 @@ public class GamePanel extends JPanel {
 		presenter.newGame();
 	}
 
-	public void newGame(GameType gameType) {
-		presenter.newGame(gameType);
+	public void newGame(GameTypes gameTypes) {
+		presenter.newGame(gameTypes);
 	}
 
 	public void saveGame() {
