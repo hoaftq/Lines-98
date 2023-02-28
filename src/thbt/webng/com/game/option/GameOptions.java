@@ -5,87 +5,13 @@ import java.io.Serializable;
 import thbt.webng.com.game.util.StorageUtil;
 
 public class GameOptions implements Cloneable, Serializable {
-
 	private static final long serialVersionUID = -4449406179310549758L;
 
-	public GameType getGameType() {
-		return gameType;
-	}
+	private final static String CONFIG_FILE_NAME = "Config";
+	private static GameOptions currentInstance;
 
-	public void setGameType(GameType gameType) {
-		this.gameType = gameType;
-	}
-
-	public GameType getDefaultGameType() {
-		return defaultGameType;
-	}
-
-	public void setDefaultGameType(GameType defaultGameType) {
-		this.defaultGameType = defaultGameType;
-	}
-
-	public NextBallDisplayType getNextBallDisplayType() {
-		return nextBallDisplayType;
-	}
-
-	public void setNextBallDisplayType(NextBallDisplayType nextBallDisplayType) {
-		this.nextBallDisplayType = nextBallDisplayType;
-	}
-
-	public int getJumpValue() {
-		return jumpValue;
-	}
-
-	public void setJumpValue(int jumpValue) {
-		this.jumpValue = jumpValue;
-	}
-
-	public int getExplosionValue() {
-		return explosionValue;
-	}
-
-	public void setExplosionValue(int explosionValue) {
-		this.explosionValue = explosionValue;
-	}
-
-	public int getMovementValue() {
-		return movementValue;
-	}
-
-	public void setMovementValue(int movementValue) {
-		this.movementValue = movementValue;
-	}
-
-	public int getAppearanceValue() {
-		return appearanceValue;
-	}
-
-	public void setAppearanceValue(int appearanceValue) {
-		this.appearanceValue = appearanceValue;
-	}
-
-	public boolean isBallJumpingSound() {
-		return ballJumpingSound;
-	}
-
-	public void setBallJumpingSound(boolean ballJumpingSound) {
-		this.ballJumpingSound = ballJumpingSound;
-	}
-
-	public boolean isDestroySound() {
-		return destroySound;
-	}
-
-	public void setDestroySound(boolean destroySound) {
-		this.destroySound = destroySound;
-	}
-
-	public boolean isMovementSound() {
-		return movementSound;
-	}
-
-	public void setMovementSound(boolean movementSound) {
-		this.movementSound = movementSound;
+	static {
+		currentInstance = StorageUtil.<GameOptions>load(CONFIG_FILE_NAME).orElse(new GameOptions());
 	}
 
 	public static GameOptions getCurrentInstance() {
@@ -97,26 +23,9 @@ public class GameOptions implements Cloneable, Serializable {
 		StorageUtil.save(currentInstance, CONFIG_FILE_NAME);
 	}
 
-	@Override
-	protected GameOptions clone() {
-		GameOptions gi = new GameOptions();
-		gi.setGameType(gameType);
-		gi.setDefaultGameType(defaultGameType);
-		gi.setNextBallDisplayType(nextBallDisplayType);
-		gi.setJumpValue(jumpValue);
-		gi.setExplosionValue(explosionValue);
-		gi.setMovementValue(movementValue);
-		gi.setAppearanceValue(appearanceValue);
-		gi.setBallJumpingSound(ballJumpingSound);
-		gi.setDestroySound(destroySound);
-		gi.setMovementSound(movementSound);
-		return gi;
-	}
-
-	private GameType gameType = GameType.LINE;
-	private GameType defaultGameType = GameType.LINE;
-
-	private NextBallDisplayType nextBallDisplayType = NextBallDisplayType.ShowBoth;
+	private GameTypes gameTypes = GameTypes.LINE;
+	private GameTypes defaultGameTypes = GameTypes.LINE;
+	private NextBallsDisplayTypes nextBallsDisplayTypes = NextBallsDisplayTypes.ShowBoth;
 
 	private int jumpValue = 60;
 	private int explosionValue = 30;
@@ -127,9 +36,101 @@ public class GameOptions implements Cloneable, Serializable {
 	private boolean destroySound = true;
 	private boolean movementSound = true;
 
-	private static GameOptions currentInstance;
-	private final static String CONFIG_FILE_NAME = "Config";
-	static {
-		currentInstance = StorageUtil.<GameOptions>load(CONFIG_FILE_NAME).orElse(new GameOptions());
+	public GameTypes getGameType() {
+		return gameTypes;
+	}
+
+	public GameOptions setGameType(GameTypes gameTypes) {
+		this.gameTypes = gameTypes;
+		return this;
+	}
+
+	public GameTypes getDefaultGameType() {
+		return defaultGameTypes;
+	}
+
+	public GameOptions setDefaultGameType(GameTypes defaultGameTypes) {
+		this.defaultGameTypes = defaultGameTypes;
+		return this;
+	}
+
+	public NextBallsDisplayTypes getNextBallDisplayType() {
+		return nextBallsDisplayTypes;
+	}
+
+	public GameOptions setNextBallDisplayType(NextBallsDisplayTypes nextBallsDisplayTypes) {
+		this.nextBallsDisplayTypes = nextBallsDisplayTypes;
+		return this;
+	}
+
+	public int getJumpValue() {
+		return jumpValue;
+	}
+
+	public GameOptions setJumpValue(int jumpValue) {
+		this.jumpValue = jumpValue;
+		return this;
+	}
+
+	public int getExplosionValue() {
+		return explosionValue;
+	}
+
+	public GameOptions setExplosionValue(int explosionValue) {
+		this.explosionValue = explosionValue;
+		return this;
+	}
+
+	public int getMovementValue() {
+		return movementValue;
+	}
+
+	public GameOptions setMovementValue(int movementValue) {
+		this.movementValue = movementValue;
+		return this;
+	}
+
+	public int getAppearanceValue() {
+		return appearanceValue;
+	}
+
+	public GameOptions setAppearanceValue(int appearanceValue) {
+		this.appearanceValue = appearanceValue;
+		return this;
+	}
+
+	public boolean isBallJumpingSound() {
+		return ballJumpingSound;
+	}
+
+	public GameOptions setBallJumpingSound(boolean ballJumpingSound) {
+		this.ballJumpingSound = ballJumpingSound;
+		return this;
+	}
+
+	public boolean isDestroySound() {
+		return destroySound;
+	}
+
+	public GameOptions setDestroySound(boolean destroySound) {
+		this.destroySound = destroySound;
+		return this;
+	}
+
+	public boolean isMovementSound() {
+		return movementSound;
+	}
+
+	public GameOptions setMovementSound(boolean movementSound) {
+		this.movementSound = movementSound;
+		return this;
+	}
+
+	@Override
+	protected GameOptions clone() {
+		return new GameOptions().setGameType(gameTypes).setDefaultGameType(defaultGameTypes)
+				.setNextBallDisplayType(nextBallsDisplayTypes).setJumpValue(jumpValue).setExplosionValue(explosionValue)
+				.setMovementValue(movementValue).setAppearanceValue(appearanceValue)
+				.setBallJumpingSound(ballJumpingSound).setDestroySound(destroySound).setMovementSound(movementSound);
 	}
 }

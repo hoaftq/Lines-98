@@ -17,7 +17,7 @@ import thbt.webng.com.game.info.GameInfoPresenter;
 import thbt.webng.com.game.scorehistory.HighScoreDialog;
 import thbt.webng.com.game.scorehistory.PlayerScore;
 import thbt.webng.com.game.scorehistory.PlayerScoreHistory;
-import thbt.webng.com.game.option.GameType;
+import thbt.webng.com.game.option.GameTypes;
 import thbt.webng.com.game.option.OptionsDialog;
 import thbt.webng.com.game.util.WindowUtil;
 
@@ -69,21 +69,21 @@ public class GameFrame extends JFrame {
 		gameMenu.add(newLinesMenuItem);
 		newLinesMenuItem.addActionListener((e) -> {
 			saveHighScore();
-			gamePanel.newGame(GameType.LINE);
+			gamePanel.newGame(GameTypes.LINE);
 		});
 
 		JMenuItem newSquaresMenuItem = new JMenuItem("New Squares Game", 'S');
 		gameMenu.add(newSquaresMenuItem);
 		newSquaresMenuItem.addActionListener((e) -> {
 			saveHighScore();
-			gamePanel.newGame(GameType.SQUARE);
+			gamePanel.newGame(GameTypes.SQUARE);
 		});
 
 		JMenuItem newBlocksMenuItem = new JMenuItem("New Blocks Game", 'B');
 		gameMenu.add(newBlocksMenuItem);
 		newBlocksMenuItem.addActionListener((e) -> {
 			saveHighScore();
-			gamePanel.newGame(GameType.BLOCK);
+			gamePanel.newGame(GameTypes.BLOCK);
 		});
 
 		gameMenu.addSeparator();

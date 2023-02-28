@@ -8,7 +8,7 @@ import thbt.webng.com.game.Position;
 import thbt.webng.com.game.Square;
 import thbt.webng.com.game.info.GameInfoPresenter;
 import thbt.webng.com.game.option.GameOptions;
-import thbt.webng.com.game.option.GameType;
+import thbt.webng.com.game.option.GameTypes;
 
 public class GameBoardPresenter {
 
@@ -21,8 +21,8 @@ public class GameBoardPresenter {
 		this.view = view;
 	}
 
-	public void newGame(GameType gameType) {
-		view.newGame(gameType);
+	public void newGame(GameTypes gameTypes) {
+		view.newGame(gameTypes);
 	}
 
 	public void newGame() {
