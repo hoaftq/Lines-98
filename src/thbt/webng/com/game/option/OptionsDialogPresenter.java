@@ -4,8 +4,8 @@ import javax.swing.*;
 
 public class OptionsDialogPresenter {
 
-    private OptionsDialogView view;
-    private GameOptions gameOptions = GameOptionsManager.getCurrentGameOptions().clone();
+    private final OptionsDialogView view;
+    private final GameOptions gameOptions = GameOptionsManager.getCurrentGameOptions().clone();
 
     public OptionsDialogPresenter(JFrame owner) {
         this.view = new OptionsDialogView(owner, this);
@@ -55,10 +55,16 @@ public class OptionsDialogPresenter {
         gameOptions.setBallJumpingSound(isSelected);
     }
 
+    public void show() {
+        view.setVisible(true);
+    }
+
     public void onOK() {
         GameOptionsManager.setCurrentGameOptions(gameOptions);
+        view.dispose();
     }
 
     public void onCancel() {
+        view.dispose();
     }
 }
