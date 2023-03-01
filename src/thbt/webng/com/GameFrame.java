@@ -89,7 +89,7 @@ public class GameFrame extends JFrame {
         gameMenu.add(optionsMenuItem);
         optionsMenuItem.addActionListener((e) -> {
             var optionsDialogPresenter = new OptionsDialogPresenter(this);
-            optionsDialogPresenter.getView().setVisible(true);
+            optionsDialogPresenter.show();
             gamePanel.repaint();
         });
 

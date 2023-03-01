@@ -8,11 +8,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.Serial;
 
 public class OptionsDialogView extends JDialog implements ActionListener, ItemListener {
+    @Serial
     private static final long serialVersionUID = -3458511180350780500L;
 
-    private OptionsDialogPresenter presenter;
+    private final OptionsDialogPresenter presenter;
 
     private JRadioButton lineGameTypeButton;
 
@@ -55,12 +57,8 @@ public class OptionsDialogView extends JDialog implements ActionListener, ItemLi
             presenter.onSetNextBallsDisplayType((NextBallsDisplayType) nextBallsDisplayTypesComboBox.getSelectedItem());
         } else if (e.getSource() == okButton) {
             presenter.onOK();
-            setVisible(false);
-            dispose();
         } else if (e.getSource() == cancelButton) {
             presenter.onCancel();
-            setVisible(false);
-            dispose();
         }
     }
 
