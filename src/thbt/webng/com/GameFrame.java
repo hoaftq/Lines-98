@@ -4,7 +4,7 @@ import thbt.webng.com.game.GamePanel;
 import thbt.webng.com.game.info.GameInfoPresenter;
 import thbt.webng.com.game.option.GameType;
 import thbt.webng.com.game.option.OptionsDialogPresenter;
-import thbt.webng.com.game.scorehistory.HighScoreDialog;
+import thbt.webng.com.game.scorehistory.HighScoreDialogPresenter;
 import thbt.webng.com.game.scorehistory.PlayerScore;
 import thbt.webng.com.game.scorehistory.PlayerScoreHistory;
 import thbt.webng.com.game.util.WindowUtil;
@@ -180,7 +180,7 @@ public class GameFrame extends JFrame {
     }
 
     private void showHighScoreDialog() {
-        HighScoreDialog highScoreDialog = new HighScoreDialog(GameFrame.this);
-        highScoreDialog.setVisible(true);
+        HighScoreDialogPresenter highScoreDialogPresenter = new HighScoreDialogPresenter(GameFrame.this);
+        highScoreDialogPresenter.show();
     }
 }
