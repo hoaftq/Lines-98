@@ -6,33 +6,22 @@ import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
+import java.io.Serial;
 import java.security.InvalidParameterException;
 import java.util.List;
 
-public class HighScoreDialog extends JDialog {
+public class HighScoreDialogView extends JDialog {
 
+    @Serial
     private static final long serialVersionUID = -7150760362536326108L;
+    private final HighScoreDialogPresenter presenter;
 
-    public HighScoreDialog(JFrame frame) {
+    public HighScoreDialogView(JFrame frame, HighScoreDialogPresenter presenter) {
         super(frame, true);
+        this.presenter = presenter;
 
-        JTable table = new JTable(new HighScoreTableModel());
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        table.setDefaultRenderer(Object.class, centerRenderer);
-
-        JScrollPane northPane = new JScrollPane(table);
-        add(northPane, BorderLayout.CENTER);
-
-        JPanel southPane = new JPanel();
-        JButton okButton = new JButton("OK");
-        okButton.addActionListener((e) -> {
-            HighScoreDialog.this.setVisible(false);
-            HighScoreDialog.this.dispose();
-        });
-
-        southPane.add(okButton);
-        add(southPane, BorderLayout.SOUTH);
+        addHighScoreTable();
+        addOkButton();
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setTitle("High scores");
@@ -41,13 +30,39 @@ public class HighScoreDialog extends JDialog {
         setResizable(false);
     }
 
-    private class HighScoreTableModel extends AbstractTableModel {
+    private void addHighScoreTable() {
+        var table = new JTable(new HighScoreTableModel(presenter.getTopScores()));
+        var centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        table.setDefaultRenderer(Object.class, centerRenderer);
 
+        var northPane = new JScrollPane(table);
+        add(northPane, BorderLayout.CENTER);
+    }
+
+    private void addOkButton() {
+        var southPane = new JPanel();
+        JButton okButton = new JButton("OK");
+        okButton.addActionListener((e) -> {
+            presenter.onOkButton();
+        });
+
+        southPane.add(okButton);
+        add(southPane, BorderLayout.SOUTH);
+    }
+
+    private static class HighScoreTableModel extends AbstractTableModel {
+
+        @Serial
         private static final long serialVersionUID = -7011685201149589747L;
 
         private final String[] columnNames = {"Name", "Score", "Play time"};
 
-        private List<PlayerScore> scores = PlayerScoreHistory.getInstance().getTopScores();
+        private final List<PlayerScore> scores;
+
+        public HighScoreTableModel(List<PlayerScore> scores) {
+            this.scores = scores;
+        }
 
         @Override
         public int getColumnCount() {
