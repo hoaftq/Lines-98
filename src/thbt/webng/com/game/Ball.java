@@ -2,11 +2,10 @@ package thbt.webng.com.game;
 
 import thbt.webng.com.game.option.GameOptionsManager;
 import thbt.webng.com.game.sound.SoundManager;
-import thbt.webng.com.game.util.PrimitiveBall;
 
 import java.awt.*;
 
-public class Ball extends PrimitiveBall {
+public class Ball extends BaseBall {
     private static final int MATURITY_SIZE = 33;
     private static final int GROWING_SIZE = 9;
 

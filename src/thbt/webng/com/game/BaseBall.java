@@ -1,8 +1,8 @@
-package thbt.webng.com.game.util;
+package thbt.webng.com.game;
 
 import java.awt.*;
 
-public class PrimitiveBall {
+public class BaseBall {
 
     protected int left;
     protected int top;
@@ -10,10 +10,10 @@ public class PrimitiveBall {
     protected int height;
     protected Color color;
 
-    public PrimitiveBall() {
+    public BaseBall() {
     }
 
-    public PrimitiveBall(int width, int height) {
+    public BaseBall(int width, int height) {
         this.width = width;
         this.height = height;
     }
