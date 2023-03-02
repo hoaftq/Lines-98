@@ -1,20 +1,22 @@
 package thbt.webng.com.game.option;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public class GameOptions implements Cloneable, Serializable {
+    @Serial
     private static final long serialVersionUID = -4449406179310549758L;
 
     private GameType gameType = GameType.LINE;
     private GameType defaultGameType = GameType.LINE;
     private NextBallsDisplayType nextBallsDisplayType = NextBallsDisplayType.ShowBoth;
-    private int jumpValue = 60;
-    private int explosionValue = 30;
-    private int movementValue = 10;
-    private int appearanceValue = 20;
-    private boolean ballJumpingSound = false;
-    private boolean destroySound = true;
-    private boolean movementSound = true;
+    private int jumpingStepDelay = 30;
+    private int explosionStepDelay = 15;
+    private int movementStepDelay = 10;
+    private int appearanceStepDelay = 10;
+    private boolean playJumpSound = false;
+    private boolean playDestroySound = true;
+    private boolean playMoveSound = true;
 
     public GameType getGameType() {
         return gameType;
@@ -43,66 +45,66 @@ public class GameOptions implements Cloneable, Serializable {
         return this;
     }
 
-    public int getJumpValue() {
-        return jumpValue;
+    public int getJumpingStepDelay() {
+        return jumpingStepDelay;
     }
 
-    public GameOptions setJumpValue(int jumpValue) {
-        this.jumpValue = jumpValue;
+    public GameOptions setJumpingStepDelay(int jumpingStepDelay) {
+        this.jumpingStepDelay = jumpingStepDelay;
         return this;
     }
 
-    public int getExplosionValue() {
-        return explosionValue;
+    public int getExplosionStepDelay() {
+        return explosionStepDelay;
     }
 
-    public GameOptions setExplosionValue(int explosionValue) {
-        this.explosionValue = explosionValue;
+    public GameOptions setExplosionStepDelay(int explosionStepDelay) {
+        this.explosionStepDelay = explosionStepDelay;
         return this;
     }
 
-    public int getMovementValue() {
-        return movementValue;
+    public int getMovementStepDelay() {
+        return movementStepDelay;
     }
 
-    public GameOptions setMovementValue(int movementValue) {
-        this.movementValue = movementValue;
+    public GameOptions setMovementStepDelay(int movementStepDelay) {
+        this.movementStepDelay = movementStepDelay;
         return this;
     }
 
-    public int getAppearanceValue() {
-        return appearanceValue;
+    public int getAppearanceStepDelay() {
+        return appearanceStepDelay;
     }
 
-    public GameOptions setAppearanceValue(int appearanceValue) {
-        this.appearanceValue = appearanceValue;
+    public GameOptions setAppearanceStepDelay(int appearanceStepDelay) {
+        this.appearanceStepDelay = appearanceStepDelay;
         return this;
     }
 
-    public boolean isBallJumpingSound() {
-        return ballJumpingSound;
+    public boolean isPlayJumpSound() {
+        return playJumpSound;
     }
 
-    public GameOptions setBallJumpingSound(boolean ballJumpingSound) {
-        this.ballJumpingSound = ballJumpingSound;
+    public GameOptions setPlayJumpSound(boolean playJumpSound) {
+        this.playJumpSound = playJumpSound;
         return this;
     }
 
-    public boolean isDestroySound() {
-        return destroySound;
+    public boolean isPlayDestroySound() {
+        return playDestroySound;
     }
 
-    public GameOptions setDestroySound(boolean destroySound) {
-        this.destroySound = destroySound;
+    public GameOptions setPlayDestroySound(boolean playDestroySound) {
+        this.playDestroySound = playDestroySound;
         return this;
     }
 
-    public boolean isMovementSound() {
-        return movementSound;
+    public boolean isPlayMoveSound() {
+        return playMoveSound;
     }
 
-    public GameOptions setMovementSound(boolean movementSound) {
-        this.movementSound = movementSound;
+    public GameOptions setPlayMoveSound(boolean playMoveSound) {
+        this.playMoveSound = playMoveSound;
         return this;
     }
 
@@ -112,12 +114,12 @@ public class GameOptions implements Cloneable, Serializable {
                 .setGameType(gameType)
                 .setDefaultGameType(defaultGameType)
                 .setNextBallsDisplayType(nextBallsDisplayType)
-                .setJumpValue(jumpValue)
-                .setExplosionValue(explosionValue)
-                .setMovementValue(movementValue)
-                .setAppearanceValue(appearanceValue)
-                .setBallJumpingSound(ballJumpingSound)
-                .setDestroySound(destroySound)
-                .setMovementSound(movementSound);
+                .setJumpingStepDelay(jumpingStepDelay)
+                .setExplosionStepDelay(explosionStepDelay)
+                .setMovementStepDelay(movementStepDelay)
+                .setAppearanceStepDelay(appearanceStepDelay)
+                .setPlayJumpSound(playJumpSound)
+                .setPlayDestroySound(playDestroySound)
+                .setPlayMoveSound(playMoveSound);
     }
 }
