@@ -1,16 +1,16 @@
 package thbt.webng.com.game.info;
 
-import thbt.webng.com.game.util.PrimitiveBall;
+import thbt.webng.com.game.BaseBall;
 
 import java.awt.*;
 import java.util.Arrays;
 
 public class NextBallsView {
 
-    private PrimitiveBall[] nextBalls = new PrimitiveBall[3];
+    private BaseBall[] nextBalls = new BaseBall[3];
 
     public NextBallsView() {
-        Arrays.setAll(nextBalls, i -> new PrimitiveBall(23, 23));
+        Arrays.setAll(nextBalls, i -> new BaseBall(23, 23));
     }
 
     public void draw(Graphics g) {
