@@ -32,27 +32,27 @@ public class OptionsDialogPresenter {
     }
 
     public boolean isDestroySound() {
-        return gameOptions.isDestroySound();
+        return gameOptions.isPlayDestroySound();
     }
 
     public void onSetDestroySound(boolean isSelected) {
-        gameOptions.setDestroySound(isSelected);
+        gameOptions.setPlayDestroySound(isSelected);
     }
 
     public boolean isMovementSound() {
-        return gameOptions.isMovementSound();
+        return gameOptions.isPlayMoveSound();
     }
 
     public void onSetMovementSound(boolean isSelected) {
-        gameOptions.setMovementSound(isSelected);
+        gameOptions.setPlayMoveSound(isSelected);
     }
 
     public boolean isBallJumpingSound() {
-        return gameOptions.isBallJumpingSound();
+        return gameOptions.isPlayJumpSound();
     }
 
     public void onSetBallJumpingSound(boolean isSelected) {
-        gameOptions.setBallJumpingSound(isSelected);
+        gameOptions.setPlayJumpSound(isSelected);
     }
 
     public void show() {

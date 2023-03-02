@@ -1,20 +1,18 @@
 package thbt.webng.com.game;
 
-import thbt.webng.com.game.option.GameOptions;
 import thbt.webng.com.game.option.GameOptionsManager;
 import thbt.webng.com.game.sound.SoundManager;
 import thbt.webng.com.game.util.PrimitiveBall;
 
 import java.awt.*;
-import java.util.List;
 
 public class Ball extends PrimitiveBall {
+    private static final int MATURITY_SIZE = 33;
+    private static final int GROWING_SIZE = 9;
 
-    public static final int MATURITY_SIZE = 33;
-    public static final int GROWING_SIZE = 9;
     protected Square square;
     private BallState ballState;
-    private boolean isUpDirect = true;
+    private boolean isMovingUp = true;
     private Thread animateThread;
 
     public Ball(Color color, BallState ballState, Square square) {
@@ -22,63 +20,6 @@ public class Ball extends PrimitiveBall {
         this.square = square;
         setBallState(ballState);
         setColor(color);
-    }
-
-    public static void growBall(final List<Square> squareList) {
-        for (Square square : squareList) {
-            if (square.getBallState() != BallState.GROWING) {
-                throw new IllegalStateException();
-            }
-
-            square.getBall().ballState = BallState.MATURE;
-        }
-
-        while (squareList.get(0).getBall().width < MATURITY_SIZE) {
-            for (Square square : squareList) {
-                Ball ball = square.getBall();
-                ball.setSize(ball.width + 2);
-                square.repaint();
-            }
-
-            try {
-                Thread.sleep(GameOptionsManager.getCurrentGameOptions().getAppearanceValue());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public static void hideBall(final List<Square> squareList) {
-        for (Square square : squareList) {
-            if (square.getBallState() != BallState.MATURE && square.getBallState() != BallState.ANIMATE) {
-                throw new IllegalStateException();
-            }
-
-            square.getBall().ballState = BallState.REMOVED;
-        }
-
-        while (squareList.get(0).getBall().width > GROWING_SIZE) {
-            for (Square square : squareList) {
-                Ball ball = square.getBall();
-                ball.setSize(ball.width - 2);
-                square.repaint();
-            }
-
-            try {
-                Thread.sleep(GameOptionsManager.getCurrentGameOptions().getExplosionValue());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        for (Square square : squareList) {
-            square.setBall(null);
-            square.repaint();
-        }
-
-        if (GameOptionsManager.getCurrentGameOptions().isDestroySound()) {
-            SoundManager.playDestroySound();
-        }
     }
 
     @Override
@@ -89,6 +30,27 @@ public class Ball extends PrimitiveBall {
     @Override
     public int getTop() {
         return square.getTop() + top;
+    }
+
+    @Override
+    public void setWidth(int width) {
+        this.width = width;
+        left = (square.getSize() - width) / 2;
+    }
+
+    @Override
+    public void setHeight(int height) {
+        this.height = height;
+        top = (square.getSize() - height) / 2;
+    }
+
+    public int getSize() {
+        return width;
+    }
+
+    public void setSize(int size) {
+        setWidth(size);
+        setHeight(size);
     }
 
     public BallState getBallState() {
@@ -108,7 +70,40 @@ public class Ball extends PrimitiveBall {
         }
     }
 
+    public boolean grow() {
+        if (ballState != BallState.GROWING) {
+            throw new IllegalStateException();
+        }
+
+        var size = getSize();
+        if (size < MATURITY_SIZE) {
+            setSize(size + 1);
+            square.repaint();
+            return true;
+        }
+
+        ballState = BallState.MATURE;
+        return false;
+    }
+
+    public boolean shrink() {
+        if (ballState != BallState.MATURE) {
+            throw new IllegalStateException();
+        }
+
+        var size = getSize();
+        if (size > 0) {
+            setSize(size - 1);
+            square.repaint();
+            return true;
+        }
+
+        ballState = BallState.REMOVED;
+        return false;
+    }
+
     public void select() {
+        // TODO need this
         if (ballState == BallState.GROWING || ballState == BallState.REMOVED) {
             throw new IllegalStateException();
         }
@@ -118,21 +113,38 @@ public class Ball extends PrimitiveBall {
         }
 
         ballState = BallState.ANIMATE;
+        animateJumping();
+    }
 
+    public void unSelect() {
+        animateThread.interrupt();
+
+        ballState = BallState.MATURE;
+        top = (square.getSize() - MATURITY_SIZE) / 2;
+        isMovingUp = true;
+        square.repaint();
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return new Ball(color, ballState == BallState.ANIMATE ? BallState.MATURE : ballState, square);
+    }
+
+    private void animateJumping() {
         animateThread = new Thread(() -> {
-            while (ballState == BallState.ANIMATE) {
-                if (isUpDirect) {
+            while (!Thread.currentThread().isInterrupted()) {
+                if (isMovingUp) {
                     if (top > 2) {
-                        top -= 2;
+                        top -= 1;
                     } else {
-                        isUpDirect = !isUpDirect;
+                        isMovingUp = false;
                     }
                 } else {
                     if (top + height < square.getSize() - 2) {
-                        top += 2;
+                        top += 1;
                     } else {
-                        isUpDirect = !isUpDirect;
-                        if (GameOptionsManager.getCurrentGameOptions().isBallJumpingSound()) {
+                        isMovingUp = true;
+                        if (GameOptionsManager.getCurrentGameOptions().isPlayJumpSound()) {
                             SoundManager.playJumSound();
                         }
                     }
@@ -141,38 +153,13 @@ public class Ball extends PrimitiveBall {
                 square.repaint();
 
                 try {
-                    Thread.sleep(GameOptionsManager.getCurrentGameOptions().getJumpValue());
+                    Thread.sleep(GameOptionsManager.getCurrentGameOptions().getJumpingStepDelay());
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    System.out.println("Interrupted by unSelect");
+                    break;
                 }
             }
         });
-
         animateThread.start();
-    }
-
-    public void unSelect() {
-        ballState = BallState.MATURE;
-
-        // animateThread.stop();
-        try {
-            animateThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        top = (square.getSize() - MATURITY_SIZE) / 2;
-        isUpDirect = true;
-        square.repaint();
-    }
-
-    private void setSize(int size) {
-        width = height = size;
-        left = top = (square.getSize() - size) / 2;
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return new Ball(color, ballState == BallState.ANIMATE ? BallState.MATURE : ballState, square);
     }
 }

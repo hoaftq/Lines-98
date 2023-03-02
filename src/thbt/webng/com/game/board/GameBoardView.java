@@ -170,7 +170,7 @@ public class GameBoardView {
         selectedPos = null;
         squareFrom.setBall(null);
 
-        if (GameOptionsManager.getCurrentGameOptions().isMovementSound()) {
+        if (GameOptionsManager.getCurrentGameOptions().isPlayMoveSound()) {
             SoundManager.playMoveSound();
         }
 
@@ -228,7 +228,7 @@ public class GameBoardView {
     }
 
     private void explosionBall(List<Square> listCompleteSquare) {
-        Ball.hideBall(listCompleteSquare);
+        hideBalls(listCompleteSquare);
         int score = listCompleteSquare.size() + (listCompleteSquare.size() - 4) * listCompleteSquare.size();
         gameInfoBoard.getScorePresenter().setScore(gameInfoBoard.getScorePresenter().getScore() + score);
     }
@@ -252,7 +252,7 @@ public class GameBoardView {
         for (Position pos : nextBallPositions) {
             squareList.add(getSquare(pos));
         }
-        Ball.growBall(squareList);
+        growBalls(squareList);
 
         for (Position pos : nextBallPositions) {
             if (getSquare(pos).hasBall() && getSquare(pos).getBallState() == BallState.MATURE) {
@@ -387,6 +387,51 @@ public class GameBoardView {
 
     private NextBallsPresenter getNextBalls() {
         return getGameInfoBoard().getNextBallsPresenter();
+    }
+
+    private static void growBalls(final List<Square> squareList) {
+        if (squareList.stream().anyMatch(s -> s.getBall().getBallState() != BallState.GROWING)) {
+            throw new IllegalStateException();
+        }
+
+        while (squareList.get(0).getBallState() != BallState.MATURE) {
+            for (var square : squareList) {
+                square.getBall().grow();
+            }
+
+            try {
+                Thread.sleep(GameOptionsManager.getCurrentGameOptions().getAppearanceStepDelay());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static void hideBalls(final List<Square> squareList) {
+        if (squareList.stream().anyMatch(s -> s.getBall().getBallState() != BallState.MATURE)) {
+            throw new IllegalStateException();
+        }
+
+
+        while (squareList.get(0).getBall().getBallState() != BallState.REMOVED) {
+            for (Square square : squareList) {
+                square.getBall().shrink();
+            }
+
+            try {
+                Thread.sleep(GameOptionsManager.getCurrentGameOptions().getExplosionStepDelay());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (Square square : squareList) {
+            square.setBall(null);
+        }
+
+        if (GameOptionsManager.getCurrentGameOptions().isPlayDestroySound()) {
+            SoundManager.playDestroySound();
+        }
     }
 
     private class GameState {
