@@ -4,13 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Square {
-
-    public static final int SIZE = 45;
+    public static final int DEFAULT_SIZE = 45;
+    private final JComponent component;
     private int left;
     private int top;
-    private int size = SIZE;
+    private int size = DEFAULT_SIZE;
     private Ball ball;
-    private JComponent component;
 
     public Square(JComponent component) {
         this.component = component;
@@ -57,30 +56,25 @@ public class Square {
     }
 
     public BallState getBallState() {
-        if (ball == null) {
-            return BallState.REMOVED;
-        }
-
-        return ball.getBallState();
+        return ball == null ? BallState.REMOVED : ball.getBallState();
     }
 
-    public boolean isEnableDestroy(Color color) {
-        if (ball == null) {
-            return false;
-        }
-
-        return ball.getBallState() == BallState.MATURE && ball.getColor().equals(color);
+    public boolean isDestroyable(Color color) {
+        return ball != null
+                && ball.getBallState() == BallState.MATURE && ball.getColor().equals(color);
     }
 
     public void draw(Graphics g, boolean showGrowingBalls) {
         drawBackground(g);
 
-        if (ball != null) {
-            if (showGrowingBalls) {
-                ball.draw(g);
-            } else if (ball.getBallState() != BallState.GROWING) {
-                ball.draw(g);
-            }
+        if (ball == null) {
+            return;
+        }
+
+        if (showGrowingBalls) {
+            ball.draw(g);
+        } else if (ball.getBallState() != BallState.GROWING) {
+            ball.draw(g);
         }
     }
 
@@ -90,6 +84,6 @@ public class Square {
 
     private void drawBackground(Graphics g) {
         g.setColor(Color.LIGHT_GRAY);
-        g.fill3DRect(left, top, SIZE, SIZE, true);
+        g.fill3DRect(left, top, DEFAULT_SIZE, DEFAULT_SIZE, true);
     }
 }
