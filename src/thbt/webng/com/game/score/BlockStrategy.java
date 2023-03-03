@@ -31,7 +31,7 @@ class BlockStrategy extends ScoreStrategy {
         if (!visited[pos.x][pos.y]) {
             visited[pos.x][pos.y] = true;
 
-            if (squares[pos.x][pos.y].isEnableDestroy(color)) {
+            if (squares[pos.x][pos.y].isDestroyable(color)) {
                 completedPositions.add(pos);
 
                 if (pos.y > 0) {

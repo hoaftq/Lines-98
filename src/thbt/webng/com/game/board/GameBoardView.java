@@ -40,8 +40,8 @@ public class GameBoardView {
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 squareArray[i][j] = new Square(this.gamePanel);
-                squareArray[i][j].setLeft(left + j * Square.SIZE);
-                squareArray[i][j].setTop(top + i * Square.SIZE);
+                squareArray[i][j].setLeft(left + j * Square.DEFAULT_SIZE);
+                squareArray[i][j].setTop(top + i * Square.DEFAULT_SIZE);
             }
         }
     }
@@ -68,7 +68,7 @@ public class GameBoardView {
      * top
      */
     public Dimension getBoardSize() {
-        return new Dimension(2 * left + col * Square.SIZE, top + row * Square.SIZE + 1);
+        return new Dimension(2 * left + col * Square.DEFAULT_SIZE, top + row * Square.DEFAULT_SIZE + 1);
     }
 
     public void newGame(GameType gameType) {
@@ -129,8 +129,8 @@ public class GameBoardView {
     }
 
     public Position squareFromMousePos(int x, int y) {
-        int i = (y - top) / Square.SIZE;
-        int j = (x - left) / Square.SIZE;
+        int i = (y - top) / Square.DEFAULT_SIZE;
+        int j = (x - left) / Square.DEFAULT_SIZE;
 
         if (y < top || i >= row || x < left || j >= col) {
             return null;

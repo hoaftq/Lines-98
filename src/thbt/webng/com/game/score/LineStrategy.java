@@ -33,7 +33,7 @@ class LineStrategy extends ScoreStrategy {
         for (var d : new Direction[]{dir, dir.opposite()}) {
             var i = d.getX();
             var j = d.getY();
-            while (isValidPosition(pos.x + i, pos.y + j) && squares[pos.x + i][pos.y + j].isEnableDestroy(color)) {
+            while (isValidPosition(pos.x + i, pos.y + j) && squares[pos.x + i][pos.y + j].isDestroyable(color)) {
                 linePositions.add(new Position(pos.x + i, pos.y + j));
                 i += d.getX();
                 j += d.getY();
