@@ -20,7 +20,11 @@ public class GamePanel extends JPanel {
 
     public GamePanel(GameFrame frame) {
         gameFrame = frame;
-        presenter = new GameBoardPresenter(new GameBoardModel(), new GameBoardView(this));
+
+        var gameInfoPresenter = new GameInfoPresenter(this);
+        var model = new GameBoardModel(gameInfoPresenter, this);
+        var view = new GameBoardView(this, gameInfoPresenter, model.getSquares());
+        presenter = new GameBoardPresenter(model, view);
 
         initialize();
     }
