@@ -1,8 +1,6 @@
 package thbt.webng.com.game.board;
 
 import thbt.webng.com.game.BallState;
-import thbt.webng.com.game.Position;
-import thbt.webng.com.game.Square;
 import thbt.webng.com.game.info.GameInfoPresenter;
 import thbt.webng.com.game.option.GameOptionsManager;
 import thbt.webng.com.game.option.GameType;
@@ -11,9 +9,9 @@ import java.awt.*;
 
 public class GameBoardPresenter {
 
-    private GameBoardModel model;
+    private final GameBoardModel model;
 
-    private GameBoardView view;
+    private final GameBoardView view;
 
     public GameBoardPresenter(GameBoardModel model, GameBoardView view) {
         this.model = model;
@@ -21,7 +19,8 @@ public class GameBoardPresenter {
     }
 
     public void newGame(GameType gameType) {
-        view.newGame(gameType);
+        model.newGame(gameType);
+        view.repaint();
     }
 
     public void newGame() {
@@ -29,25 +28,21 @@ public class GameBoardPresenter {
     }
 
     public void playAt(int mouseX, int mouseY) {
-        Position pos = view.squareFromMousePos(mouseX, mouseY);
-        if (pos == null) {
+        var position = view.squareFromMousePos(mouseX, mouseY);
+        if (position == null) {
             return;
         }
 
-        Square square = view.getSquare(pos);
-
+        var square = model.getSquareAt(position);
         if (square.getBallState() == BallState.MATURE) {
-            view.selectBall(pos);
-        } else {
-            if (view.getSelectedPosition() != null) {
-                if (view.moveTo(pos)) {
-                }
-            }
+            model.selectBall(position);
+        } else if (model.getSelectedPosition() != null) {
+            model.moveTo(position);
         }
     }
 
     public boolean isGameOver() {
-        return view.isGameOver();
+        return model.isGameOver();
     }
 
     public Dimension getBoardSize() {
@@ -59,19 +54,18 @@ public class GameBoardPresenter {
     }
 
     public void saveGame() {
-        view.saveGame();
+        model.saveGame();
     }
 
     public void loadGame() {
-        view.loadGame();
+        model.loadGame();
     }
 
     public void stepBack() {
-        view.stepBack();
+        model.stepBack();
     }
 
     public GameInfoPresenter getGameInfoBoard() {
-        return view.getGameInfoBoard();
+        return view.getGameInfoPresenter();
     }
-
 }

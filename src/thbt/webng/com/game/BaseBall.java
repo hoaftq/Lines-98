@@ -71,7 +71,7 @@ public class BaseBall {
 
         Paint p = new GradientPaint(leftBottomPoint, Color.BLACK, rightTopPoint, Color.BLACK);
         g2.setPaint(p);
-        g2.fillArc(getLeft() + 1, getTop() + 1, width - 2, height - 2, 0, 360);
+        g2.fillOval(getLeft() + 1, getTop() + 1, width - 2, height - 2);
 
         Paint paint = new GradientPaint(leftBottomPoint, color, middlePoint, Color.BLACK);
         g2.setPaint(paint);
