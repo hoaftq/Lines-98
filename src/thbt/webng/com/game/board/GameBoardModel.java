@@ -1,10 +1,10 @@
 package thbt.webng.com.game.board;
 
-import thbt.webng.com.game.*;
-import thbt.webng.com.game.info.GameInfoPresenter;
-import thbt.webng.com.game.info.NextBallsPresenter;
+import thbt.webng.com.game.Ball;
+import thbt.webng.com.game.BallState;
+import thbt.webng.com.game.Position;
+import thbt.webng.com.game.Square;
 import thbt.webng.com.game.option.GameOptionsManager;
-import thbt.webng.com.game.option.GameType;
 import thbt.webng.com.game.path.MovingPath;
 import thbt.webng.com.game.score.ScoreStrategyContext;
 import thbt.webng.com.game.sound.SoundManager;
@@ -20,8 +20,7 @@ public class GameBoardModel {
     private final int row = 9;
     private final int col = 9;
     private final Square[][] squares = new Square[row][col];
-    private final GamePanel gamePanel;
-    private final GameInfoPresenter gameInfoPresenter;
+    private GameBoardModelListener modelListener;
     private Position selectedPosition;
     private List<Position> nextBallPositions;
     private Thread moveThread;
@@ -29,17 +28,8 @@ public class GameBoardModel {
     private GameState previousGameState;
     private GameState savedGameState;
 
-    public GameBoardModel(GameInfoPresenter gameInfoPresenter, GamePanel gamePanel) {
-        this.gamePanel = gamePanel;
-        this.gameInfoPresenter = gameInfoPresenter;
-
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-//                squareArray[i][j] = new Square(this.gamePanel);
-//                squareArray[i][j].setLeft(left + j * Square.DEFAULT_SIZE);
-//                squareArray[i][j].setTop(top + i * Square.DEFAULT_SIZE);
-            }
-        }
+    public void setModelListener(GameBoardModelListener modelListener) {
+        this.modelListener = modelListener;
     }
 
     public Square getSquareAt(Position pos) {
@@ -58,30 +48,24 @@ public class GameBoardModel {
         return gameOver;
     }
 
-    public void newGame(GameType gameType) {
+    public void newGame() {
         clearGameBoard();
         addFirstBalls();
         addGrowingBalls();
 
-        gameInfoPresenter.getDigitalClockPresenter().resetTime();
-        gameInfoPresenter.getDigitalClockPresenter().start();
-        gameInfoPresenter.getScorePresenter().setScore(0);
-
-        GameOptionsManager.getCurrentGameOptions().setGameType(gameType);
+        modelListener.onModelChanged();
     }
 
     public void selectBall(Position position) {
-        if (selectedPosition != null) {
-            getSquareAt(selectedPosition).getBall().unSelect();
-        }
+        unselectBall();
 
         selectedPosition = position;
-        getSquareAt(selectedPosition).getBall().select();
+        getSquareAt(position).getBall().select();
     }
 
-    public boolean moveTo(Position positionTo) {
+    public void moveTo(Position positionTo) {
         if (moveThread != null && moveThread.isAlive()) {
-            return false;
+            return;
         }
 
         if (selectedPosition == null) {
@@ -89,40 +73,26 @@ public class GameBoardModel {
         }
 
         if (selectedPosition.equals(positionTo)) {
-            return false;
+            return;
         }
 
-        final var movingPositions = new MovingPath(squares).findPath(selectedPosition, positionTo);
-        if (movingPositions.size() == 0) {
+        var movingPositions = new MovingPath(squares).findPath(selectedPosition, positionTo);
+        if (movingPositions.isEmpty()) {
             SoundManager.playCantMoveSound();
-            return false;
+            return;
         }
 
         previousGameState = takeGameSnapshot();
 
-        final var ballFrom = removeSelectedBall();
+        var ballFrom = removeSelectedBall();
 
         if (GameOptionsManager.getCurrentGameOptions().isPlayMoveSound()) {
             SoundManager.playMoveSound();
         }
 
-        moveThread = new Thread(() -> {
-            var overriddenBall = moveSelectedBall(ballFrom, movingPositions);
-
-            var completedSquares = getCompleteArea(positionTo);
-            if (!completedSquares.isEmpty()) {
-                explodeBalls(completedSquares);
-                handleOverriddenBall(positionTo, overriddenBall);
-            } else {
-                handleOverriddenBall(positionTo, overriddenBall);
-                growBallsAndAddNewOnes();
-            }
-
-            gamePanel.repaint();
-        });
-        moveThread.start();
-        return true;
+        startMovingThread(positionTo, movingPositions, ballFrom);
     }
+
 
     public void stepBack() {
         if (previousGameState != null) {
@@ -142,14 +112,34 @@ public class GameBoardModel {
     }
 
     private Ball removeSelectedBall() {
-        var squareFrom = getSquareAt(selectedPosition);
-        var ballFrom = squareFrom.getBall();
-        ballFrom.unSelect();
+        var selectedSquare = getSquareAt(selectedPosition);
+        var selectedBall = selectedSquare.getBall();
 
+        selectedBall.unSelect();
         selectedPosition = null;
-        squareFrom.setBall(null);
-        return ballFrom;
+        selectedSquare.setBall(null);
+
+        return selectedBall;
     }
+
+    private void startMovingThread(Position positionTo, List<Position> movingPositions, Ball ballFrom) {
+        moveThread = new Thread(() -> {
+            var overriddenBall = moveSelectedBall(ballFrom, movingPositions);
+
+            var completedSquares = getCompleteArea(positionTo);
+            if (!completedSquares.isEmpty()) {
+                explodeBalls(completedSquares);
+                handleOverriddenBall(positionTo, overriddenBall);
+            } else {
+                handleOverriddenBall(positionTo, overriddenBall);
+                growBallsAndAddNewGrowingBalls();
+            }
+
+            modelListener.onModelChanged();
+        });
+        moveThread.start();
+    }
+
 
     private Ball moveSelectedBall(Ball ballFrom, List<Position> movingPositions) {
         for (int i = 1; i < movingPositions.size(); i++) {
@@ -158,7 +148,7 @@ public class GameBoardModel {
             var currentBall = square.getBall();
             square.setBall(new Ball(ballFrom.getColor(), BallState.MATURE, square));
 
-            gamePanel.repaint();
+            modelListener.onModelChanged();
 
             try {
                 Thread.sleep(20);
@@ -187,13 +177,12 @@ public class GameBoardModel {
         } else {
             setNewGrowingPos(positionTo, overriddenBall);
         }
-
     }
 
     private void explodeBalls(List<Square> completedSquares) {
         hideBalls(completedSquares);
         int score = completedSquares.size() + (completedSquares.size() - 4) * completedSquares.size();
-        gameInfoPresenter.getScorePresenter().setScore(gameInfoPresenter.getScorePresenter().getScore() + score);
+        modelListener.setScore(modelListener.getScore() + score);
     }
 
     private void setNewGrowingPos(Position oldPos, Ball ball) {
@@ -210,16 +199,13 @@ public class GameBoardModel {
         }
     }
 
-    private void growBallsAndAddNewOnes() {
+    private void growBallsAndAddNewGrowingBalls() {
         growBalls();
         addGrowingBalls();
     }
 
     private void clearGameBoard() {
-        if (selectedPosition != null) {
-            getSquareAt(selectedPosition).getBall().unSelect();
-            selectedPosition = null;
-        }
+        unselectBall();
 
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
@@ -246,8 +232,8 @@ public class GameBoardModel {
         nextBallPositions = getNextBallPositions();
         gameOver = nextBallPositions.size() < 3; // TODO ?
 
-        getNextBalls().generateNextColors();
-        var nextColors = getNextBalls().getNextColors();
+        modelListener.generateNextColors();
+        var nextColors = modelListener.getNextColors();
 
         for (int i = 0; i < nextBallPositions.size(); i++) {
             var square = getSquareAt(nextBallPositions.get(i));
@@ -282,10 +268,6 @@ public class GameBoardModel {
 
     private List<Square> getCompleteArea(Position pos) {
         return new ScoreStrategyContext().getCompleteArea(squares, pos);
-    }
-
-    private NextBallsPresenter getNextBalls() {
-        return gameInfoPresenter.getNextBallsPresenter();
     }
 
     private void growBalls() {
@@ -362,23 +344,20 @@ public class GameBoardModel {
 
         for (int i = 0; i < 3; i++) {
             // TODO
-            gameState.nextBallColors[i] = getNextBalls().getNextColors()[i];
+            gameState.nextBallColors[i] = modelListener.getNextColors()[i];
         }
 
         gameState.nextBallPositions = new ArrayList<Position>();
         gameState.nextBallPositions.addAll(nextBallPositions);
 
-        gameState.score = gameInfoPresenter.getScorePresenter().getScore();
-        gameState.spentTime = gameInfoPresenter.getDigitalClockPresenter().getTimeInSeconds();
+        gameState.score = modelListener.getScore();
+        gameState.spentTime = modelListener.getSpentTime();
 
         return gameState;
     }
 
     private void restoreGame(GameState gameState, boolean withSpentTime) {
-        if (selectedPosition != null) {
-            getSquareAt(selectedPosition).getBall().unSelect();
-            selectedPosition = null;
-        }
+        unselectBall();
 
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
@@ -386,17 +365,26 @@ public class GameBoardModel {
             }
         }
 
-        getNextBalls().setNextColors(gameState.nextBallColors);
+        modelListener.setNextColors(gameState.nextBallColors);
 
         nextBallPositions = gameState.nextBallPositions;
 
-        gameInfoPresenter.getScorePresenter().setScore(gameState.score);
+        modelListener.setScore(gameState.score);
 
         if (withSpentTime) {
-            gameInfoPresenter.getDigitalClockPresenter().setTimeInSeconds(gameState.spentTime);
+            modelListener.setSpentTime(gameState.spentTime);
         }
 
-        gamePanel.repaint();
+        modelListener.onModelChanged();
+    }
+
+    private void unselectBall() {
+        if (selectedPosition == null) {
+            return;
+        }
+
+        getSquareAt(selectedPosition).getBall().unSelect();
+        selectedPosition = null;
     }
 
     private class GameState {
