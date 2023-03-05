@@ -7,20 +7,31 @@ import thbt.webng.com.game.option.GameType;
 
 import java.awt.*;
 
-public class GameBoardPresenter {
+public class GameBoardPresenter implements GameBoardModelListener, GameBoardViewListener {
 
     private final GameBoardModel model;
 
     private final GameBoardView view;
 
-    public GameBoardPresenter(GameBoardModel model, GameBoardView view) {
+    private final GameInfoPresenter gameInfoPresenter;
+
+    public GameBoardPresenter(GameBoardModel model, GameBoardView view, GameInfoPresenter gameInfoPresenter) {
         this.model = model;
         this.view = view;
+        this.gameInfoPresenter = gameInfoPresenter;
+
+        this.model.setModelListener(this);
+        this.view.setViewListener(this);
     }
 
     public void newGame(GameType gameType) {
-        model.newGame(gameType);
-        view.repaint();
+        model.newGame();
+
+        gameInfoPresenter.getDigitalClockPresenter().resetTime();
+        gameInfoPresenter.getDigitalClockPresenter().start();
+        gameInfoPresenter.getScorePresenter().setScore(0);
+
+        GameOptionsManager.getCurrentGameOptions().setGameType(gameType);
     }
 
     public void newGame() {
@@ -66,6 +77,51 @@ public class GameBoardPresenter {
     }
 
     public GameInfoPresenter getGameInfoBoard() {
-        return view.getGameInfoPresenter();
+        return gameInfoPresenter;
+    }
+
+    @Override
+    public void onModelChanged() {
+        view.repaint();
+    }
+
+    @Override
+    public int getScore() {
+        return gameInfoPresenter.getScorePresenter().getScore();
+    }
+
+    @Override
+    public int getSpentTime() {
+        return gameInfoPresenter.getDigitalClockPresenter().getTimeInSeconds();
+    }
+
+    @Override
+    public void setScore(int score) {
+        gameInfoPresenter.getScorePresenter().setScore(score);
+    }
+
+    @Override
+    public void setSpentTime(int timeInSeconds) {
+        gameInfoPresenter.getDigitalClockPresenter().setTimeInSeconds(timeInSeconds);
+    }
+
+    @Override
+    public void generateNextColors() {
+        gameInfoPresenter.getNextBallsPresenter().generateNextColors();
+    }
+
+    @Override
+    public void setNextColors(Color[] nextColors) {
+        gameInfoPresenter.getNextBallsPresenter().setNextColors(nextColors);
+    }
+
+    @Override
+    public Color[] getNextColors() {
+        return gameInfoPresenter.getNextBallsPresenter().getNextColors();
+    }
+
+    @Override
+    public void drawGameInfo(Graphics g) {
+        gameInfoPresenter.draw(g);
     }
 }

@@ -3,7 +3,6 @@ package thbt.webng.com.game.board;
 import thbt.webng.com.game.GamePanel;
 import thbt.webng.com.game.Position;
 import thbt.webng.com.game.Square;
-import thbt.webng.com.game.info.GameInfoPresenter;
 import thbt.webng.com.game.option.GameOptionsManager;
 import thbt.webng.com.game.option.NextBallsDisplayType;
 
@@ -15,11 +14,11 @@ public class GameBoardView {
 
     private final Square[][] squares;
     private final GamePanel gamePanel;
-    private final GameInfoPresenter gameInfoPresenter;
 
-    public GameBoardView(GamePanel gamePanel, GameInfoPresenter gameInfoPresenter, Square[][] squares) {
+    private GameBoardViewListener viewListener;
+
+    public GameBoardView(GamePanel gamePanel, Square[][] squares) {
         this.gamePanel = gamePanel;
-        this.gameInfoPresenter = gameInfoPresenter;
         this.squares = squares;
 
         for (int i = 0; i < this.squares.length; i++) {
@@ -31,8 +30,12 @@ public class GameBoardView {
         }
     }
 
+    public void setViewListener(GameBoardViewListener viewListener) {
+        this.viewListener = viewListener;
+    }
+
     public void draw(Graphics g) {
-        gameInfoPresenter.draw(g);
+        viewListener.drawGameInfo(g);
 
         boolean displayGrowingBalls = GameOptionsManager.getCurrentGameOptions()
                 .getNextBallsDisplayTypes() == NextBallsDisplayType.ShowBoth
@@ -42,10 +45,6 @@ public class GameBoardView {
                 squares[i][j].draw(g, displayGrowingBalls);
             }
         }
-    }
-
-    public GameInfoPresenter getGameInfoPresenter() {
-        return gameInfoPresenter;
     }
 
     /**
