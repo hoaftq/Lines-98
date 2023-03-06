@@ -2,9 +2,6 @@ package thbt.webng.com.game.util;
 
 import java.awt.*;
 
-/**
- * Window utility
- */
 public final class WindowUtil {
 
     /**
@@ -14,27 +11,27 @@ public final class WindowUtil {
     }
 
     /**
-     * Set window location to center owner
+     * Set window location to owner center
      *
-     * @param window window what set to center owner
+     * @param window window that is set to owner center
      */
     public static void centerOwner(Window window) {
-        Component onwner = window.getOwner();
+        var owner = window.getOwner();
         int x, y;
 
-        // If owner is null, set dialog position to center screen
-        if (onwner == null) {
-            Dimension scrSize = Toolkit.getDefaultToolkit().getScreenSize();
+        // If the dialog doesn't have an owner, put the dialog to screen center
+        if (owner == null) {
+            var scrSize = Toolkit.getDefaultToolkit().getScreenSize();
             x = (int) ((scrSize.getWidth() - window.getWidth()) / 2);
             y = (int) ((scrSize.getHeight() - window.getHeight()) / 2);
         } else {
 
-            // Set dialog position to center owner
-            x = onwner.getX() + (onwner.getWidth() - window.getWidth()) / 2;
-            y = onwner.getY() + (onwner.getHeight() - window.getHeight()) / 2;
+            // Put the dialog to owner center
+            x = owner.getX() + (owner.getWidth() - window.getWidth()) / 2;
+            y = owner.getY() + (owner.getHeight() - window.getHeight()) / 2;
         }
 
-        // Ensure dialog in screen
+        // Ensure the dialog is in screen
         if (x < 0)
             x = 0;
         if (y < 0)
@@ -42,5 +39,4 @@ public final class WindowUtil {
 
         window.setLocation(x, y);
     }
-
 }
