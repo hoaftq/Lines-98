@@ -22,6 +22,8 @@ public class GameBoardPresenter implements GameBoardModelListener, GameBoardView
 
         this.model.setModelListener(this);
         this.view.setViewListener(this);
+
+        newGame();
     }
 
     public void newGame(GameType gameType) {
@@ -56,14 +58,6 @@ public class GameBoardPresenter implements GameBoardModelListener, GameBoardView
         return model.isGameOver();
     }
 
-    public Dimension getBoardSize() {
-        return view.getBoardSize();
-    }
-
-    public void draw(Graphics g) {
-        view.draw(g);
-    }
-
     public void saveGame() {
         model.saveGame();
     }
@@ -76,6 +70,10 @@ public class GameBoardPresenter implements GameBoardModelListener, GameBoardView
         model.stepBack();
     }
 
+    public void repaint() {
+        view.repaint();
+    }
+
     public GameInfoPresenter getGameInfoBoard() {
         return gameInfoPresenter;
     }
@@ -83,6 +81,11 @@ public class GameBoardPresenter implements GameBoardModelListener, GameBoardView
     @Override
     public void onModelChanged() {
         view.repaint();
+    }
+
+    @Override
+    public void onPlayAt(int mouseX, int mouseY) {
+        playAt(mouseX, mouseY);
     }
 
     @Override
