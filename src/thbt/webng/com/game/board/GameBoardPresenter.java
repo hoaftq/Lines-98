@@ -1,6 +1,6 @@
 package thbt.webng.com.game.board;
 
-import thbt.webng.com.game.BallState;
+import thbt.webng.com.game.base.BallState;
 import thbt.webng.com.game.info.GameInfoPresenter;
 import thbt.webng.com.game.option.GameOptionsManager;
 import thbt.webng.com.game.option.GameType;

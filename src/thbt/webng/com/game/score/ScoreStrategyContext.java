@@ -1,8 +1,7 @@
 package thbt.webng.com.game.score;
 
-import thbt.webng.com.game.Position;
-import thbt.webng.com.game.Square;
-import thbt.webng.com.game.option.GameOptions;
+import thbt.webng.com.game.base.Position;
+import thbt.webng.com.game.base.Square;
 import thbt.webng.com.game.option.GameOptionsManager;
 
 import java.util.List;

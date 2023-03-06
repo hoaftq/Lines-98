@@ -1,4 +1,4 @@
-package thbt.webng.com.game;
+package thbt.webng.com.game.base;
 
 import thbt.webng.com.game.option.GameOptionsManager;
 import thbt.webng.com.game.sound.SoundManager;
