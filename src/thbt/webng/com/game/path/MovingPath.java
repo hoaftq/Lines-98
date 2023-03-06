@@ -1,8 +1,8 @@
 package thbt.webng.com.game.path;
 
-import thbt.webng.com.game.BallState;
-import thbt.webng.com.game.Position;
-import thbt.webng.com.game.Square;
+import thbt.webng.com.game.base.BallState;
+import thbt.webng.com.game.base.Position;
+import thbt.webng.com.game.base.Square;
 
 import java.util.LinkedList;
 import java.util.List;

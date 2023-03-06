@@ -1,6 +1,6 @@
 package thbt.webng.com.game.info;
 
-import thbt.webng.com.game.BaseBall;
+import thbt.webng.com.game.base.BaseBall;
 
 import java.awt.*;
 import java.util.Arrays;

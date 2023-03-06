@@ -1,6 +1,5 @@
 package thbt.webng.com.game;
 
-import thbt.webng.com.GameFrame;
 import thbt.webng.com.game.board.GameBoardModel;
 import thbt.webng.com.game.board.GameBoardPresenter;
 import thbt.webng.com.game.board.GameBoardView;

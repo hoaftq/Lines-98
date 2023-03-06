@@ -1,9 +1,9 @@
 package thbt.webng.com.game.board;
 
-import thbt.webng.com.game.Ball;
-import thbt.webng.com.game.BallState;
-import thbt.webng.com.game.Position;
-import thbt.webng.com.game.Square;
+import thbt.webng.com.game.base.Ball;
+import thbt.webng.com.game.base.BallState;
+import thbt.webng.com.game.base.Position;
+import thbt.webng.com.game.base.Square;
 import thbt.webng.com.game.option.GameOptionsManager;
 import thbt.webng.com.game.path.MovingPath;
 import thbt.webng.com.game.score.ScoreStrategyContext;

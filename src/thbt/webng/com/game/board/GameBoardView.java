@@ -1,8 +1,8 @@
 package thbt.webng.com.game.board;
 
 import thbt.webng.com.game.GamePanel;
-import thbt.webng.com.game.Position;
-import thbt.webng.com.game.Square;
+import thbt.webng.com.game.base.Position;
+import thbt.webng.com.game.base.Square;
 import thbt.webng.com.game.option.GameOptionsManager;
 import thbt.webng.com.game.option.NextBallsDisplayType;
 

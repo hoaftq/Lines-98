@@ -1,4 +1,4 @@
-package thbt.webng.com.game;
+package thbt.webng.com.game.base;
 
 import java.awt.*;
 

@@ -1,4 +1,4 @@
-package thbt.webng.com.game;
+package thbt.webng.com.game.base;
 
 public class Position {
     public int x;

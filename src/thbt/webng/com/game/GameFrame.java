@@ -1,6 +1,6 @@
-package thbt.webng.com;
+package thbt.webng.com.game;
 
-import thbt.webng.com.game.GamePanel;
+import thbt.webng.com.AboutDialog;
 import thbt.webng.com.game.info.GameInfoPresenter;
 import thbt.webng.com.game.option.GameType;
 import thbt.webng.com.game.option.OptionsDialogPresenter;
