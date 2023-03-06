@@ -30,7 +30,7 @@ public class GameInfoView {
         highestScoreView.draw(g);
         scoreView.draw(g);
 
-        NextBallsDisplayType displayType = GameOptionsManager.getCurrentGameOptions().getNextBallsDisplayTypes();
+        NextBallsDisplayType displayType = GameOptionsManager.getCurrentGameOptions().getNextBallsDisplayType();
         if (displayType == NextBallsDisplayType.ShowBoth || displayType == NextBallsDisplayType.ShowOnTop) {
             nextBallsView.draw(g);
         }

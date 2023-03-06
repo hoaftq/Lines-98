@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static java.lang.Thread.sleep;
+
 public class GameBoardModel {
 
     private final int row = 9;
@@ -151,7 +153,7 @@ public class GameBoardModel {
             modelListener.onModelChanged();
 
             try {
-                Thread.sleep(20);
+                sleep(20);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -282,7 +284,7 @@ public class GameBoardModel {
             }
 
             try {
-                Thread.sleep(GameOptionsManager.getCurrentGameOptions().getAppearanceStepDelay());
+                sleep(GameOptionsManager.getCurrentGameOptions().getAppearanceStepDelay());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -311,7 +313,7 @@ public class GameBoardModel {
             }
 
             try {
-                Thread.sleep(GameOptionsManager.getCurrentGameOptions().getExplosionStepDelay());
+                sleep(GameOptionsManager.getCurrentGameOptions().getExplosionStepDelay());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -347,8 +349,7 @@ public class GameBoardModel {
             gameState.nextBallColors[i] = modelListener.getNextColors()[i];
         }
 
-        gameState.nextBallPositions = new ArrayList<Position>();
-        gameState.nextBallPositions.addAll(nextBallPositions);
+        gameState.nextBallPositions = new ArrayList<>(nextBallPositions);
 
         gameState.score = modelListener.getScore();
         gameState.spentTime = modelListener.getSpentTime();

@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Square {
-    public static final int DEFAULT_SIZE = 45;
+    private static final int DEFAULT_SIZE = 45;
     private final JComponent component;
     private int left;
     private int top;

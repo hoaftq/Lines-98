@@ -39,7 +39,7 @@ public class GameBoardPresenter implements GameBoardModelListener, GameBoardView
     }
 
     public void playAt(int mouseX, int mouseY) {
-        var position = view.squareFromMousePos(mouseX, mouseY);
+        var position = view.getPositionAtMouse(mouseX, mouseY);
         if (position == null) {
             return;
         }
@@ -101,8 +101,8 @@ public class GameBoardPresenter implements GameBoardModelListener, GameBoardView
     }
 
     @Override
-    public void setSpentTime(int timeInSeconds) {
-        gameInfoPresenter.getDigitalClockPresenter().setTimeInSeconds(timeInSeconds);
+    public void setSpentTime(int spentTime) {
+        gameInfoPresenter.getDigitalClockPresenter().setTimeInSeconds(spentTime);
     }
 
     @Override
