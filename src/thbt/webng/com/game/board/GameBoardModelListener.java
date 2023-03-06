@@ -6,6 +6,8 @@ public interface GameBoardModelListener {
 
     void onModelChanged();
 
+    void onNoEmptySquares();
+
     int getScore();
 
     int getSpentTime();

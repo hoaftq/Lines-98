@@ -26,7 +26,6 @@ public class GameBoardModel {
     private Position selectedPosition;
     private List<Position> nextBallPositions;
     private Thread moveThread;
-    private boolean gameOver;
     private GameState previousGameState;
     private GameState savedGameState;
 
@@ -44,10 +43,6 @@ public class GameBoardModel {
 
     public Position getSelectedPosition() {
         return selectedPosition;
-    }
-
-    public boolean isGameOver() {
-        return gameOver;
     }
 
     public void newGame() {
@@ -216,7 +211,6 @@ public class GameBoardModel {
         }
 
         previousGameState = null;
-        gameOver = false;
     }
 
     private void addFirstBalls() {
@@ -232,7 +226,9 @@ public class GameBoardModel {
 
     private void addGrowingBalls() {
         nextBallPositions = getNextBallPositions();
-        gameOver = nextBallPositions.size() < 3; // TODO ?
+        if (nextBallPositions.isEmpty()) {
+            modelListener.onNoEmptySquares();
+        }
 
         modelListener.generateNextColors();
         var nextColors = modelListener.getNextColors();

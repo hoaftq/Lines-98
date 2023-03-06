@@ -8,8 +8,6 @@ import thbt.webng.com.game.info.GameInfoPresenter;
 import thbt.webng.com.game.option.GameType;
 import thbt.webng.com.game.option.OptionsDialogPresenter;
 import thbt.webng.com.game.scorehistory.HighScoreDialogPresenter;
-import thbt.webng.com.game.scorehistory.PlayerScore;
-import thbt.webng.com.game.scorehistory.PlayerScoreHistory;
 import thbt.webng.com.game.util.WindowUtil;
 
 import javax.swing.*;
@@ -45,7 +43,7 @@ public class GameFrame extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-                saveHighScore();
+                presenter.endGame();
             }
         });
     }
@@ -54,142 +52,113 @@ public class GameFrame extends JFrame {
         var model = new GameBoardModel();
         var view = new GameBoardView(model.getSquares());
         var gameInfoPresenter = new GameInfoPresenter(view);
-        presenter = new GameBoardPresenter(model, view, gameInfoPresenter);
+        presenter = new GameBoardPresenter(model, view, gameInfoPresenter, (highScore) -> showHighScoreDialog());
         add(view);
     }
 
     private void addGameMenu() {
-        JMenu gameMenu = new JMenu("Game");
+        var gameMenu = new JMenu("Game");
         gameMenu.setMnemonic('G');
 
-        JMenuItem newMenuItem;
-        gameMenu.add(newMenuItem = new JMenuItem("New", 'N'));
-        newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
+        var newMenuItem = new JMenuItem("New", 'N');
+        gameMenu.add(newMenuItem);
+        newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
         newMenuItem.addActionListener((e) -> {
-            saveHighScore();
+            presenter.endGame();
             presenter.newGame();
         });
 
-        JMenuItem newLinesMenuItem = new JMenuItem("New Lines Game", 'L');
+        var newLinesMenuItem = new JMenuItem("New Lines Game", 'L');
         gameMenu.add(newLinesMenuItem);
         newLinesMenuItem.addActionListener((e) -> {
-            saveHighScore();
+            presenter.endGame();
             presenter.newGame(GameType.LINE);
         });
 
-        JMenuItem newSquaresMenuItem = new JMenuItem("New Squares Game", 'S');
+        var newSquaresMenuItem = new JMenuItem("New Squares Game", 'S');
         gameMenu.add(newSquaresMenuItem);
         newSquaresMenuItem.addActionListener((e) -> {
-            saveHighScore();
+            presenter.endGame();
             presenter.newGame(GameType.SQUARE);
         });
 
-        JMenuItem newBlocksMenuItem = new JMenuItem("New Blocks Game", 'B');
+        var newBlocksMenuItem = new JMenuItem("New Blocks Game", 'B');
         gameMenu.add(newBlocksMenuItem);
         newBlocksMenuItem.addActionListener((e) -> {
-            saveHighScore();
+            presenter.endGame();
             presenter.newGame(GameType.BLOCK);
         });
 
         gameMenu.addSeparator();
 
-        JMenuItem optionsMenuItem = new JMenuItem("Options", 'O');
+        var optionsMenuItem = new JMenuItem("Options", 'O');
         gameMenu.add(optionsMenuItem);
         optionsMenuItem.addActionListener((e) -> {
-            var optionsDialogPresenter = new OptionsDialogPresenter(this);
-            optionsDialogPresenter.show();
+            showOptionsDialog();
             presenter.repaint();
         });
 
         gameMenu.addSeparator();
 
-        JMenuItem saveGameMenuItem = new JMenuItem("High Scores", 'H');
+        var saveGameMenuItem = new JMenuItem("High Scores", 'H');
         gameMenu.add(saveGameMenuItem);
-        saveGameMenuItem.addActionListener((e) -> {
-            showHighScoreDialog();
-        });
+        saveGameMenuItem.addActionListener((e) -> showHighScoreDialog());
 
         getJMenuBar().add(gameMenu);
     }
 
     private void addControlMenu() {
-        JMenu controlMenu = new JMenu("Control");
+        var controlMenu = new JMenu("Control");
         controlMenu.setMnemonic('C');
 
-        JMenuItem saveGameMenuItem = new JMenuItem("Save Game", 'S');
+        var saveGameMenuItem = new JMenuItem("Save Game", 'S');
         controlMenu.add(saveGameMenuItem);
-        saveGameMenuItem.addActionListener((e) -> {
-            presenter.saveGame();
-        });
+        saveGameMenuItem.addActionListener((e) -> presenter.saveGame());
 
-        JMenuItem loadGameMenuItem = new JMenuItem("Load Game", 'L');
+        var loadGameMenuItem = new JMenuItem("Load Game", 'L');
         controlMenu.add(loadGameMenuItem);
-        loadGameMenuItem.addActionListener((e) -> {
-            presenter.loadGame();
-        });
+        loadGameMenuItem.addActionListener((e) -> presenter.loadGame());
 
-        JMenuItem endGameMenuItem = new JMenuItem("End Game", 'E');
+        var endGameMenuItem = new JMenuItem("End Game", 'E');
         controlMenu.add(endGameMenuItem);
         endGameMenuItem.addActionListener((e) -> {
-            saveHighScore();
+            presenter.endGame();
             presenter.newGame();
         });
 
         controlMenu.addSeparator();
 
-        JMenuItem stepBackMenuItem = new JMenuItem("Step Back");
-        stepBackMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK));
+        var stepBackMenuItem = new JMenuItem("Step Back");
+        stepBackMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
         controlMenu.add(stepBackMenuItem);
-        stepBackMenuItem.addActionListener((e) -> {
-            presenter.stepBack();
-        });
+        stepBackMenuItem.addActionListener((e) -> presenter.stepBack());
 
         getJMenuBar().add(controlMenu);
     }
 
     private void addHelpMenu() {
-        JMenu helpMenu = new JMenu("Help");
+        var helpMenu = new JMenu("Help");
         helpMenu.setMnemonic('H');
 
-        JMenuItem aboutMenuItem = new JMenuItem("About", 'A');
+        var aboutMenuItem = new JMenuItem("About", 'A');
         helpMenu.add(aboutMenuItem);
-        aboutMenuItem.addActionListener((e) -> {
-            AboutDialog aboutDialog = new AboutDialog(GameFrame.this);
-            aboutDialog.setVisible(true);
-
-        });
+        aboutMenuItem.addActionListener((e) -> showAboutDialog());
 
         getJMenuBar().add(helpMenu);
     }
 
-    private void saveHighScore() {
-        GameInfoPresenter gameInfoBoard = presenter.getGameInfoBoard();
-
-        // Stop the playing clock
-        gameInfoBoard.getDigitalClockPresenter().stop();
-
-        PlayerScoreHistory playerScoreHistory = PlayerScoreHistory.getInstance();
-
-        // Player gets a new high score
-        if (playerScoreHistory.isNewRecord(gameInfoBoard.getScorePresenter().getScore())) {
-            String playerName = JOptionPane.showInputDialog(GameFrame.this,
-                    "You've got a high score. Please input your name", "New high score", JOptionPane.QUESTION_MESSAGE);
-            if (playerName != null && !"".equals(playerName)) {
-                // Add a new record to high score history
-                playerScoreHistory.addHighScore(new PlayerScore(playerName, gameInfoBoard.getScorePresenter().getScore(),
-                        gameInfoBoard.getDigitalClockPresenter().toString()));
-                playerScoreHistory.save();
-
-                showHighScoreDialog();
-            }
-        }
-
-        // Update highest score on the game status board
-        gameInfoBoard.getHighestScorePresenter().setScore(playerScoreHistory.getHighestScore());
+    private void showOptionsDialog() {
+        var optionsDialogPresenter = new OptionsDialogPresenter(this);
+        optionsDialogPresenter.show();
     }
 
     private void showHighScoreDialog() {
-        HighScoreDialogPresenter highScoreDialogPresenter = new HighScoreDialogPresenter(GameFrame.this);
+        var highScoreDialogPresenter = new HighScoreDialogPresenter(GameFrame.this);
         highScoreDialogPresenter.show();
+    }
+
+    private void showAboutDialog() {
+        var aboutDialog = new AboutDialog(GameFrame.this);
+        aboutDialog.setVisible(true);
     }
 }

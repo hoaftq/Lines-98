@@ -4,8 +4,12 @@ import thbt.webng.com.game.base.BallState;
 import thbt.webng.com.game.info.GameInfoPresenter;
 import thbt.webng.com.game.option.GameOptionsManager;
 import thbt.webng.com.game.option.GameType;
+import thbt.webng.com.game.scorehistory.PlayerScore;
+import thbt.webng.com.game.scorehistory.PlayerScoreHistory;
 
+import javax.swing.*;
 import java.awt.*;
+import java.util.function.Consumer;
 
 public class GameBoardPresenter implements GameBoardModelListener, GameBoardViewListener {
 
@@ -15,10 +19,16 @@ public class GameBoardPresenter implements GameBoardModelListener, GameBoardView
 
     private final GameInfoPresenter gameInfoPresenter;
 
-    public GameBoardPresenter(GameBoardModel model, GameBoardView view, GameInfoPresenter gameInfoPresenter) {
+    private final Consumer<Integer> newHighScoreConsumer;
+
+    public GameBoardPresenter(GameBoardModel model,
+                              GameBoardView view,
+                              GameInfoPresenter gameInfoPresenter,
+                              Consumer<Integer> newHighScoreConsumer) {
         this.model = model;
         this.view = view;
         this.gameInfoPresenter = gameInfoPresenter;
+        this.newHighScoreConsumer = newHighScoreConsumer;
 
         this.model.setModelListener(this);
         this.view.setViewListener(this);
@@ -54,10 +64,6 @@ public class GameBoardPresenter implements GameBoardModelListener, GameBoardView
         }
     }
 
-    public boolean isGameOver() {
-        return model.isGameOver();
-    }
-
     public void saveGame() {
         model.saveGame();
     }
@@ -78,9 +84,19 @@ public class GameBoardPresenter implements GameBoardModelListener, GameBoardView
         return gameInfoPresenter;
     }
 
+    public void endGame() {
+        saveHighScore();
+    }
+
     @Override
     public void onModelChanged() {
         view.repaint();
+    }
+
+    @Override
+    public void onNoEmptySquares() {
+        endGame();
+        newGame();
     }
 
     @Override
@@ -126,5 +142,34 @@ public class GameBoardPresenter implements GameBoardModelListener, GameBoardView
     @Override
     public void drawGameInfo(Graphics g) {
         gameInfoPresenter.draw(g);
+    }
+
+    public void saveHighScore() {
+//        GameInfoPresenter gameInfoBoard = presenter.getGameInfoBoard();
+
+        // Stop the playing clock
+        gameInfoPresenter.getDigitalClockPresenter().stop();
+
+        var playerScoreHistory = PlayerScoreHistory.getInstance();
+
+        // Player gets a new high score
+        if (playerScoreHistory.isNewRecord(gameInfoPresenter.getScorePresenter().getScore())) {
+            String playerName = JOptionPane.showInputDialog(view,
+                    "You've got a high score. Please input your name", "New high score", JOptionPane.QUESTION_MESSAGE);
+            if (playerName != null && !playerName.isBlank()) {
+                // Add a new record to high score history
+                playerScoreHistory.addHighScore(new PlayerScore(playerName, gameInfoPresenter.getScorePresenter().getScore(),
+                        gameInfoPresenter.getDigitalClockPresenter().toString()));
+                playerScoreHistory.save();
+
+                // Update highest score on the game status board
+                gameInfoPresenter.getHighestScorePresenter().setScore(playerScoreHistory.getHighestScore());
+
+//                showHighScoreDialog();
+                newHighScoreConsumer.accept(playerScoreHistory.getHighestScore());
+            }
+        }
+
+//        return false;
     }
 }
