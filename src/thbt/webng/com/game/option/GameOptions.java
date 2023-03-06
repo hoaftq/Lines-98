@@ -36,7 +36,7 @@ public class GameOptions implements Cloneable, Serializable {
         return this;
     }
 
-    public NextBallsDisplayType getNextBallsDisplayTypes() {
+    public NextBallsDisplayType getNextBallsDisplayType() {
         return nextBallsDisplayType;
     }
 

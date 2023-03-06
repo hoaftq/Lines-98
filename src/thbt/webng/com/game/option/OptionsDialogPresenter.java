@@ -24,7 +24,7 @@ public class OptionsDialogPresenter {
     }
 
     public NextBallsDisplayType getNextBallsDisplayType() {
-        return gameOptions.getNextBallsDisplayTypes();
+        return gameOptions.getNextBallsDisplayType();
     }
 
     public void onSetNextBallsDisplayType(NextBallsDisplayType nextBallsDisplayType) {

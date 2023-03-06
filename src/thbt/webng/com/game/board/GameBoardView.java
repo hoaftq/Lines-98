@@ -21,13 +21,7 @@ public class GameBoardView {
         this.gamePanel = gamePanel;
         this.squares = squares;
 
-        for (int i = 0; i < this.squares.length; i++) {
-            for (int j = 0; j < this.squares[0].length; j++) {
-                this.squares[i][j] = new Square(this.gamePanel); // TODO is it model responsibility
-                this.squares[i][j].setLeft(left + j * Square.DEFAULT_SIZE);
-                this.squares[i][j].setTop(top + i * Square.DEFAULT_SIZE);
-            }
-        }
+        initializeSquares();
     }
 
     public void setViewListener(GameBoardViewListener viewListener) {
@@ -37,11 +31,11 @@ public class GameBoardView {
     public void draw(Graphics g) {
         viewListener.drawGameInfo(g);
 
-        boolean displayGrowingBalls = GameOptionsManager.getCurrentGameOptions()
-                .getNextBallsDisplayTypes() == NextBallsDisplayType.ShowBoth
-                || GameOptionsManager.getCurrentGameOptions().getNextBallsDisplayTypes() == NextBallsDisplayType.ShowOnField;
-        for (int i = 0; i < squares.length; i++) {
-            for (int j = 0; j < squares[0].length; j++) {
+        var nextBallsDisplayType = GameOptionsManager.getCurrentGameOptions().getNextBallsDisplayType();
+        boolean displayGrowingBalls = nextBallsDisplayType == NextBallsDisplayType.ShowBoth
+                || nextBallsDisplayType == NextBallsDisplayType.ShowOnField;
+        for (int i = 0; i < getRowCount(); i++) {
+            for (int j = 0; j < getColumnCount(); j++) {
                 squares[i][j].draw(g, displayGrowingBalls);
             }
         }
@@ -52,22 +46,44 @@ public class GameBoardView {
      * top
      */
     public Dimension getBoardSize() {
-        return new Dimension(2 * left + squares[0].length * Square.DEFAULT_SIZE,
-                top + squares.length * Square.DEFAULT_SIZE + 1);
+        return new Dimension(2 * left + getColumnCount() * getSquareSize(),
+                top + getRowCount() * getSquareSize() + 1);
     }
 
     public void repaint() {
         gamePanel.repaint();
     }
 
-    public Position squareFromMousePos(int x, int y) {
-        int i = (y - top) / Square.DEFAULT_SIZE;
-        int j = (x - left) / Square.DEFAULT_SIZE;
+    public Position getPositionAtMouse(int x, int y) {
+        int i = (y - top) / getSquareSize();
+        int j = (x - left) / getSquareSize();
 
-        if (y < top || i >= squares.length || x < left || j >= squares[0].length) {
+        if (y < top || i >= getRowCount() || x < left || j >= getColumnCount()) {
             return null;
         }
 
         return new Position(i, j);
+    }
+
+    private void initializeSquares() {
+        for (int i = 0; i < getRowCount(); i++) {
+            for (int j = 0; j < getColumnCount(); j++) {
+                this.squares[i][j] = new Square(this.gamePanel);
+                this.squares[i][j].setLeft(left + j * getSquareSize());
+                this.squares[i][j].setTop(top + i * getSquareSize());
+            }
+        }
+    }
+
+    private int getSquareSize() {
+        return squares[0][0].getSize();
+    }
+
+    private int getRowCount() {
+        return squares.length;
+    }
+
+    private int getColumnCount() {
+        return squares[0].length;
     }
 }
