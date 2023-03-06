@@ -1,19 +1,19 @@
 package thbt.webng.com.game.info;
 
-import thbt.webng.com.game.GamePanel;
 import thbt.webng.com.game.scorehistory.PlayerScoreHistory;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class GameInfoPresenter {
-    private GameInfoView view;
+    private final GameInfoView view;
 
-    private ScorePresenter highestScorePresenter;
-    private ScorePresenter scorePresenter;
-    private DigitalClockPresenter digitalClockPresenter;
-    private NextBallsPresenter nextBallsPresenter;
+    private final ScorePresenter highestScorePresenter;
+    private final ScorePresenter scorePresenter;
+    private final DigitalClockPresenter digitalClockPresenter;
+    private final NextBallsPresenter nextBallsPresenter;
 
-    public GameInfoPresenter(GamePanel gamePanel) {
+    public GameInfoPresenter(JPanel gamePanel) {
         scorePresenter = new ScorePresenter(new ScoreModel(), new ScoreView());
         highestScorePresenter = new ScorePresenter(new ScoreModel(), new ScoreView());
         nextBallsPresenter = new NextBallsPresenter(new NextBallsModel(), new NextBallsView());

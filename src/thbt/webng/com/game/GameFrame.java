@@ -1,6 +1,9 @@
 package thbt.webng.com.game;
 
 import thbt.webng.com.AboutDialog;
+import thbt.webng.com.game.board.GameBoardModel;
+import thbt.webng.com.game.board.GameBoardPresenter;
+import thbt.webng.com.game.board.GameBoardView;
 import thbt.webng.com.game.info.GameInfoPresenter;
 import thbt.webng.com.game.option.GameType;
 import thbt.webng.com.game.option.OptionsDialogPresenter;
@@ -14,23 +17,25 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.Serial;
 
 public class GameFrame extends JFrame {
 
+    @Serial
     private static final long serialVersionUID = -8199515970527728642L;
-    private GamePanel gamePanel;
+
+    private GameBoardPresenter presenter;
 
     public GameFrame() {
         setTitle("Lines 98");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        gamePanel = new GamePanel(this);
-        add(gamePanel);
-
         setJMenuBar(new JMenuBar());
         addGameMenu();
         addControlMenu();
         addHelpMenu();
+
+        createGameBoardObjects();
 
         pack();
         setResizable(false);
@@ -45,9 +50,12 @@ public class GameFrame extends JFrame {
         });
     }
 
-    public void endGame() {
-        saveHighScore();
-        gamePanel.newGame();
+    private void createGameBoardObjects() {
+        var model = new GameBoardModel();
+        var view = new GameBoardView(model.getSquares());
+        var gameInfoPresenter = new GameInfoPresenter(view);
+        presenter = new GameBoardPresenter(model, view, gameInfoPresenter);
+        add(view);
     }
 
     private void addGameMenu() {
@@ -59,28 +67,28 @@ public class GameFrame extends JFrame {
         newMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
         newMenuItem.addActionListener((e) -> {
             saveHighScore();
-            gamePanel.newGame();
+            presenter.newGame();
         });
 
         JMenuItem newLinesMenuItem = new JMenuItem("New Lines Game", 'L');
         gameMenu.add(newLinesMenuItem);
         newLinesMenuItem.addActionListener((e) -> {
             saveHighScore();
-            gamePanel.newGame(GameType.LINE);
+            presenter.newGame(GameType.LINE);
         });
 
         JMenuItem newSquaresMenuItem = new JMenuItem("New Squares Game", 'S');
         gameMenu.add(newSquaresMenuItem);
         newSquaresMenuItem.addActionListener((e) -> {
             saveHighScore();
-            gamePanel.newGame(GameType.SQUARE);
+            presenter.newGame(GameType.SQUARE);
         });
 
         JMenuItem newBlocksMenuItem = new JMenuItem("New Blocks Game", 'B');
         gameMenu.add(newBlocksMenuItem);
         newBlocksMenuItem.addActionListener((e) -> {
             saveHighScore();
-            gamePanel.newGame(GameType.BLOCK);
+            presenter.newGame(GameType.BLOCK);
         });
 
         gameMenu.addSeparator();
@@ -90,7 +98,7 @@ public class GameFrame extends JFrame {
         optionsMenuItem.addActionListener((e) -> {
             var optionsDialogPresenter = new OptionsDialogPresenter(this);
             optionsDialogPresenter.show();
-            gamePanel.repaint();
+            presenter.repaint();
         });
 
         gameMenu.addSeparator();
@@ -111,19 +119,20 @@ public class GameFrame extends JFrame {
         JMenuItem saveGameMenuItem = new JMenuItem("Save Game", 'S');
         controlMenu.add(saveGameMenuItem);
         saveGameMenuItem.addActionListener((e) -> {
-            gamePanel.saveGame();
+            presenter.saveGame();
         });
 
         JMenuItem loadGameMenuItem = new JMenuItem("Load Game", 'L');
         controlMenu.add(loadGameMenuItem);
         loadGameMenuItem.addActionListener((e) -> {
-            gamePanel.loadGame();
+            presenter.loadGame();
         });
 
         JMenuItem endGameMenuItem = new JMenuItem("End Game", 'E');
         controlMenu.add(endGameMenuItem);
         endGameMenuItem.addActionListener((e) -> {
-            endGame();
+            saveHighScore();
+            presenter.newGame();
         });
 
         controlMenu.addSeparator();
@@ -132,7 +141,7 @@ public class GameFrame extends JFrame {
         stepBackMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK));
         controlMenu.add(stepBackMenuItem);
         stepBackMenuItem.addActionListener((e) -> {
-            gamePanel.stepBack();
+            presenter.stepBack();
         });
 
         getJMenuBar().add(controlMenu);
@@ -154,7 +163,7 @@ public class GameFrame extends JFrame {
     }
 
     private void saveHighScore() {
-        GameInfoPresenter gameInfoBoard = gamePanel.getGameInfoBoard();
+        GameInfoPresenter gameInfoBoard = presenter.getGameInfoBoard();
 
         // Stop the playing clock
         gameInfoBoard.getDigitalClockPresenter().stop();
