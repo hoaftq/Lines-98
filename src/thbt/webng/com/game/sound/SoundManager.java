@@ -1,21 +1,23 @@
 package thbt.webng.com.game.sound;
 
 import javax.sound.sampled.*;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public final class SoundManager {
 
-    private final static String SOUND_PATH = "/thbt/webng/com/resources/";
+    private static final String SOUND_PATH = "/thbt/webng/com/resources/";
     private static final String DESTROY = "DESTROY2.WAV";
     private static final String JUMP = "JUMP.WAV";
     private static final String CANTMOVE = "CANTMOVE.WAV";
     private static final String MOVE = "MOVE.WAV";
+
+    private static final SoundManager soundManager = new SoundManager();
+
     private static Clip moveClip;
     private static Clip cantMoveClip;
     private static Clip jumpClip;
     private static Clip destroyClip;
-    private static SoundManager soundManager = new SoundManager();
+
     private SoundManager() {
     }
 
@@ -62,27 +64,17 @@ public final class SoundManager {
     }
 
     private Clip play(String fileName) {
-        Clip clip = null;
-
-        try {
-            AudioInputStream stream = AudioSystem.getAudioInputStream(getClass().getResource(SOUND_PATH + fileName));
-            AudioFormat format = stream.getFormat();
+        try (var stream = AudioSystem.getAudioInputStream(getClass().getResource(SOUND_PATH + fileName))) {
+            var format = stream.getFormat();
             DataLine.Info info = new DataLine.Info(Clip.class, format);
-            try {
-                clip = (Clip) AudioSystem.getLine(info);
-                clip.open(stream);
-                clip.start();
-            } catch (LineUnavailableException e) {
-                e.printStackTrace();
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (UnsupportedAudioFileException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            Clip clip = (Clip) AudioSystem.getLine(info);
+            clip.open(stream);
+            clip.start();
+            return clip;
+        } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
             e.printStackTrace();
         }
 
-        return clip;
+        return null;
     }
 }
