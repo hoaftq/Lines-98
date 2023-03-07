@@ -1,7 +1,5 @@
 package thbt.webng.com.game.scorehistory;
 
-import thbt.webng.com.game.util.WindowUtil;
-
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -20,35 +18,33 @@ public class HighScoreDialogView extends JDialog {
         super(frame, true);
         this.presenter = presenter;
 
-        addHighScoreTable();
-        addOkButton();
+        add(createHighScorePanel(), BorderLayout.CENTER);
+        add(createActionPanel(), BorderLayout.SOUTH);
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setTitle("High scores");
         setSize(320, 300);
-        WindowUtil.centerOwner(this);
+        setLocationRelativeTo(frame);
         setResizable(false);
     }
 
-    private void addHighScoreTable() {
+    private JScrollPane createHighScorePanel() {
         var table = new JTable(new HighScoreTableModel(presenter.getTopScores()));
         var centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         table.setDefaultRenderer(Object.class, centerRenderer);
-
-        var northPane = new JScrollPane(table);
-        add(northPane, BorderLayout.CENTER);
+        return new JScrollPane(table);
     }
 
-    private void addOkButton() {
-        var southPane = new JPanel();
+    private JPanel createActionPanel() {
+        var actionPanel = new JPanel();
         JButton okButton = new JButton("OK");
         okButton.addActionListener((e) -> {
             presenter.onOkButton();
         });
 
-        southPane.add(okButton);
-        add(southPane, BorderLayout.SOUTH);
+        actionPanel.add(okButton);
+        return actionPanel;
     }
 
     private static class HighScoreTableModel extends AbstractTableModel {

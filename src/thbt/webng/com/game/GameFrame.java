@@ -8,7 +8,6 @@ import thbt.webng.com.game.info.GameInfoPresenter;
 import thbt.webng.com.game.option.GameType;
 import thbt.webng.com.game.option.OptionsDialogPresenter;
 import thbt.webng.com.game.scorehistory.HighScoreDialogPresenter;
-import thbt.webng.com.game.util.WindowUtil;
 
 import javax.swing.*;
 import java.awt.event.InputEvent;
@@ -37,8 +36,8 @@ public class GameFrame extends JFrame {
 
         pack();
         setResizable(false);
+        setLocationRelativeTo(null);
 
-        WindowUtil.centerOwner(this);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
