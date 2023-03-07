@@ -29,10 +29,10 @@ public abstract class ScoreStrategy {
     }
 
     protected boolean isValidPosition(Position pos) {
-        return isValidPosition(pos.x, pos.y);
+        return isValidPosition(pos.x(), pos.y());
     }
 
     protected List<Square> mapPositionsToSquares(Collection<Position> positions) {
-        return positions.stream().map(p -> squares[p.x][p.y]).toList();
+        return positions.stream().map(p -> squares[p.x()][p.y()]).toList();
     }
 }
