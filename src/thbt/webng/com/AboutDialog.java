@@ -24,7 +24,7 @@ public class AboutDialog extends JDialog {
         add(createActionPanel(), BorderLayout.SOUTH);
 
         pack();
-        setLocationRelativeTo(this);
+        setLocationRelativeTo(owner);
         setResizable(false);
     }
 

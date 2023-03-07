@@ -1,7 +1,5 @@
 package thbt.webng.com.game.option;
 
-import thbt.webng.com.game.util.WindowUtil;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -38,11 +36,11 @@ public class OptionsDialogView extends JDialog implements ActionListener, ItemLi
         super(owner, "Options", true);
         this.presenter = presenter;
 
-        addOptionsPanel();
-        addActionsPanel();
-        pack();
+        add(createOptionsPanel(), BorderLayout.CENTER);
+        add(createActionsPanel(), BorderLayout.SOUTH);
 
-        WindowUtil.centerOwner(this);
+        pack();
+        setLocationRelativeTo(owner);
     }
 
     @Override
@@ -74,7 +72,7 @@ public class OptionsDialogView extends JDialog implements ActionListener, ItemLi
         }
     }
 
-    private void addOptionsPanel() {
+    private JPanel createOptionsPanel() {
         var optionsPanel = new JPanel();
         optionsPanel.setLayout(new BoxLayout(optionsPanel, BoxLayout.PAGE_AXIS));
         optionsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -131,10 +129,10 @@ public class OptionsDialogView extends JDialog implements ActionListener, ItemLi
         jumpingSoundCheckBox.addItemListener(this);
         optionsPanel.add(jumpingSoundCheckBox);
 
-        add(optionsPanel, BorderLayout.CENTER);
+        return optionsPanel;
     }
 
-    private void addActionsPanel() {
+    private JPanel createActionsPanel() {
         var actionsPanel = new JPanel();
         actionsPanel.setLayout(new BoxLayout(actionsPanel, BoxLayout.LINE_AXIS));
         actionsPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
@@ -151,6 +149,6 @@ public class OptionsDialogView extends JDialog implements ActionListener, ItemLi
         okButton.addActionListener(this);
         actionsPanel.add(okButton);
 
-        add(actionsPanel, BorderLayout.SOUTH);
+        return actionsPanel;
     }
 }
