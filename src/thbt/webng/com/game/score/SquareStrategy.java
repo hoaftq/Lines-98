@@ -34,9 +34,9 @@ class SquareStrategy extends ScoreStrategy {
     }
 
     private List<Position> getCompletedPositions(Position pos, List<Direction> directions) {
-        Color color = squares[pos.x][pos.y].getBall().getColor();
-        var completedSquares = directions.stream().map(d -> new Position(pos.x + d.getX(), pos.y + d.getY()))
-                .filter(SquareStrategy.this::isValidPosition).filter(p -> squares[p.x][p.y].isDestroyable(color))
+        Color color = squares[pos.x()][pos.y()].getBall().getColor();
+        var completedSquares = directions.stream().map(d -> new Position(pos.x() + d.getX(), pos.y() + d.getY()))
+                .filter(SquareStrategy.this::isValidPosition).filter(p -> squares[p.x()][p.y()].isDestroyable(color))
                 .toList();
         return completedSquares.size() == 3 ? completedSquares : List.of();
     }

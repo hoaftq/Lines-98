@@ -4,106 +4,97 @@ import thbt.webng.com.game.base.BallState;
 import thbt.webng.com.game.base.Position;
 import thbt.webng.com.game.base.Square;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
 public class MovingPath {
 
-    private Square[][] squares;
-    private boolean[][] visitedArray;
+    private final Square[][] squares;
+    private boolean[][] visited;
 
     public MovingPath(Square[][] squares) {
         this.squares = squares;
     }
 
-    public List<Position> findPath(Position selectedPos, Position positionTo) {
-        List<Position> pathList = new LinkedList<Position>();
-        Queue<ExtPosition> positionQueue = new LinkedList<ExtPosition>();
+    public List<Position> findShortestPath(Position positionFrom, Position positionTo) {
+        resetVisited();
 
-//		resetVisitedArray();
-        visitedArray = new boolean[squares.length][squares[0].length];
-
-        positionQueue.add(new ExtPosition(selectedPos.x, selectedPos.y));
+        Queue<ExtPosition> positionQueue = new LinkedList<>();
+        positionQueue.add(new ExtPosition(positionFrom.x(), positionFrom.y()));
         while (positionQueue.size() > 0) {
-            Position pos = positionQueue.poll();
-            visitedArray[pos.x][pos.y] = true;
-
-            if (pos.x == positionTo.x && pos.y == positionTo.y) {
-                do {
-                    pathList.add(0, pos);
-                    pos = ((ExtPosition) pos).prevPosition;
-                } while (pos != null);
-
-                break;
+            var ep = positionQueue.poll();
+            if (ep.position.equals(positionTo)) {
+                return getPath(ep);
             }
 
-            positionQueue.addAll(getNeighborsSquare((ExtPosition) pos));
+            visited[ep.x()][ep.y()] = true;
+            positionQueue.addAll(getNeighborPositions(ep));
         }
 
-        return pathList;
+        return new ArrayList<>();
     }
 
-//	private void resetVisitedArray() {
-//		for (int i = 0; i < row; i++) {
-//			for (int j = 0; j < col; j++) {
-//				visitedArray[i][j] = false;
-//			}
-//		}
-//	}
+    private void resetVisited() {
+        visited = new boolean[squares.length][squares[0].length];
+    }
 
-    private List<ExtPosition> getNeighborsSquare(ExtPosition pos) {
+    private List<ExtPosition> getNeighborPositions(ExtPosition extPosition) {
         int row = squares.length;
         int col = squares[0].length;
 
-        List<ExtPosition> positionList = new LinkedList<ExtPosition>();
-        int x, y;
+        List<ExtPosition> neighborPositions = new ArrayList<>();
 
-        if (pos.x > 0) {
-            x = pos.x - 1;
-            y = pos.y;
-            if (!visitedArray[x][y] && squares[x][y].getBallState() != BallState.MATURE) {
-                positionList.add(new ExtPosition(x, y, pos));
+        int[][] directions = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
+        for (int[] direction : directions) {
+            int x = extPosition.x() + direction[0];
+            int y = extPosition.y() + direction[1];
+
+            if (x < 0 || x >= col || y < 0 || y >= row) {
+                continue;
             }
+
+            if (visited[x][y] || squares[x][y].getBallState() == BallState.MATURE) {
+                continue;
+            }
+
+            neighborPositions.add(new ExtPosition(x, y, extPosition));
+            visited[x][y] = true;
         }
 
-        if (pos.x < col - 1) {
-            x = pos.x + 1;
-            y = pos.y;
-            if (!visitedArray[x][y] && squares[x][y].getBallState() != BallState.MATURE) {
-                positionList.add(new ExtPosition(x, y, pos));
-            }
-        }
-
-        if (pos.y > 0) {
-            x = pos.x;
-            y = pos.y - 1;
-            if (!visitedArray[x][y] && squares[x][y].getBallState() != BallState.MATURE) {
-                positionList.add(new ExtPosition(x, y, pos));
-            }
-        }
-
-        if (pos.y < row - 1) {
-            x = pos.x;
-            y = pos.y + 1;
-            if (!visitedArray[x][y] && squares[x][y].getBallState() != BallState.MATURE) {
-                positionList.add(new ExtPosition(x, y, pos));
-            }
-        }
-
-        return positionList;
+        return neighborPositions;
     }
 
-    private class ExtPosition extends Position {
-        public ExtPosition prevPosition;
+    private static LinkedList<Position> getPath(ExtPosition extPosition) {
+        var path = new LinkedList<Position>();
+        do {
+            path.addFirst(extPosition.position);
+            extPosition = extPosition.prevExtPosition;
+        } while (extPosition != null);
 
-        public ExtPosition(int x, int y) {
-            super(x, y);
+        return path;
+    }
+
+    private static class ExtPosition {
+        private final Position position;
+        private ExtPosition prevExtPosition;
+
+        ExtPosition(int x, int y) {
+            position = new Position(x, y);
         }
 
-        public ExtPosition(int x, int y, ExtPosition prevPosition) {
-            super(x, y);
-            this.prevPosition = prevPosition;
+        ExtPosition(int x, int y, ExtPosition prevExtPosition) {
+            this(x, y);
+            this.prevExtPosition = prevExtPosition;
+        }
+
+        int x() {
+            return position.x();
+        }
+
+        int y() {
+            return position.y();
         }
     }
 }

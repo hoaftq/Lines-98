@@ -34,7 +34,7 @@ public class GameBoardModel {
     }
 
     public Square getSquareAt(Position pos) {
-        return squares[pos.x][pos.y];
+        return squares[pos.x()][pos.y()];
     }
 
     public Square[][] getSquares() {
@@ -73,7 +73,7 @@ public class GameBoardModel {
             return;
         }
 
-        var movingPositions = new MovingPath(squares).findPath(selectedPosition, positionTo);
+        var movingPositions = new MovingPath(squares).findShortestPath(selectedPosition, positionTo);
         if (movingPositions.isEmpty()) {
             SoundManager.playCantMoveSound();
             return;
