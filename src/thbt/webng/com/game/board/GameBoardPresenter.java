@@ -145,7 +145,6 @@ public class GameBoardPresenter implements GameBoardModelListener, GameBoardView
     }
 
     public void saveHighScore() {
-//        GameInfoPresenter gameInfoBoard = presenter.getGameInfoBoard();
 
         // Stop the playing clock
         gameInfoPresenter.getDigitalClockPresenter().stop();
@@ -159,17 +158,14 @@ public class GameBoardPresenter implements GameBoardModelListener, GameBoardView
             if (playerName != null && !playerName.isBlank()) {
                 // Add a new record to high score history
                 playerScoreHistory.addHighScore(new PlayerScore(playerName, gameInfoPresenter.getScorePresenter().getScore(),
-                        gameInfoPresenter.getDigitalClockPresenter().toString()));
+                        gameInfoPresenter.getDigitalClockPresenter().getTimeString()));
                 playerScoreHistory.save();
 
-                // Update highest score on the game status board
+                // Update the highest score on the game status board
                 gameInfoPresenter.getHighestScorePresenter().setScore(playerScoreHistory.getHighestScore());
 
-//                showHighScoreDialog();
                 newHighScoreConsumer.accept(playerScoreHistory.getHighestScore());
             }
         }
-
-//        return false;
     }
 }
