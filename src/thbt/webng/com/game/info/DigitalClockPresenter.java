@@ -51,6 +51,10 @@ public class DigitalClockPresenter {
         setTimeInSeconds(0);
     }
 
+    public String getTimeString() {
+        return model.getTimeString();
+    }
+
     public void setLeft(int left) {
         view.setLeft(left);
     }
