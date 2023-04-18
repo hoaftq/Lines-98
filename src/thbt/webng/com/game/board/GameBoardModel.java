@@ -326,18 +326,14 @@ public class GameBoardModel {
 
     private GameState takeGameSnapshot() {
         var gameState = new GameState();
-        try {
-            for (int i = 0; i < row; i++) {
-                for (int j = 0; j < col; j++) {
-                    if (squares[i][j].getBall() != null) {
-                        gameState.balls[i][j] = (Ball) (squares[i][j].getBall().clone());
-                    } else {
-                        gameState.balls[i][j] = null;
-                    }
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (squares[i][j].getBall() != null) {
+                    gameState.balls[i][j] = squares[i][j].getBall().clone();
+                } else {
+                    gameState.balls[i][j] = null;
                 }
             }
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
         }
 
         for (int i = 0; i < 3; i++) {

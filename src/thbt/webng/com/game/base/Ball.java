@@ -47,7 +47,7 @@ public class Ball extends BaseBall {
         return width;
     }
 
-    public void setSize(int size) {
+    private void setSize(int size) {
         setWidth(size);
         setHeight(size);
     }
@@ -69,7 +69,7 @@ public class Ball extends BaseBall {
         }
     }
 
-    public boolean grow() {
+    public void grow() {
         if (ballState != BallState.GROWING) {
             throw new IllegalStateException();
         }
@@ -78,14 +78,13 @@ public class Ball extends BaseBall {
         if (size < MATURITY_SIZE) {
             setSize(size + 1);
             square.repaint();
-            return true;
+            return;
         }
 
         ballState = BallState.MATURE;
-        return false;
     }
 
-    public boolean shrink() {
+    public void shrink() {
         if (ballState != BallState.MATURE) {
             throw new IllegalStateException();
         }
@@ -94,11 +93,10 @@ public class Ball extends BaseBall {
         if (size > 0) {
             setSize(size - 1);
             square.repaint();
-            return true;
+            return;
         }
 
         ballState = BallState.REMOVED;
-        return false;
     }
 
     public void select() {
@@ -125,7 +123,7 @@ public class Ball extends BaseBall {
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
+    public Ball clone() {
         return new Ball(color, ballState == BallState.ANIMATE ? BallState.MATURE : ballState, square);
     }
 
