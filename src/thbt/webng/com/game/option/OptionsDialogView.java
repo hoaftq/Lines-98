@@ -100,8 +100,8 @@ public class OptionsDialogView extends JDialog implements ActionListener, ItemLi
 
         optionsPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 
-        var nextBallDisplayTypeLabel = new JLabel("Next ball display type:");
-        optionsPanel.add(nextBallDisplayTypeLabel);
+        var nextBallsDisplayTypeLabel = new JLabel("Next balls display type:");
+        optionsPanel.add(nextBallsDisplayTypeLabel);
 
         optionsPanel.add(Box.createRigidArea(new Dimension(0, 3)));
 
