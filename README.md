@@ -2,8 +2,8 @@
 Lines-98 game written originally using Java Applet and then converted to Java Swing.
 
 It supports 3 difference types of game where you get scores if you move balls into one of the following shapes
-- Line Game: Move balls into a line (at lease 5 balls in a line)
-- Square Game: Move balls to a square (at lease 4 balls in a rectangle)
+- Line Game: Move balls into a line (at least 5 balls in a line)
+- Square Game: Move balls to a square (at least 4 balls in a rectangle)
 - Block Game: Move balls to a block (7 neighbor balls)
 
 ![Lines98-Screenshot](Lines98-Screenshot.png)
