@@ -2,18 +2,17 @@ package thbt.webng.com.game.base;
 
 import java.awt.*;
 
-public class BaseBall {
+public class NoninteractiveBall {
+    private int left;
+    private int top;
+    private int width;
+    private int height;
+    private Color color;
 
-    protected int left;
-    protected int top;
-    protected int width;
-    protected int height;
-    protected Color color;
-
-    public BaseBall() {
+    public NoninteractiveBall() {
     }
 
-    public BaseBall(int width, int height) {
+    public NoninteractiveBall(int width, int height) {
         this.width = width;
         this.height = height;
     }
@@ -69,16 +68,17 @@ public class BaseBall {
         Point middlePoint = new Point(leftBottomPoint.x + dx / 2, leftBottomPoint.y - dy / 2);
         Point rightTopPoint = new Point(leftBottomPoint.x + dx, leftBottomPoint.y - dy);
 
-        Paint p = new GradientPaint(leftBottomPoint, Color.BLACK, rightTopPoint, Color.BLACK);
-        g2.setPaint(p);
+        // TODO perhaps only needed for low resolution screen
+        Paint wholeCirclePaint = new GradientPaint(leftBottomPoint, Color.BLACK, rightTopPoint, Color.BLACK);
+        g2.setPaint(wholeCirclePaint);
         g2.fillOval(getLeft() + 1, getTop() + 1, width - 2, height - 2);
 
-        Paint paint = new GradientPaint(leftBottomPoint, color, middlePoint, Color.BLACK);
-        g2.setPaint(paint);
+        Paint leftBottomPaint = new GradientPaint(leftBottomPoint, color, middlePoint, Color.BLACK);
+        g2.setPaint(leftBottomPaint);
         g2.fillArc(getLeft(), getTop(), width, height, 134, 182);
 
-        Paint paint2 = new GradientPaint(middlePoint, Color.BLACK, rightTopPoint, color);
-        g2.setPaint(paint2);
+        Paint topRightPaint = new GradientPaint(middlePoint, Color.BLACK, rightTopPoint, color);
+        g2.setPaint(topRightPaint);
         g2.fillArc(getLeft(), getTop(), width, height, -46, 182);
     }
 }

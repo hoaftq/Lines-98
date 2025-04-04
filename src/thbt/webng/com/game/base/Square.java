@@ -47,7 +47,7 @@ public class Square {
         this.ball = ball;
 
         if (this.ball != null) {
-            this.ball.square = this;
+            this.ball.setSquare(this);
         }
     }
 
@@ -61,7 +61,7 @@ public class Square {
 
     public boolean isDestroyable(Color color) {
         return ball != null
-                && ball.getBallState() == BallState.MATURE && ball.getColor().equals(color);
+               && ball.getBallState() == BallState.MATURE && ball.getColor().equals(color);
     }
 
     public void draw(Graphics g, boolean showGrowingBalls) {
@@ -71,9 +71,7 @@ public class Square {
             return;
         }
 
-        if (showGrowingBalls) {
-            ball.draw(g);
-        } else if (ball.getBallState() != BallState.GROWING) {
+        if (showGrowingBalls || ball.getBallState() != BallState.GROWING) {
             ball.draw(g);
         }
     }

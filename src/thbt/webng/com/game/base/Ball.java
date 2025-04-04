@@ -5,9 +5,11 @@ import thbt.webng.com.game.sound.SoundManager;
 
 import java.awt.*;
 
-public class Ball extends BaseBall {
+public class Ball implements Cloneable {
     private static final int MATURITY_SIZE = 33;
     private static final int GROWING_SIZE = 9;
+
+    private final NoninteractiveBall noninteractiveBall;
 
     protected Square square;
     private BallState ballState;
@@ -15,41 +17,20 @@ public class Ball extends BaseBall {
     private Thread animateThread;
 
     public Ball(Color color, BallState ballState, Square square) {
-        super();
+        noninteractiveBall = new NoninteractiveBall();
+        noninteractiveBall.setColor(color);
+
         this.square = square;
         setBallState(ballState);
-        setColor(color);
     }
 
-    @Override
-    public int getLeft() {
-        return square.getLeft() + left;
+    public Color getColor() {
+        return noninteractiveBall.getColor();
     }
 
-    @Override
-    public int getTop() {
-        return square.getTop() + top;
-    }
-
-    @Override
-    public void setWidth(int width) {
-        this.width = width;
-        left = (square.getSize() - width) / 2;
-    }
-
-    @Override
-    public void setHeight(int height) {
-        this.height = height;
-        top = (square.getSize() - height) / 2;
-    }
-
-    public int getSize() {
-        return width;
-    }
-
-    private void setSize(int size) {
-        setWidth(size);
-        setHeight(size);
+    public void setSquare(Square square) {
+        this.square = square;
+        setSize(getSize());
     }
 
     public BallState getBallState() {
@@ -74,7 +55,7 @@ public class Ball extends BaseBall {
             throw new IllegalStateException();
         }
 
-        var size = getSize();
+        var size = noninteractiveBall.getWidth();
         if (size < MATURITY_SIZE) {
             setSize(size + 1);
             square.repaint();
@@ -89,7 +70,7 @@ public class Ball extends BaseBall {
             throw new IllegalStateException();
         }
 
-        var size = getSize();
+        var size = noninteractiveBall.getWidth();
         if (size > 0) {
             setSize(size - 1);
             square.repaint();
@@ -117,28 +98,46 @@ public class Ball extends BaseBall {
         animateThread.interrupt();
 
         ballState = BallState.MATURE;
-        top = (square.getSize() - MATURITY_SIZE) / 2;
+        noninteractiveBall.setTop(square.getTop() + (square.getSize() - MATURITY_SIZE) / 2);
         isMovingUp = true;
         square.repaint();
     }
 
+    public void draw(Graphics g) {
+        noninteractiveBall.draw(g);
+    }
+
     @Override
     public Ball clone() {
-        return new Ball(color, ballState == BallState.ANIMATE ? BallState.MATURE : ballState, square);
+        return new Ball(noninteractiveBall.getColor(),
+                ballState == BallState.ANIMATE ? BallState.MATURE : ballState,
+                square);
+    }
+
+    private int getSize() {
+        return noninteractiveBall.getWidth();
+    }
+
+    private void setSize(int size) {
+        int padding = (square.getSize() - size) / 2;
+        noninteractiveBall.setLeft(square.getLeft() + padding);
+        noninteractiveBall.setTop(square.getTop() + padding);
+        noninteractiveBall.setWidth(size);
+        noninteractiveBall.setHeight(size);
     }
 
     private void animateJumping() {
         animateThread = new Thread(() -> {
             while (!Thread.currentThread().isInterrupted()) {
                 if (isMovingUp) {
-                    if (top > 2) {
-                        top -= 1;
+                    if (noninteractiveBall.getTop() - square.getTop() > 2) {
+                        noninteractiveBall.setTop(noninteractiveBall.getTop() - 1);
                     } else {
                         isMovingUp = false;
                     }
                 } else {
-                    if (top + height < square.getSize() - 2) {
-                        top += 1;
+                    if (noninteractiveBall.getTop() + noninteractiveBall.getHeight() - square.getTop() < square.getSize() - 2) {
+                        noninteractiveBall.setTop(noninteractiveBall.getTop() + 1);
                     } else {
                         isMovingUp = true;
                         if (GameOptionsManager.getCurrentGameOptions().isPlayJumpSound()) {
